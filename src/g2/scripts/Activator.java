@@ -1,4 +1,4 @@
-package jar_using_groovy;
+package g2.scripts;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "Jar_using_Groovy"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "g2.scripts"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

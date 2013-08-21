@@ -1,4 +1,4 @@
-package jar_using_groovy.wizards;
+package g2.scripts.wizards;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -135,7 +135,7 @@ public class SampleNewWizard extends Wizard implements INewWizard {
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status =
-			new Status(IStatus.ERROR, "Jar_using_Groovy", IStatus.OK, message, null);
+			new Status(IStatus.ERROR, "g2.scripts", IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
 

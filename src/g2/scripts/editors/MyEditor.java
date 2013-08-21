@@ -1,32 +1,16 @@
-package jar_using_groovy;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+package g2.scripts.editors;
 
 import groovy.lang.Binding;
-import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.eclipse.editor.GroovyConfiguration;
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
-import org.codehaus.jdt.groovy.model.GroovyCompilationUnit;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -34,15 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 //
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchException;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.internal.WorkbenchWindow;
-import org.eclipse.ui.internal.browser.WorkbenchBrowserSupport;
 
 public class MyEditor extends GroovyEditor 
 {
@@ -59,7 +35,9 @@ public class MyEditor extends GroovyEditor
 	    sashForm = new SashForm(parent, SWT.VERTICAL);
 	    sashForm.setLayout(new RowLayout());
 
+	   
 	    super.createPartControl(sashForm);
+		
 	    execute = new Button(sashForm, SWT.VERTICAL);
 	    result  = new StyledText(sashForm, SWT.BORDER);
 	    	    
@@ -116,20 +94,6 @@ public class MyEditor extends GroovyEditor
 	    	public void run() 
 	    	{
 	    		compileAndExecuteCode_InGuiThread();
-	    			
-	    		//IMenuManager menuManager = win.getActionBars().getMenuManager();
-	    		
-	    	/*WorkbenchWindow win = (WorkbenchWindow) PlatformUI.getWorkbench().getWorkbenchWindows()[0];
-	        IMenuManager menuManager = win.getActionBars().getMenuManager();
-	        IMenuManager menu = new MenuManager("Editor &Menu");
-	        menuManager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
-	        
-	    	Action sampleAction = new Action("test action") {
-				public void run() {
-					MessageDialog.openInformation(null, "Jar_using_Groovy", "Sample Action Executed"); 
-				}};
-			
-			menu.add(sampleAction);*/
 	    	}
 		});
 		

@@ -1,10 +1,13 @@
-package jar_using_groovy.editors;
+package g2.scripts.editors;
+
+import g2.scripts.views.SimpleEditor;
 
 import org.eclipse.jface.action.*;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.IDE;
@@ -78,8 +81,16 @@ public class MultiPageEditorContributor extends MultiPageEditorActionBarContribu
 	}
 	private void createActions() {
 		sampleAction = new Action() {
-			public void run() {
-				MessageDialog.openInformation(null, "Jar_using_Groovy", "Sample Action Executed");
+			public void run() 
+			{				
+				//MessageDialog.openInformation(null, "Test 123", "Sample Action Executed");
+				IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				try {
+					page.showView(SimpleEditor.ID);
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		};
 		sampleAction.setText("Sample Action BBBB");

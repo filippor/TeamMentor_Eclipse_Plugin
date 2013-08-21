@@ -1,4 +1,4 @@
-package jar_using_groovy.wizards;
+package g2.scripts.wizards;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
