@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="G2 Script (Groovy)"
+            extensions="g2"
+            icon="icons/sample.gif"
+            contributorClass="jar_using_groovy.editors.MultiPageEditorContributor"
+            class="jar_using_groovy.editors.MultiPageEditor"
+            id="jar_using_groovy.editors.MultiPageEditor">
+      </editor>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="G2 (Groovy)"
+            id="New_G2_View">
+      </category>
+      <view
+            name="Write G2 Script"
+            icon="icons/sample.gif"
+            category="New_G2_View"
+            class="jar_using_groovy.views.SampleView"
+            id="jar_using_groovy.views.SampleView">
+      </view>
+   </extension>
+   
+   
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            name="G2 Wizard"
+            id="New_G2_Wizard">
+      </category>
+      <wizard
+            name="Write G2 Script"
+            icon="icons/sample.gif"
+            category="New_G2_View"
+            class="jar_using_groovy.wizards.SampleNewWizard"
+            id="jar_using_groovy.wizards.SampleNewWizard">
+      </wizard>
+   </extension>
+
+</plugin>
