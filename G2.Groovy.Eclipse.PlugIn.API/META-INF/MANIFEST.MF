@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: g2_scripts
-Bundle-SymbolicName: G2.Editor;singleton:=true
+Bundle-SymbolicName: G2.Groovy.Eclipse.PlugIn.API;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: g2.scripts.Activator
 Require-Bundle: org.eclipse.ui,

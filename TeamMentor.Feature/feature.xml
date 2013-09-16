@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="G2.Editor.Feature"
-      label="G2 Editor"
+      id="TeamMentor.Feature"
+      label="TeamMentor Eclipse PlugIn"
       version="1.0.1.qualifier">
 
    <description url="http://www.teammentor.net">
-      This is a description about this Plug-in
+      This is TeamMentor&apos;s Eclipse PlugIn
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="http://www.teammentor.net">
+      Copyright SI
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="https://github.com/TeamMentor/Master/raw/master/Docs/TM-TP%20License.docx">
+      TeamMentor Partner License
    </license>
-
-   <includes
-         id="org.codehaus.groovy.eclipse.feature"
-         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
@@ -33,7 +29,14 @@
    </requires>
 
    <plugin
-         id="G2.Editor"
+         id="G2.Groovy.Eclipse.PlugIn.API"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="TeamMentor.Eclipse.PlugIn"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PlugIn
+Bundle-SymbolicName: TeamMentor.Eclipse.PlugIn
+Bundle-Version: 1.0.1.qualifier
+Bundle-Activator: teammentor.eclipse.plugin.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
