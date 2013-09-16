@@ -1,20 +1,17 @@
 package g2.java.api;
 
-import g2.scripts.views.WebBrowser;
+import g2.scripts.views.DefaultPart_WebBrowser;
 
-import java.net.URL;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.internal.WorkbenchWindow;
-import org.eclipse.ui.internal.browser.WorkbenchBrowserSupport;
 
 
 @SuppressWarnings("restriction")
@@ -95,23 +92,32 @@ public class EclipseAPI
 		return this;
 	}
 	
+	public EclipseAPI add_MenuItem_LoginToTM(MenuManager menu)
+	{		
+		Action sampleAction = new Action("Login into TM") {
+			public void run()
+			{				
+				String sessionId = "9e78f231-106b-4f73-a10f-22ab9ebee435"; 
+				MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId: " + sessionId);				
+				
+				Browser.setCookie("Session=" + sessionId,"https://teammentor.net");
+			}};			
+		
+		menu.add(sampleAction);
+		getTopMenuManager().update(true);		
+		return this;
+	}
+		
 	
-	public WebBrowser open_Url_in_WebBrowser(String browserId, String urlToOpen)
+	public DefaultPart_WebBrowser open_Url_in_WebBrowser(String browserId, String urlToOpen)
 	{	
-		try {
-			//int style = IWorkbenchBrowserSupport.AS_EDITOR | IWorkbenchBrowserSupport.LOCATION_BAR | IWorkbenchBrowserSupport.STATUS;
-			/*int style = IWorkbenchBrowserSupport.AS_VIEW | IWorkbenchBrowserSupport.LOCATION_BAR | IWorkbenchBrowserSupport.STATUS;		
-			IWebBrowser browser;
-			
-			browser = WorkbenchBrowserSupport.getInstance().createBrowser(style, browserId, browserId, browserId);
-			
-			browser.openURL(new URL(urlToOpen));
-			return browser;*/
+		try 
+		{
 			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
-			WebBrowser webBrowser = (WebBrowser)page.showView(WebBrowser.ID, browserId, IWorkbenchPage.VIEW_ACTIVATE);
-			webBrowser.webBrowser.setUrl(urlToOpen);
-			return webBrowser;
-			
+			DefaultPart_WebBrowser webBrowserPart = (DefaultPart_WebBrowser)page.showView(DefaultPart_WebBrowser.ID, browserId, IWorkbenchPage.VIEW_ACTIVATE);
+			webBrowserPart.browser.setUrl(urlToOpen);
+			webBrowserPart.setName(urlToOpen);
+			return webBrowserPart;			
 		}
 		catch (Exception e) 
 		{

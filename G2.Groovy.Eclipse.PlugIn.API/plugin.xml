@@ -29,8 +29,8 @@
       <view name			= "Web Browser"
             icon			= "icons/sample.gif"
             category		= "New_G2_View"
-            class			= "g2.scripts.views.WebBrowser"
-            id				= "g2.scripts.views.WebBrowser"
+            class			= "g2.scripts.views.DefaultPart_WebBrowser"
+            id				= "g2.scripts.views.DefaultPart_WebBrowser"
             allowMultiple 	= "true"
             restorable 		= "false">
       </view>
