@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="G2.Editor.Feature"
+      label="G2 Editor"
+      version="1.0.1.qualifier">
+
+   <description url="http://www.teammentor.net">
+      This is a description about this Plug-in
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="org.codehaus.groovy.eclipse.feature"
+         version="0.0.0"/>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.codehaus.groovy" version="2.0.7" match="greaterOrEqual"/>
+      <import plugin="org.codehaus.groovy.eclipse.ui" version="2.8.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.8.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.8.3" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="G2.Editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

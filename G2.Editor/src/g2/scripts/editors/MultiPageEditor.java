@@ -71,48 +71,18 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	 */
 	void createPage0() {
 		try 
-		{
-			//editor = new TextEditor();
-			
-			
-			//GroovyEditor groovyEditor = new GroovyEditor();
-			//int index = addPage(groovyEditor,groovyEditor.getEditorInput());
-			//int index = addPage(editor, getEditorInput());
-			//setPageText(index, editor.getTitle());
-			
-			//GroovyEditor editor1 = new GroovyEditor();
-			
+		{				
 			myEditor = new MyEditor();			
 			int index = addPage(myEditor, getEditorInput());
 			setPageText(index, "MyEditor");
-			
-			//GridLayout gridLayout = new GridLayout();
-			
-			//composite.setLayout(gridLayout);
-			
-			
-			
-			//int index = addPage(composite);
-			//setPageText(index, "My Layout test");
-			
-//			editor1.createPartControl(sashForm);
-			
-				//int index = addPage(editor1, getEditorInput());
-			//setPageText(index, editor1.getTitle());
-			//groovyEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			
 		}
-		//catch (PartInitException e) 
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			/*ErrorDialog.openError(
-				getSite().getShell(),
-				"Error creating nested text editor",
-				null,
-				e.getStatus());*/
 		}
 	}
+	// setPageText(index, editor1.getTitle());
+	
 	/**
 	 * Creates page 1 of the multi-page editor,
 	 * which allows you to change the font used in page 2.
@@ -290,7 +260,8 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	/**
 	 * Creates the pages of the multi-page editor.
 	 */
-	protected void createPages() {
+	protected void createPages() 
+	{
 		createPage0();
 		createPage1();
 		

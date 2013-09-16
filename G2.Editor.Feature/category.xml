@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/G2.Editor.Feature_1.0.0.qualifier.jar" id="G2.Editor.Feature" version="1.0.0.qualifier">
+      <category name="TeamMentor"/>
+   </feature>
+   <category-def name="TeamMentor" label="TeamMentor"/>
+</site>

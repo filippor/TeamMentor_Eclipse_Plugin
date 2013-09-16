@@ -128,8 +128,7 @@ public class SampleNewWizard extends Wizard implements INewWizard {
 	 */
 
 	private InputStream openContentStream() {
-		String contents = "return 42;";		
-			//"This is the initial file contents for *.mpe file that should be word-sorted in the Preview page of the multi-page editor";
+		String contents = "return 42;";					
 		return new ByteArrayInputStream(contents.getBytes());
 	}
 
