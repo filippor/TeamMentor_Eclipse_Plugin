@@ -99,7 +99,8 @@ public class MyEditor extends GroovyEditor
 		}
 		catch(Exception e)
 		{
-			result.setText("GENERIC ERROR:" + e.getMessage());
+			String message = e.getMessage();
+			result.setText("GENERIC ERROR:" + message + " : " + e.toString());
 		}
-	}
+	}	
 }

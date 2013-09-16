@@ -15,18 +15,24 @@
    </extension>
    
    
-   <extension
-         point="org.eclipse.ui.views">
+   <extension point="org.eclipse.ui.views">
       <category
             name="G2 (Groovy)"
             id="New_G2_View">
       </category>
-      <view
-            name="Write G2 Script"
+      <view name="Write G2 Script"
             icon="icons/sample.gif"
             category="New_G2_View"
             class="g2.scripts.views.SimpleEditor"
             id="g2.scripts.views.SimpleEditor">
+      </view>
+      <view name			= "Web Browser"
+            icon			= "icons/sample.gif"
+            category		= "New_G2_View"
+            class			= "g2.scripts.views.WebBrowser"
+            id				= "g2.scripts.views.WebBrowser"
+            allowMultiple 	= "true"
+            restorable 		= "false">
       </view>
    </extension>
    
@@ -52,7 +58,7 @@
             visible="true"
             id="Plug2.actionSet">
          <menu
-               label="G2 &amp;Menu"
+               label="G2 &amp;Menu (v1.2)"
                id="sampleMenu">
             <separator name="sampleGroup"></separator>
          </menu>
