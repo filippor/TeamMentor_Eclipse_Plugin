@@ -74,7 +74,9 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 		{				
 			myEditor = new MyEditor();			
 			int index = addPage(myEditor, getEditorInput());
-			setPageText(index, "MyEditor");
+			String title = myEditor.getTitle();
+			setPageText(index, "G2 Script Editor");			
+			setPartName(title);			
 		}
 		catch (Exception e)
 		{

@@ -1,6 +1,7 @@
 package g2.scripts.editors;
 
 import g2.groovy.api.TestGroovy;
+import g2.java.api.TeamMentorAPI;
 import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -60,6 +61,10 @@ public class MyEditor extends GroovyEditor
 		workbench  = PlatformUI.getWorkbench();
 		display    = workbench.getDisplay();		
 		testGroovy = new TestGroovy();
+		
+		//String title = this.getTitle();
+		//this.setTitle("asdsa");
+		//this.setPartName(title);
 	}
 	public void compileAndExecuteCode()
 	{		
@@ -87,9 +92,9 @@ public class MyEditor extends GroovyEditor
 		binding.setVariable("display", display);
 		binding.setVariable("testGroovy", testGroovy);
 		binding.setVariable("binding", binding);
-		binding.setVariable("openArticle", new MethodClosure(TeamMentorMenu.class, "open_Article"));
-		binding.setVariable("loginIntoTM", new MethodClosure(TeamMentorMenu.class, "loginIntoTM"));
+		binding.setVariable("activePage", workbench.getActiveWorkbenchWindow().getActivePage());
 		
+		TeamMentorAPI.mapGroovyBindings(binding);
 		
 		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(), binding);
 		

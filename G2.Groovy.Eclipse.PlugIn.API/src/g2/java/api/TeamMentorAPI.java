@@ -12,6 +12,7 @@ public class TeamMentorAPI
 	//public static String BrowserID_TeamMentor_Article = "TeamMentor Articles";
 	public static String Server 	= "https://teammentor.net";
 	public static String SessionId  = "9e78f231-106b-4f73-a10f-22ab9ebee435";
+	public static Browser lastBrowser;
 	
 	public static void open_Article(String articleId)
 	{
@@ -64,7 +65,7 @@ public class TeamMentorAPI
 		
 	public static void edit_Wysiwyg_withMetadata(String articleId)
 	{
-		final DefaultPart_WebBrowser  browserView =  open_Article_Page("edit", articleId);
+		final Browser  browser =  open_Article_Page("edit", articleId);
 		new Thread()
 		{
 		    public void run() 
@@ -84,7 +85,7 @@ public class TeamMentorAPI
 					public void run()
 					{
 						//browserView.browser.execute("alert(13) ");						
-						browserView.browser.execute("$('.ItemDetailTable').show(); ");
+						browser.execute("$('.ItemDetailTable').show(); ");
 					}
 				});
 		        
@@ -96,11 +97,12 @@ public class TeamMentorAPI
 //		browserView.browser.execute("$('.ItemDetailTable').show(); ");
 	}		
 	
-	public static DefaultPart_WebBrowser open_Article_Page(String mode, String articleId)
+	public static Browser open_Article_Page(String mode, String articleId)
 	{
 		String tmUrl = Server + "/" + mode + "/" + articleId; 
 		//eclipseAPI.open_Url_in_WebBrowser(BrowserID_TeamMentor_Article, tmUrl);
-		return eclipseAPI.open_Url_in_WebBrowser(articleId, tmUrl);		
+		lastBrowser = eclipseAPI.open_Url_in_WebBrowser(articleId, tmUrl).browser;
+		return lastBrowser;
 	}
 
 	//hardcoded servers and sessions
@@ -118,7 +120,7 @@ public class TeamMentorAPI
 		setSession("9e78f231-106b-4f73-a10f-22ab9ebee435");
 		open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
 	}
-	public static void setServer_OWASP()
+	public static 	void setServer_OWASP()
 	{	
 		setServer("http://owasp.teammentor.net");
 		setSession("00000000-0000-0000-0000-000000000000");
@@ -134,6 +136,7 @@ public class TeamMentorAPI
 		binding.setVariable("setServer"  , new MethodClosure(TeamMentorAPI.class, "setServer"));
 		binding.setVariable("setSession" , new MethodClosure(TeamMentorAPI.class, "setSession"));
 		
+		binding.setVariable("open"		 , new MethodClosure(TeamMentorAPI.class, "view_Article"));		
 		binding.setVariable("viewArticle", new MethodClosure(TeamMentorAPI.class, "view_Article"));		
 		binding.setVariable("viewRaw"    , new MethodClosure(TeamMentorAPI.class, "view_Raw"));
 		binding.setVariable("viewHtml"   , new MethodClosure(TeamMentorAPI.class, "view_Html"));
@@ -150,5 +153,12 @@ public class TeamMentorAPI
 		binding.setVariable("setServer_Local"     , new MethodClosure(TeamMentorAPI.class, "setServer_Local"));		
 		binding.setVariable("setServer_TeamMentor", new MethodClosure(TeamMentorAPI.class, "setServer_TeamMentor"));
 		binding.setVariable("setServer_OWASP"     , new MethodClosure(TeamMentorAPI.class, "setServer_OWASP"));
+		
+		binding.setVariable("browser"     , lastBrowser);
+		binding.setVariable("eclipseAPI"     , TeamMentorAPI.eclipseAPI);
+		
+		binding.setVariable("inspect"     , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
+		binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
+		
 	}
 }

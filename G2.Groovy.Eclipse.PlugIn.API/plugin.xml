@@ -33,6 +33,14 @@
             allowMultiple 	= "true"
             restorable 		= "false">
       </view>
+      <view name			= "Panel"
+            icon			= "icons/sample.gif"
+            category		= "New_G2_View"
+            class			= "g2.scripts.views.DefaultPart_Panel"
+            id				= "g2.scripts.views.DefaultPart_Panel"
+            allowMultiple 	= "true"
+            restorable 		= "false">
+      </view>
    </extension>
    
    
