@@ -1,6 +1,7 @@
 package g2.java.api;
 
 import org.eclipse.jface.action.*;
+import org.eclipse.swt.browser.Browser;
 
 
 public class TeamMentorMenu 
@@ -21,7 +22,7 @@ public class TeamMentorMenu
 		
 		//eclipseAPI.AddMenu ('TeamMentor', {menu->withNewMenu(menu)});
 		
-		TM_Menu = eclipseAPI.addMenu ("TeamMentor (v1.0)");				
+		TM_Menu = eclipseAPI.addMenu ("TeamMentor API (v1.0)");				
 		addDefaultMenuItems();			
 	}
 	
@@ -39,6 +40,12 @@ public class TeamMentorMenu
 	{
 		String tmUrl = "http://teammentor.net/article/" + articleId; 
 		eclipseAPI.open_Url_in_WebBrowser(BrowserID_TeamMentor_Article, tmUrl);		
+	}
+	public static String loginIntoTM()
+	{
+		String sessionId = "9e78f231-106b-4f73-a10f-22ab9ebee435";
+		Browser.setCookie("Session=" + sessionId,"https://teammentor.net");
+		return sessionId;
 	}
 	
 	/*public static void add_MenuItem_Article_InSession(String articleId)

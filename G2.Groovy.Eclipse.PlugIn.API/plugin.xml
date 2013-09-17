@@ -16,11 +16,10 @@
    
    
    <extension point="org.eclipse.ui.views">
-      <category
-            name="G2 (Groovy)"
-            id="New_G2_View">
+      <category name="G2 (Groovy)"
+            	id="New_G2_View">
       </category>
-      <view name="Write G2 Script"
+      <view name="Write TeamMentor Script"
             icon="icons/sample.gif"
             category="New_G2_View"
             class="g2.scripts.views.SimpleEditor"
@@ -58,15 +57,15 @@
             visible="true"
             id="Plug2.actionSet">
          <menu
-               label="G2 &amp;Menu (v1.2)"
+               label="&amp;TeamMentor"
                id="sampleMenu">
             <separator name="sampleGroup"></separator>
          </menu>
          <action
-               label="&amp;Simple G2 Editor"
+               label="&amp;Write TeamMentor Script"
                icon="icons/sample.gif"
                class="g2.scripts.actions.OpenSimpleEditor"
-               tooltip="Simple G2 Editor"
+               tooltip="Write TeamMentor Script"
                menubarPath="sampleMenu/sampleGroup"               
                id="g2.scripts.actions.OpenSimpleEditor">
          </action>

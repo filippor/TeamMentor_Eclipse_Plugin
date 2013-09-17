@@ -1,11 +1,13 @@
 package g2.scripts.editors;
 
 import g2.groovy.api.TestGroovy;
+import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
+import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -84,6 +86,10 @@ public class MyEditor extends GroovyEditor
 		binding.setVariable("workbench", workbench);
 		binding.setVariable("display", display);
 		binding.setVariable("testGroovy", testGroovy);
+		binding.setVariable("binding", binding);
+		binding.setVariable("openArticle", new MethodClosure(TeamMentorMenu.class, "open_Article"));
+		binding.setVariable("loginIntoTM", new MethodClosure(TeamMentorMenu.class, "loginIntoTM"));
+		
 		
 		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(), binding);
 		

@@ -1,9 +1,11 @@
 package g2.scripts.views;
 
+import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -54,6 +56,12 @@ public class SimpleEditor extends ViewPart {
 
 		sashForm.setWeights(new int[] { 500,100,500});
 		
+		code.setText("loginIntoTM();\n" + 
+				     "openArticle('Cross-Site Scripting')\n" +
+				     "//openArticle('SQL Injection')");	
+		
+		
+		
 		//for scripting
 		//shell 	  = parent.getShell();
 		//composite = parent;
@@ -82,6 +90,9 @@ public class SimpleEditor extends ViewPart {
 		binding.setVariable("editor", this);
 		//binding.setVariable("workbench", workbench);
 		//binding.setVariable("display", display);
+		
+		binding.setVariable("openArticle", new MethodClosure(TeamMentorMenu.class, "open_Article"));
+		binding.setVariable("loginIntoTM", new MethodClosure(TeamMentorMenu.class, "loginIntoTM"));
 		
 		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(), binding);
 		

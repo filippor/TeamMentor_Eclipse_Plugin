@@ -96,11 +96,9 @@ public class EclipseAPI
 	{		
 		Action sampleAction = new Action("Login into TM") {
 			public void run()
-			{				
-				String sessionId = "9e78f231-106b-4f73-a10f-22ab9ebee435"; 
-				MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId: " + sessionId);				
-				
-				Browser.setCookie("Session=" + sessionId,"https://teammentor.net");
+			{								 				
+				String sessionId = TeamMentorMenu.loginIntoTM();
+				MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId " + sessionId);
 			}};			
 		
 		menu.add(sampleAction);
