@@ -1,5 +1,6 @@
 package g2.scripts.views;
 
+import g2.java.api.TeamMentorAPI;
 import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -91,8 +92,7 @@ public class SimpleEditor extends ViewPart {
 		//binding.setVariable("workbench", workbench);
 		//binding.setVariable("display", display);
 		
-		binding.setVariable("openArticle", new MethodClosure(TeamMentorMenu.class, "open_Article"));
-		binding.setVariable("loginIntoTM", new MethodClosure(TeamMentorMenu.class, "loginIntoTM"));
+		TeamMentorAPI.mapGroovyBindings(binding);			
 		
 		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(), binding);
 		

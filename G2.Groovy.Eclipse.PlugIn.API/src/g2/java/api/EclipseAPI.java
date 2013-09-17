@@ -84,7 +84,7 @@ public class EclipseAPI
 		Action sampleAction = new Action(menuName) {
 			public void run()
 			{
-				TeamMentorMenu.open_Article(articleId);		
+				TeamMentorAPI.open_Article(articleId);		
 			}};			
 		
 		menu.add(sampleAction);
@@ -97,7 +97,7 @@ public class EclipseAPI
 		Action sampleAction = new Action("Login into TM") {
 			public void run()
 			{								 				
-				String sessionId = TeamMentorMenu.loginIntoTM();
+				String sessionId = TeamMentorAPI.loginIntoTM();
 				MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId " + sessionId);
 			}};			
 		
