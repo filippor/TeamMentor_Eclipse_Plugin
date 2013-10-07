@@ -7,6 +7,9 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.CompilationCustomizer;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.SWT;
@@ -94,9 +97,17 @@ public class MyEditor extends GroovyEditor
 		binding.setVariable("binding", binding);
 		binding.setVariable("activePage", workbench.getActiveWorkbenchWindow().getActivePage());
 		
+		
+		
 		TeamMentorAPI.mapGroovyBindings(binding);
 		
-		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(), binding);
+		CompilerConfiguration configuration = new CompilerConfiguration();
+		
+		ImportCustomizer importCustomizer = new ImportCustomizer();
+		importCustomizer.addStarImports("g2.java.api.eclipse.ui");
+		configuration.addCompilationCustomizers(importCustomizer );
+		
+		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);
 		
 		try 
 		{				

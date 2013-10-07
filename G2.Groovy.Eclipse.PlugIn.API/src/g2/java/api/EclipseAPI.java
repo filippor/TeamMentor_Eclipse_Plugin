@@ -1,5 +1,6 @@
 package g2.java.api;
 
+import g2.groovy.api.Tree_ExtensionMethods;
 import g2.scripts.views.DefaultPart_WebBrowser;
 
 import org.eclipse.jface.action.Action;
@@ -19,11 +20,37 @@ public class EclipseAPI
 {
 	public static IWorkbench workbench;
 	
+	static 
+	{
+		Tree_ExtensionMethods.setExtensionmethods();
+	}
 	public EclipseAPI()
 	{	
 		workbench = PlatformUI.getWorkbench();
+		Tree_ExtensionMethods.setExtensionmethods();
 	}	
-		
+	
+	//helpers
+	
+	public IWorkbench 	    workbench()
+	{
+		return workbench;
+	}
+	public IWorkbenchWindow activeWorkbenchWindow()
+	{
+		if (workbench != null)
+			return workbench.getActiveWorkbenchWindow();
+		return null;
+	}
+	public IWorkbenchPage 	activePage()
+	{
+		IWorkbenchWindow workbenchWindow = activeWorkbenchWindow();
+		if (workbenchWindow != null)
+		 	return workbenchWindow.getActivePage();
+		return null;
+	}
+	
+	
 	public MenuManager getTopMenuManager()
 	{
 		/*workbench = PlatformUI.getWorkbench();
