@@ -1,17 +1,17 @@
 package g2.scripts.editors;
 
 import g2.groovy.api.TestGroovy;
+import g2.java.api.EclipseAPI;
 import g2.java.api.TeamMentorAPI;
-import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.customizers.CompilationCustomizer;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
-import org.codehaus.groovy.runtime.MethodClosure;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -29,18 +29,41 @@ import org.eclipse.ui.PlatformUI;
 
 public class MyEditor extends GroovyEditor 
 {
-	public SashForm 	sashForm;
-	public Button   	execute;
-	public StyledText   result;
-	public Shell   	    shell;
-	public Composite   	composite;
-	public IWorkbench   workbench;
-	public Display   	display;
-	public TestGroovy   testGroovy;
+	public Binding	    		 binding;
+	public CompilerConfiguration configuration;
+	public Composite   			 composite;
+	public EclipseAPI			 eclipseApi;
+	public Button   			 execute;
+	public StyledText   		 result;
+	public SashForm 			 sashForm;
+	public EclipseAPI			 eclipseAPI;
 	
-	public void createPartControl(Composite parent) 
+	
+	public void setBindingVariablesValues() 
 	{
-	    sashForm = new SashForm(parent, SWT.VERTICAL);
+		eclipseAPI = new EclipseAPI();
+		
+		binding = new Binding();
+				
+		binding.setVariable("binding"	, binding);
+		binding.setVariable("composite"	, composite);		
+		binding.setVariable("editor"	, this);
+		binding.setVariable("eclipseApi",eclipseAPI);		
+		
+	}
+	public void setCompilerConfiguration()
+	{
+		configuration= new CompilerConfiguration();
+		
+		ImportCustomizer importCustomizer = new ImportCustomizer();
+		importCustomizer.addStarImports("g2.java.api.eclipse.ui");
+		configuration.addCompilationCustomizers(importCustomizer );
+	}
+	
+	public void createPartControl(Composite _composite) 
+	{
+		composite  = _composite;
+	    sashForm = new SashForm(composite, SWT.VERTICAL);
 	    sashForm.setLayout(new RowLayout());
 	   
 	    super.createPartControl(sashForm);
@@ -56,18 +79,8 @@ public class MyEditor extends GroovyEditor
 						} });		
 		result .setBackground(new Color(Display.getCurrent (),200,200,255));
 
-		sashForm.setWeights(new int[] { 500,100,500});
-		
-		//for scripting
-		shell 	   = parent.getShell();
-		composite  = parent;
-		workbench  = PlatformUI.getWorkbench();
-		display    = workbench.getDisplay();		
-		testGroovy = new TestGroovy();
-		
-		//String title = this.getTitle();
-		//this.setTitle("asdsa");
-		//this.setPartName(title);
+		sashForm.setWeights(new int[] { 500,100,500});		
+
 	}
 	public void compileAndExecuteCode()
 	{		
@@ -86,26 +99,11 @@ public class MyEditor extends GroovyEditor
 	public void compileAndExecuteCode_InGuiThread()
 	{
 		String text = this.getDocumentProvider().getDocument(this.getEditorInput()).get();
-				
-		Binding binding = new Binding();		
-		binding.setVariable("shell", shell);
-		binding.setVariable("composite", composite);
-		binding.setVariable("editor", this);
-		binding.setVariable("workbench", workbench);
-		binding.setVariable("display", display);
-		binding.setVariable("testGroovy", testGroovy);
-		binding.setVariable("binding", binding);
-		binding.setVariable("activePage", workbench.getActiveWorkbenchWindow().getActivePage());
-		
-		
+								
+		setBindingVariablesValues();
+		setCompilerConfiguration();
 		
 		TeamMentorAPI.mapGroovyBindings(binding);
-		
-		CompilerConfiguration configuration = new CompilerConfiguration();
-		
-		ImportCustomizer importCustomizer = new ImportCustomizer();
-		importCustomizer.addStarImports("g2.java.api.eclipse.ui");
-		configuration.addCompilationCustomizers(importCustomizer );
 		
 		GroovyShell groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);
 		

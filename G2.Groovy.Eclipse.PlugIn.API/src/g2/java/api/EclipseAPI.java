@@ -1,12 +1,18 @@
 package g2.java.api;
 
+import g2.groovy.api.TestGroovy;
 import g2.groovy.api.Tree_ExtensionMethods;
 import g2.scripts.views.DefaultPart_WebBrowser;
+import groovy.lang.Binding;
 
+import org.codehaus.groovy.eclipse.preferences.DebuggerPreferencesPage;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -18,17 +24,43 @@ import org.eclipse.ui.internal.WorkbenchWindow;
 @SuppressWarnings("restriction")
 public class EclipseAPI 
 {
-	public static IWorkbench workbench;
+	public IWorkbenchWindow activeWorkbenchWindow;
+	public IWorkbench 		workbench;	
+	public Display	 		display;
+	public Shell   	    	shell;
+	public TestGroovy   	testGroovy;	
+	public IWorkspace   	workspace;
 	
 	static 
 	{
 		Tree_ExtensionMethods.setExtensionmethods();
 	}
+	
 	public EclipseAPI()
 	{	
-		workbench = PlatformUI.getWorkbench();
-		Tree_ExtensionMethods.setExtensionmethods();
+				
+		captureEclipseObjects();
 	}	
+	
+	
+	public EclipseAPI captureEclipseObjects()
+	{		
+		try
+		{
+			workbench 			  = PlatformUI.getWorkbench();
+			display    			  = workbench.getDisplay();
+			activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			shell 	   			  = activeWorkbenchWindow.getShell();		
+			workspace  			  = ResourcesPlugin.getWorkspace();
+			testGroovy 			  = new TestGroovy();
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		
+		return this;
+	}		
 	
 	//helpers
 	
@@ -36,12 +68,14 @@ public class EclipseAPI
 	{
 		return workbench;
 	}
+	
 	public IWorkbenchWindow activeWorkbenchWindow()
 	{
 		if (workbench != null)
 			return workbench.getActiveWorkbenchWindow();
 		return null;
 	}
+	
 	public IWorkbenchPage 	activePage()
 	{
 		IWorkbenchWindow workbenchWindow = activeWorkbenchWindow();
@@ -52,84 +86,90 @@ public class EclipseAPI
 	
 	
 	public MenuManager getTopMenuManager()
-	{
-		/*workbench = PlatformUI.getWorkbench();
-		IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();		
-		if (workbenchWindows.length > 0)
+	{		
+		if (workbench != null)
 		{
-			workbench.getActiveWorkbenchWindow().get
-			IWorkbenchWindow workbenchWindow =  workbenchWindows[0];			
-			MenuManager topMenuManager = workbenchWindow.getActionBars().getMenuManager();			
-			return topMenuManager;
-		}*/
-		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-		return ((WorkbenchWindow)window).getMenuManager();			
+			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+			return ((WorkbenchWindow)window).getMenuManager();
+		}
+		return null;
 	}		
 	
 	public MenuManager addMenu(String menuName)
 	{
 		MenuManager topMenuManager = getTopMenuManager();
-		if (topMenuManager != null)
-		{
-			MenuManager newMenu = new MenuManager(menuName);
-			topMenuManager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, newMenu);
-			
-			return newMenu;
-		}
-		return null;
+		if (topMenuManager == null)
+			return null;
+							
+		MenuManager newMenu = new MenuManager(menuName);
+		topMenuManager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, newMenu);
+		
+		return newMenu;		
 	}
 	
 	public MenuManager add_MenuItem_ShowMessage(MenuManager targetMenu, String menuName, final String messageTitle, final String messageBody)
 	{		
-		Action sampleAction = new Action(menuName) {
+		if (targetMenu == null)
+			return null;
+		
+		Action action = new Action(menuName) {
 			public void run()
 			{
 				MessageDialog.openInformation(null, messageTitle, messageBody);
 			}};		
-		targetMenu.add(sampleAction);	
+		targetMenu.add(action);	
 		targetMenu.update(true);				
 		return targetMenu;		
 	}
 	
 	public EclipseAPI add_MenuItem_OpenWebPage(MenuManager menu, final String menuName, final String urlToOpen)
 	{
-		final EclipseAPI eclipseAPI = this;	
-		Action sampleAction = new Action(menuName) {
-			public void run()
-			{
-				eclipseAPI.open_Url_in_WebBrowser(menuName,urlToOpen);				
-			}};
+		if (menu !=null)
+		{				
+			final EclipseAPI eclipseAPI = this;	
+			Action action = new Action(menuName) {
+				public void run()
+				{
+					eclipseAPI.open_Url_in_WebBrowser(menuName,urlToOpen);				
+				}};
+				
 			
-		
-		menu.add(sampleAction);
-		getTopMenuManager().update(true);		
+			menu.add(action);
+			getTopMenuManager().update(true);
+		}
 		return this;
 	}
 	
 	public EclipseAPI add_MenuItem_Article(MenuManager menu, final String menuName, final String articleId)
 	{		
-		Action sampleAction = new Action(menuName) {
-			public void run()
-			{
-				TeamMentorAPI.open_Article(articleId);		
-			}};			
-		
-		menu.add(sampleAction);
-		getTopMenuManager().update(true);		
+		if (menu!=null)
+		{
+			Action action = new Action(menuName) {
+				public void run()
+				{
+					TeamMentorAPI.open_Article(articleId);		
+				}};			
+			
+			menu.add(action);
+			getTopMenuManager().update(true);
+		}
 		return this;
 	}
 	
 	public EclipseAPI add_MenuItem_LoginToTM(MenuManager menu)
 	{		
-		Action sampleAction = new Action("Login into TM") {
-			public void run()
-			{								 				
-				String sessionId = TeamMentorAPI.loginIntoTM();
-				MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId " + sessionId);
-			}};			
-		
-		menu.add(sampleAction);
-		getTopMenuManager().update(true);		
+		if (menu!=null)
+		{
+			Action sampleAction = new Action("Login into TM") {
+				public void run()
+				{								 				
+					String sessionId = TeamMentorAPI.loginIntoTM();
+					MessageDialog.openInformation(null, "TeamMentor", "Logged in into TM using sessionId " + sessionId);
+				}};			
+			
+			menu.add(sampleAction);
+			getTopMenuManager().update(true);
+		}
 		return this;
 	}
 		

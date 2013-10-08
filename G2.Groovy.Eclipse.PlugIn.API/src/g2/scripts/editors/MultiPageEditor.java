@@ -89,7 +89,7 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	 * Creates page 1 of the multi-page editor,
 	 * which allows you to change the font used in page 2.
 	 */
-	void createPage1() 
+/*	void createPage1() 
 	{
 		Composite composite = new Composite(getContainer(), SWT.NONE);
 		
@@ -149,22 +149,17 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 				
 				String text = code.getText();
 				
-				/*MessageDialog.openInformation(
+				/ *MessageDialog.openInformation(
 						getSite().getShell(),
 						"The text below is",
-						text);*/
+						text);* /
 				Binding binding = new Binding();
 				binding.setVariable("foo", new Integer(2));
 				binding.setVariable("shell", shell);
 				binding.setVariable("editor", editor);
 				binding.setVariable("result", executionResult);
 				binding.setVariable("myEditor", myEditor);
-				
-	//			Menu menubar = shell.getMenuBar();
-				//menubar.getItems().add(new MenuItem("aa"));
-	//			MenuItem menu = shell.getMenuBar().getItem(0);
-				//shell.getMenu().add(new MenuManager("Menu &1","1"));
-				
+								
 				GroovyShell shell = new GroovyShell(binding);
 
 				try 
@@ -185,90 +180,21 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 		
 		int index = addPage(composite);
 		setPageText(index, "My Layout test");
-		//this.editor
 		
-		/*final Browser browser;
-		try {
-			browser = new Browser(composite, SWT.NONE);
-		} catch (SWTError e) {
-			System.out.println("Could not instantiate Browser: " + e.getMessage());
-			
-			return;
-		}
-		data = new GridData();
-		data.horizontalAlignment = GridData.FILL;
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalSpan = 3;
-		data.grabExcessHorizontalSpace = true;
-		data.grabExcessVerticalSpace = true;
-		browser.setLayoutData(data);
-		
-		browser.setUrl("https://www.google.com");*/
 		if(true)
 			return;
-		
-	/*	Composite composite = new Composite(getContainer(), SWT.NONE);
-		GridLayout layout = new GridLayout();
-		composite.setLayout(layout);
-		layout.numColumns = 2;
-
-		Button fontButton = new Button(composite, SWT.NONE);
-		GridData gd = new GridData(GridData.BEGINNING);
-		gd.horizontalSpan = 2;
-		fontButton.setLayoutData(gd);
-		fontButton.setText("Change Font...");
-		
-		fontButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				setFont();
-			}
-		});
-		
-		
-		Button testButton = new Button(composite, SWT.NONE);				
-		testButton.setLayoutData(gd);
-		testButton.setText("My Test!!!!!");
-		
-		testButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) 
-			{
-               
-				myTests();
-			}
-		});
-		
-		Button anotherButton = new Button(composite, SWT.NONE);				
-		anotherButton.setLayoutData(gd);
-		anotherButton.setText("Another button that does nothing");
-		
-		int index = addPage(composite);
-		setPageText(index, "Properties 123");
-		*/
+			
 	}
-	/**
-	 * Creates page 2 of the multi-page editor,
-	 * which shows the sorted text.
-	 */
-	void createPage2() {
-		Composite composite = new Composite(getContainer(), SWT.NONE);
-		FillLayout layout = new FillLayout();
-		composite.setLayout(layout);
-		text = new StyledText(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-		text.setEditable(false);
-
-		int index = addPage(composite);
-		setPageText(index, "Preview");
-	}
+	*/
 	/**
 	 * Creates the pages of the multi-page editor.
 	 */
 	protected void createPages() 
 	{
 		createPage0();
-		createPage1();
+//		createPage1();
 		
-		
-		createPage2();
+				
 	}
 	/**
 	 * The <code>MultiPageEditorPart</code> implementation of this 

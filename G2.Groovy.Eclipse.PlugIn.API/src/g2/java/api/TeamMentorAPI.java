@@ -1,6 +1,5 @@
 package g2.java.api;
 
-import g2.scripts.views.DefaultPart_WebBrowser;
 import groovy.lang.Binding;
 
 import org.codehaus.groovy.runtime.MethodClosure;

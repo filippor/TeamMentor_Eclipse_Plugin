@@ -1,12 +1,10 @@
 package g2.scripts.views;
 
 import g2.java.api.TeamMentorAPI;
-import g2.java.api.TeamMentorMenu;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
