@@ -1,8 +1,8 @@
 package g2.scripts.editors;
 
 import g2.groovy.api.TestGroovy;
-import g2.java.api.EclipseAPI;
 import g2.java.api.TeamMentorAPI;
+import g2.java.api.EclipseApi.EclipseAPI;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -92,9 +92,6 @@ public class MyEditor extends GroovyEditor
 	    		compileAndExecuteCode_InGuiThread();
 	    	}
 		});
-		
-		
-	
 	}
 	public void compileAndExecuteCode_InGuiThread()
 	{

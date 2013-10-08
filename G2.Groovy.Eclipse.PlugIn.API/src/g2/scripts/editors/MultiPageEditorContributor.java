@@ -38,9 +38,12 @@ public class MultiPageEditorContributor extends MultiPageEditorActionBarContribu
 	 * Method declared in AbstractMultiPageEditorActionBarContributor.
 	 */
 
-	public void setActivePage(IEditorPart part) {
-		if (activeEditorPart == part)
+	public void setActivePage(IEditorPart part) 
+	{
+		if (part != null && part.equals(activeEditorPart))
+		{
 			return;
+		}
 
 		activeEditorPart = part;
 

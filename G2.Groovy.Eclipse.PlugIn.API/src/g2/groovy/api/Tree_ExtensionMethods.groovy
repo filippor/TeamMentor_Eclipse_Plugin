@@ -1,6 +1,6 @@
 package g2.groovy.api
 
-import g2.java.api.eclipse.ui.eclipse_Window;
+import g2.java.api.eclipse.ui.Eclipse_Window;
 import org.eclipse.swt.widgets.Tree;
 
 public class Tree_ExtensionMethods 
@@ -23,7 +23,7 @@ public class Tree_ExtensionMethods
 			{ 
 				text ->
 						Tree tree = delegate;
-						eclipse_Window.add_Node(tree,text	);
+						Eclipse_Window.add_Node(tree,text	);
 						return 	tree;							
 			};
 	
@@ -41,7 +41,7 @@ public class Tree_ExtensionMethods
 		String.metaClass.alert = 
 			{
 				text ->
-							return text;			
+							return delegate;			
 			};	
 	}
 }

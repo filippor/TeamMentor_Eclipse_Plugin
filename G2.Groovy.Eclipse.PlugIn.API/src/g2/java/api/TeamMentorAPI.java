@@ -1,5 +1,6 @@
 package g2.java.api;
 
+import g2.java.api.EclipseApi.EclipseAPI;
 import groovy.lang.Binding;
 
 import org.codehaus.groovy.runtime.MethodClosure;
@@ -8,10 +9,13 @@ import org.eclipse.swt.browser.Browser;
 public class TeamMentorAPI 
 {
 	public static EclipseAPI eclipseAPI;
-	//public static String BrowserID_TeamMentor_Article = "TeamMentor Articles";
-	public static String Server 	= "https://teammentor.net";
-	public static String SessionId  = "9e78f231-106b-4f73-a10f-22ab9ebee435";
-	public static Browser lastBrowser;
+	public static String 	 server 	= "https://teammentor.net";
+	public static String 	 sessionId  = "3d4732ca-dfe3-4db0-943e-02ad4e0c6f29";
+	public static Browser 	 lastBrowser;
+	
+	public TeamMentorAPI()
+	{}
+	
 	
 	public static void open_Article(String articleId)
 	{
@@ -40,16 +44,16 @@ public class TeamMentorAPI
 	}
 	public static String loginIntoTM()
 	{		
-		Browser.setCookie("Session=" + SessionId, Server);//"https://teammentor.net");
-		return SessionId;
+		Browser.setCookie("Session=" + sessionId, server);
+		return sessionId;
 	}	
 	public static void setServer(String newServer)
 	{
-		Server = newServer;
+		server = newServer;
 	}
 	public static void setSession(String session)
 	{
-		SessionId = session;
+		sessionId = session;
 		loginIntoTM();
 	}
 	public static void edit_Notepad(String articleId)
@@ -65,42 +69,33 @@ public class TeamMentorAPI
 	public static void edit_Wysiwyg_withMetadata(String articleId)
 	{
 		final Browser  browser =  open_Article_Page("edit", articleId);
-		new Thread()
-		{
-		    public void run() 
-		    {
-		    	System.out.println("blah");
-		    	try 
-		    	{
-					Thread.sleep(500);
-				}
-		    	catch (InterruptedException e) 
-				{ 
-					e.printStackTrace();
-				}
-		    	org.eclipse.swt.widgets.Display.getDefault().asyncExec(new Runnable()
+		new Thread() {
+		    public void run() {		    			    	
+				try 
 				{
-					@Override
-					public void run()
+					Thread.sleep(500);
+					org.eclipse.swt.widgets.Display.getDefault().asyncExec(new Runnable()
 					{
-						//browserView.browser.execute("alert(13) ");						
-						browser.execute("$('.ItemDetailTable').show(); ");
-					}
-				});
-		        
+						@Override
+						public void run()
+						{					
+							browser.execute("$('.ItemDetailTable').show(); ");
+						}
+					});
+				}
+				catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}	        
 		    }
 		}.start();
-		
-		//browserView.browser.execute("alert(13) ");	
-		//eclipseAPI.open_Url_in_WebBrowser(articleId,"javascript:alert(12")
-//		browserView.browser.execute("$('.ItemDetailTable').show(); ");
+				
 	}		
 	
 	public static Browser open_Article_Page(String mode, String articleId)
 	{
-		String tmUrl = Server + "/" + mode + "/" + articleId; 
-		//eclipseAPI.open_Url_in_WebBrowser(BrowserID_TeamMentor_Article, tmUrl);
-		lastBrowser = eclipseAPI.open_Url_in_WebBrowser(articleId, tmUrl).browser;
+		String tmUrl = server + "/" + mode + "/" + articleId; 
+		lastBrowser = eclipseAPI.panels.open_Url_in_WebBrowser(articleId, tmUrl).browser;
 		return lastBrowser;
 	}
 
@@ -115,9 +110,10 @@ public class TeamMentorAPI
 	
 	public static void setServer_TeamMentor()
 	{	
-		setServer("http://www.teammentor.net");
-		setSession("9e78f231-106b-4f73-a10f-22ab9ebee435");
-		open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
+		//setServer("http://www.teammentor.net");
+		setServer("http://checkmarx.teammentor.net");
+		setSession("6cd0322a-191d-4eea-b26f-47ef6a1ab2d9");
+		//open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
 	}
 	public static 	void setServer_OWASP()
 	{	

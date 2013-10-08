@@ -44,7 +44,7 @@ public class OpenSimpleEditor implements IWorkbenchWindowActionDelegate
 		}
 		catch (PartInitException e) 
 		{ 
-			e.printStackTrace();
+			
 		}		
 	}
 

@@ -94,8 +94,7 @@ public class SampleNewWizardPage extends WizardPage {
 	 */
 
 	private void initialize() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
+		if (selection.isEmpty() == false && selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			if (ssel.size() > 1)
 				return;
@@ -133,7 +132,8 @@ public class SampleNewWizardPage extends WizardPage {
 	 * Ensures that both text fields are set.
 	 */
 
-	private void dialogChanged() {
+	private void dialogChanged() 
+	{
 		IResource container = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(getContainerName()));
 		String fileName = getFileName();

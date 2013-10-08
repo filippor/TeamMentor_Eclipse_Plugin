@@ -9,9 +9,9 @@ public class DefaultPart_WebBrowser extends ViewPart
 {
 	public static final String ID = "g2.scripts.views.DefaultPart_WebBrowser";
 	
-	public static String DEFAULT_HTML = "<html>" + 
-    									"<link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'>" + 
-    									"<h1 class='alert alert-success'>TeamMentor window</h1>... some content will go here....</html>";
+	public static final String DEFAULT_HTML = "<html>" + 
+    										  "<link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'>" + 
+    										  "<h1 class='alert alert-success'>TeamMentor window</h1>... some content will go here....</html>";
 	public  Browser browser;
 	
 	public void createPartControl(Composite parent) 

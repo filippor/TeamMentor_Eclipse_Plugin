@@ -43,18 +43,18 @@ import org.eclipse.ui.ide.IDE;
 public class MultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
 
 	/** The text editor used in page 0. */
-	private TextEditor editor;
+	public TextEditor editor;
 
 	/** The font chosen in page 1. */
-	private Font font;
+	public Font font;
 
 	/** The text widget used in page 2. */
-	private StyledText text;
+	public StyledText text;
 	
-	private StyledText code;
-	private StyledText executionResult;
-	private Shell shell;
-	private MyEditor myEditor;
+	public StyledText code;
+	public StyledText executionResult;
+	public Shell shell;
+	public MyEditor myEditor;
 	/**
 	 * Creates a multi-page editor example.
 	 */
@@ -236,7 +236,9 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	public void init(IEditorSite site, IEditorInput editorInput)
 		throws PartInitException {
 		if (!(editorInput instanceof IFileEditorInput))
+		{
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
+		}
 		super.init(site, editorInput);
 	}
 	/* (non-Javadoc)
@@ -282,12 +284,12 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	}
 	
 	
-	void myTests()
+	/*void myTests()
 	{
-		/*MessageDialog.openInformation(
+		/ *MessageDialog.openInformation(
 				getSite().getShell(),
 				"Hellogroovyworld Plug-in",
-				"Hello, Groovy world");*/
+				"Hello, Groovy world");* /
 		String text = editor.getDocumentProvider().getDocument(editor.getEditorInput()).get();
 		Binding binding = new Binding();
 		binding.setVariable("foo", new Integer(2));
@@ -300,5 +302,5 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 				getSite().getShell(),
 				"The execution result was",
 				text + "   " +  value);
-	}	
+	}	*/
 }

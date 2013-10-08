@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import g2.java.api.EclipseAPI;
+import g2.java.api.EclipseApi.EclipseAPI;
 import g2.scripts.views.DefaultPart_Panel;
 import g2.scripts.views.DefaultPart_WebBrowser;
 
@@ -17,23 +17,23 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
-public class eclipse_Window extends EclipseAPI
+public class Eclipse_Window extends EclipseAPI
 {
 	public DefaultPart_Panel panel;
 	public String    panelId; 
 	
-	public eclipse_Window() throws PartInitException 
+	public Eclipse_Window() throws PartInitException 
 	{
 		panelId = String.valueOf(Math.abs(new Random().nextInt()));
 		createWindow();
 	}
-	public eclipse_Window(String _panelId) throws PartInitException
+	public Eclipse_Window(String _panelId) throws PartInitException
 	{		
 		panelId = _panelId;		
 		createWindow();
 	}
 	
-	public eclipse_Window createWindow() throws PartInitException
+	private Eclipse_Window createWindow() throws PartInitException
 	{
 		panel = (DefaultPart_Panel)activePage().showView(DefaultPart_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
 		title(panelId);
@@ -43,7 +43,7 @@ public class eclipse_Window extends EclipseAPI
 	{
 		return panel.getPartName();
 	}
-	public eclipse_Window title(String title)
+	public Eclipse_Window title(String title)
 	{
 		panel.title(title);
 		return this;		
@@ -63,11 +63,19 @@ public class eclipse_Window extends EclipseAPI
 	    return browser;
 	}
 	
-	public TreeViewer add_TreeView()
+	public Tree add_TreeView()
 	{
-		TreeViewer treeViewer  = new TreeViewer(panel.composite);
+		Tree tree  = (Tree)new TreeViewer(panel.composite).getTree();
 		panel.composite.layout();
-	    return treeViewer;
+	    return tree;
+	}
+	public Eclipse_Window clear()
+	{		
+		for(Control control : children())
+		{
+			control.dispose();
+		}
+		return this;
 	}
 		
 	

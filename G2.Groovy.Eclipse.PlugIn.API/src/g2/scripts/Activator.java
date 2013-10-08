@@ -13,24 +13,24 @@ public class Activator extends AbstractUIPlugin
 {
 	public static final String PLUGIN_ID = "g2.scripts"; 
 
-	private static Activator plugin;
+	public static Activator plugin;
 	
 
 	public Activator() { }
 
-	public void start(BundleContext context) throws Exception 
-	{
+	public void start(BundleContext context)  throws Exception
+	{		
 		super.start(context);
-		
 		TeamMentorMenu.createTeamMentorMenu();
 		plugin = this;
+			
 	}
 	
-	public void stop(BundleContext context) throws Exception 
-	{
+	public void stop(BundleContext context)  throws Exception
+	{				
 		plugin = null;
 		super.stop(context);
-	}
+	}	
 
 	public static Activator getDefault() 
 	{

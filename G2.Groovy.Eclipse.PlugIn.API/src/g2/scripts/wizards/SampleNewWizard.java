@@ -107,6 +107,7 @@ public class SampleNewWizard extends Wizard implements INewWizard {
 			}
 			stream.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");
@@ -116,7 +117,9 @@ public class SampleNewWizard extends Wizard implements INewWizard {
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					IDE.openEditor(page, file, true);
-				} catch (PartInitException e) {
+				} catch (PartInitException e) 
+				{
+					e.printStackTrace();
 				}
 			}
 		});
