@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="TeamMentor.Feature"
-      label="TeamMentor Eclipse PlugIn"
-      version="1.1.0.qualifier">
+      label="TeamMentor Eclipse PlugIn - For Fortify"
+      version="1.3.0.qualifier">
 
    <description url="http://www.teammentor.net">
       This is TeamMentor&apos;s Eclipse PlugIn
@@ -29,14 +29,7 @@
    </requires>
 
    <plugin
-         id="G2.Groovy.Eclipse.PlugIn.API"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="TeamMentor.Eclipse.PlugIn"
+         id="TeamMentor.Eclipse.Plugin.Fortify"
          download-size="0"
          install-size="0"
          version="0.0.0"

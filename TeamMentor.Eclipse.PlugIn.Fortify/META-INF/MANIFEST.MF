@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: G2 Groovy API
-Bundle-SymbolicName: G2.Groovy.Eclipse.PlugIn.API;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Name: TeamMentor Eclipse Plugin Fortify
+Bundle-SymbolicName: TeamMentor.Eclipse.Plugin.Fortify;singleton:=true
+Bundle-Version: 1.3.0.qualifier
 Bundle-Activator: g2.scripts.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -1,6 +1,9 @@
 package g2.scripts;
 
+import g2.groovy.api.FortifyAPI;
+import g2.java.api.TeamMentorAPI;
 import g2.java.api.TeamMentorMenu;
+import g2.java.api.EclipseApi.EclipseAPI;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -15,15 +18,26 @@ public class Activator extends AbstractUIPlugin
 
 	public static Activator plugin;
 	
+	public static EclipseAPI eclipseApi;
+	public static FortifyAPI fortifyApi;
 
-	public Activator() { }
+	
+
+	public Activator() 
+	{
+		
+	}
 
 	public void start(BundleContext context)  throws Exception
 	{		
 		super.start(context);
-		TeamMentorMenu.createTeamMentorMenu();
 		plugin = this;
-			
+
+		//TeamMentorMenu.createTeamMentorMenu();
+		eclipseApi = new EclipseAPI();
+		fortifyApi = new FortifyAPI(eclipseApi);
+		TeamMentorAPI.eclipseAPI = eclipseApi;
+		TeamMentorAPI.setServer_TeamMentor();
 	}
 	
 	public void stop(BundleContext context)  throws Exception

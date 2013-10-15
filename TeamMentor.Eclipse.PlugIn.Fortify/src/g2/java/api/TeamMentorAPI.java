@@ -110,9 +110,10 @@ public class TeamMentorAPI
 	
 	public static void setServer_TeamMentor()
 	{	
-		//setServer("http://www.teammentor.net");
-		setServer("http://checkmarx.teammentor.net");
-		setSession("6cd0322a-191d-4eea-b26f-47ef6a1ab2d9");
+		setServer("http://www.teammentor.net");
+		setSession("5d065953-6603-4eca-a1e8-9d64a70a399d"); // logged in as fortify-plugin account
+		//setServer("http://checkmarx.teammentor.net"); 
+		//setSession("6cd0322a-191d-4eea-b26f-47ef6a1ab2d9");
 		//open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
 	}
 	public static 	void setServer_OWASP()

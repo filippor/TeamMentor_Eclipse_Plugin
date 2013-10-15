@@ -57,7 +57,8 @@ public class Menus
 				MessageDialog.openInformation(null, messageTitle, messageBody);
 			}};		
 		targetMenu.add(action);	
-		targetMenu.update(true);				
+		//targetMenu.update(true);	
+		getTopMenuManager().update(true);
 		return targetMenu;		
 	}
 	

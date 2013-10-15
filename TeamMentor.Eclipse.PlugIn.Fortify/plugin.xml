@@ -70,12 +70,28 @@
             <separator name="sampleGroup"></separator>
          </menu>
          <action
-               label="&amp;Write TeamMentor Script"
-               icon="icons/sample.gif"
                class="g2.scripts.actions.OpenSimpleEditor"
-               tooltip="Write TeamMentor Script"
+               icon="icons/sample.gif"
+               id="g2.scripts.actions.OpenSimpleEditor"
+               label="&amp;Write TeamMentor Script"
+               menubarPath="sampleMenu/sampleGroup"
+               tooltip="Write TeamMentor Script">
+         </action>
+         <action
+               label="&amp;Open TeamMentor.net"
+               icon="icons/sample.gif"
+               class="g2.scripts.actions.OpenTeamMentor"
+               tooltip="Open TeamMentor.net"
                menubarPath="sampleMenu/sampleGroup"               
-               id="g2.scripts.actions.OpenSimpleEditor">
+               id="g2.scripts.actions.OpenTeamMentor">
+         </action>
+         <action
+               class="g2.scripts.actions.EnableTeamMentor"
+               icon="icons/sample.gif"
+               id="g2.scripts.actions.EnableTeamMentor"
+               label="&amp;Enable TeamMentor.net"
+               menubarPath="sampleMenu/sampleGroup"
+               tooltip="Open TeamMentor.net">
          </action>
       </actionSet>
    </extension>

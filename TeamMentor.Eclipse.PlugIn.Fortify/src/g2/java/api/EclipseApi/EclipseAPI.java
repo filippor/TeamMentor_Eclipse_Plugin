@@ -2,17 +2,24 @@ package g2.java.api.EclipseApi;
 
 import g2.groovy.api.TestGroovy;
 import g2.groovy.api.Tree_ExtensionMethods;
+import g2.java.api.eclipse.ui.EclipsePartEvents;
+
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 public class EclipseAPI 
 {
+	public static EclipsePartEvents partEvents;
 	public IWorkbenchWindow activeWorkbenchWindow;
 	public IWorkbench 		workbench;	
 	public Display	 		display;
@@ -25,7 +32,7 @@ public class EclipseAPI
 	
 	static 
 	{
-		Tree_ExtensionMethods.setExtensionmethods();
+		Tree_ExtensionMethods.setExtensionmethods();		
 	}
 	
 	public EclipseAPI()
@@ -34,8 +41,20 @@ public class EclipseAPI
 		menus  = new Menus(workbench);
 		panels = new Panels(workbench);
 		
+		setEclipsePartEvents();
 	}	
 	
+	public EclipseAPI setEclipsePartEvents()
+	{
+		if(partEvents==null)
+		{
+			partEvents = new EclipsePartEvents();
+
+			IPartService partService = workbench.getActiveWorkbenchWindow().getPartService();
+			partService.addPartListener(partEvents);
+		}
+		return this;
+	}
 	
 	public EclipseAPI captureEclipseObjects()
 	{		
@@ -78,6 +97,18 @@ public class EclipseAPI
 		if (workbenchWindow != null)
 		 	return workbenchWindow.getActivePage();
 		return null;
+	}
+	
+	public EclipseAPI alert(String message)
+	{		
+		MessageDialog.openInformation(shell,"Message",message);
+		return this;
+	}
+	public EclipseAPI log(String message)
+	{		
+		StatusManager manager = StatusManager.getManager();
+		manager.handle(new Status(Status.INFO, "Message", message));		
+		return this;
 	}
 		
 }

@@ -38,10 +38,12 @@ public class Tree_ExtensionMethods
 		
 		//String		
 		
-		String.metaClass.alert = 
+		/*String.metaClass.alert = 
 			{
-				text ->
+				text ->					
 							return delegate;			
-			};	
+			};*/
+		
+			
 	}
 }
