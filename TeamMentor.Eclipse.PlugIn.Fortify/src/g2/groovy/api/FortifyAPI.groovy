@@ -81,22 +81,19 @@ class FortifyAPI
 					public void widgetSelected(SelectionEvent e)
 					{
 						def _eclipseApi = g2.scripts.Activator.eclipseApi;
-						//try
-						//{							
-							def _fortifyApi = g2.scripts.Activator.fortifyApi;
-							
-							def _currentIssue = _fortifyApi.getCurrentIssueName();
-							def tmGuid =  _fortifyApi.resolveIssueNameToGuid(_currentIssue);
-							_eclipseApi.log("current issue: " + _currentIssue + " : GUID : " + tmGuid);
-							if (tmGuid != null)
-							{
-								g2.java.api.TeamMentorAPI.open_Article(tmGuid);
-							}
-						/*}
-						catch(Exception ex)
+						def _fortifyApi = g2.scripts.Activator.fortifyApi;
+						
+						def _currentIssue = _fortifyApi.getCurrentIssueName();
+						def tmGuid =  _fortifyApi.resolveIssueNameToGuid(_currentIssue);
+						_eclipseApi.log("current issue: " + _currentIssue + " : GUID : " + tmGuid);
+						if (tmGuid != null)
 						{
-							_eclipseApi.log("Error in widgetSelected: " + ex.message);
-						}*/
+							g2.java.api.TeamMentorAPI.open_Article(tmGuid);
+						}
+						else
+						{
+							g2.java.api.TeamMentorAPI.show_No_ArticleMessage();							
+						}						
 					}});
 				eclipseApi.log("*** Configured Tree listening event");
 			}
