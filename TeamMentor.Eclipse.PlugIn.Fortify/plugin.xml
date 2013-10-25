@@ -7,7 +7,7 @@
       <editor
             name="G2 Script (Groovy)"
             extensions="g2"
-            icon="icons/sample.gif"
+            icon="icons/tm.ico"
             contributorClass="g2.scripts.editors.MultiPageEditorContributor"
             class="g2.scripts.editors.MultiPageEditor"
             id="g2.scripts.editors.MultiPageEditor">
@@ -20,13 +20,13 @@
             	id="New_G2_View">
       </category>
       <view name="Write TeamMentor Script"
-            icon="icons/sample.gif"
+            icon="icons/tm.ico"
             category="New_G2_View"
             class="g2.scripts.views.SimpleEditor"
             id="g2.scripts.views.SimpleEditor">
       </view>
       <view name			= "Web Browser"
-            icon			= "icons/sample.gif"
+            icon			= "icons/tm.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_WebBrowser"
             id				= "g2.scripts.views.DefaultPart_WebBrowser"
@@ -34,7 +34,7 @@
             restorable 		= "false">
       </view>
       <view name			= "Panel"
-            icon			= "icons/sample.gif"
+            icon			= "icons/tm.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_Panel"
             id				= "g2.scripts.views.DefaultPart_Panel"
@@ -51,14 +51,28 @@
       </category>
       <wizard
             name="Write G2 Script"
-            icon="icons/sample.gif"
+            icon="icons/tm.ico"
             category="New_G2_Wizard"
             class="g2.scripts.wizards.SampleNewWizard"
             id="g2.scripts.wizards.SampleNewWizard">
       </wizard>
    </extension>
    
+  <extension point="org.eclipse.ui.preferencePages">
+     <page
+           class="teammentor.eclipse.plugin.fortify.preferences.PluginPreferences"
+           id="teammentor.eclipse.plugin.fortify.preferences.PluginPreferences"
+           name="TeamMentor Preferences">
+     </page>
+  </extension>
   <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="teammentor.eclipse.plugin.fortify.preferences.PreferenceInitializer">
+     </initializer>
+  </extension>
+  
+    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
             label="Sample Action Set"
@@ -66,32 +80,38 @@
             id="Plug2.actionSet">
          <menu
                label="&amp;TeamMentor"
-               id="sampleMenu">
-            <separator name="sampleGroup"></separator>
+               id="teamMentorMenu">
+            <separator name="teammentorGroup"></separator>
          </menu>
          <action
                class="g2.scripts.actions.OpenSimpleEditor"
-               icon="icons/sample.gif"
                id="g2.scripts.actions.OpenSimpleEditor"
-               label="&amp;Write TeamMentor Script"
-               menubarPath="sampleMenu/sampleGroup"
-               tooltip="Write TeamMentor Script">
+               label="&amp;Util - Write Script (TeamMentor DSL)"
+               menubarPath="teamMentorMenu/teammentorGroup"
+               tooltip="Util - Write Script (TeamMentor DSL)">
+         </action>
+         <action
+               class="g2.scripts.actions.OpenPropertiesPage"
+               id="g2.scripts.actions.OpenPropertiesPage"
+               label="&amp;Open properties Page"
+               menubarPath="teamMentorMenu/teammentorGroup"
+               tooltip="&amp;Open properties Page">
          </action>
          <action
                label="&amp;Open TeamMentor.net"
-               icon="icons/sample.gif"
+               icon="icons/tm.ico"
                class="g2.scripts.actions.OpenTeamMentor"
                tooltip="Open TeamMentor.net"
-               menubarPath="sampleMenu/sampleGroup"               
+               menubarPath="teamMentorMenu/teammentorGroup"               
                id="g2.scripts.actions.OpenTeamMentor">
          </action>
          <action
                class="g2.scripts.actions.EnableTeamMentor"
-               icon="icons/sample.gif"
+               icon="icons/tm.ico"
                id="g2.scripts.actions.EnableTeamMentor"
-               label="&amp;Enable TeamMentor.net"
-               menubarPath="sampleMenu/sampleGroup"
-               tooltip="Open TeamMentor.net">
+               label="&amp;Open TeamMentor View"
+               menubarPath="teamMentorMenu/teammentorGroup"
+               tooltip="Open TeamMentor View">
          </action>
       </actionSet>
    </extension>
