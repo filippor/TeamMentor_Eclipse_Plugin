@@ -126,7 +126,7 @@ public class TeamMentorAPI
 	public static void setServer_Local()
 	{	
 		setServer("http://localhost:12120");
-		setSession("b6cb4978-d134-4794-a435-72596bc796a2");
+		setSession("00000000-0000-0000-0000-000000000000");
 		open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
 	}
 	public static void setServer_CurrentSetup()
@@ -138,7 +138,7 @@ public class TeamMentorAPI
 	public static void setServer_TeamMentor()
 	{	
 		setServer("https://teammentor.net");
-		setSession("5d065953-6603-4eca-a1e8-9d64a70a399d"); // logged in as fortify-plugin account
+		setSession("00000000-0000-0000-0000-000000000000"); // logged in as fortify-plugin account
 		//open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
 	}
 	public static 	void setServer_OWASP()
