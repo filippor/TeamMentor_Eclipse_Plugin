@@ -7,7 +7,7 @@
       <editor
             name="G2 Script (Groovy)"
             extensions="g2"
-            icon="icons/tm.ico"
+            icon="icons/TM.ico"
             contributorClass="g2.scripts.editors.MultiPageEditorContributor"
             class="g2.scripts.editors.MultiPageEditor"
             id="g2.scripts.editors.MultiPageEditor">
@@ -20,13 +20,13 @@
             	id="New_G2_View">
       </category>
       <view name="Write TeamMentor Script"
-            icon="icons/tm.ico"
+            icon="icons/TM.ico"
             category="New_G2_View"
             class="g2.scripts.views.SimpleEditor"
             id="g2.scripts.views.SimpleEditor">
       </view>
       <view name			= "Web Browser"
-            icon			= "icons/tm.ico"
+            icon			= "icons/TM.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_WebBrowser"
             id				= "g2.scripts.views.DefaultPart_WebBrowser"
@@ -34,7 +34,7 @@
             restorable 		= "false">
       </view>
       <view name			= "Panel"
-            icon			= "icons/tm.ico"
+            icon			= "icons/TM.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_Panel"
             id				= "g2.scripts.views.DefaultPart_Panel"
@@ -51,7 +51,7 @@
       </category>
       <wizard
             name="Write G2 Script"
-            icon="icons/tm.ico"
+            icon="icons/TM.ico"
             category="New_G2_Wizard"
             class="g2.scripts.wizards.SampleNewWizard"
             id="g2.scripts.wizards.SampleNewWizard">
