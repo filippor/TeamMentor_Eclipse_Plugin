@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TeamMentor Eclipse Plugin Fortify
 Bundle-SymbolicName: TeamMentor.Eclipse.Plugin.Fortify;singleton:=true
-Bundle-Version: 1.3.3.qualifier
+Bundle-Version: 1.3.4.qualifier
 Bundle-Activator: g2.scripts.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
