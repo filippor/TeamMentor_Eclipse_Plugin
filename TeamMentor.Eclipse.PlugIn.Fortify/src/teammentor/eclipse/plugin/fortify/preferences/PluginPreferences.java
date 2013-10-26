@@ -34,9 +34,10 @@ public class PluginPreferences extends FieldEditorPreferencePage implements IWor
 	public void createFieldEditors() 
 	{
 		
-		addField(new StringFieldEditor(PreferenceConstants.P_TEAMMENTOR_SERVER, "TeamMentor &Server:", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_TEAMMENTOR_SESSION_ID, "TeamMentor &SessionId:", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_ARTICLE_NEW_WINDOW,"&Open TeamMentor article in new window",getFieldEditorParent()));				
+		addField(new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SERVER, "TeamMentor &Server:", getFieldEditorParent()));
+		addField(new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID, "TeamMentor &SessionId:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceInitializer.P_OPEN_ARTICLE_NEW_WINDOW,"&Open TeamMentor article in new window",getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_ADVANCED_MODE,"&Show Advanced Mode Features",getFieldEditorParent()));
 	}
 	
 	public void init(IWorkbench workbench) {
@@ -44,23 +45,23 @@ public class PluginPreferences extends FieldEditorPreferencePage implements IWor
 	
 	public static boolean openArticleInNewWindow()
 	{			
-		return store.getBoolean(PreferenceConstants.P_OPEN_ARTICLE_NEW_WINDOW);
+		return store.getBoolean(PreferenceInitializer.P_OPEN_ARTICLE_NEW_WINDOW);
 	}
 	public static String getServer()
 	{
-		return store.getString(PreferenceConstants.P_TEAMMENTOR_SERVER);
+		return store.getString(PreferenceInitializer.P_TEAMMENTOR_SERVER);
 	}
 	public static void setServer(String value)
 	{
-		store.setValue(PreferenceConstants.P_TEAMMENTOR_SERVER,value);
+		store.setValue(PreferenceInitializer.P_TEAMMENTOR_SERVER,value);
 	}
 	public static String getSessionId()
 	{
-		return store.getString(PreferenceConstants.P_TEAMMENTOR_SESSION_ID);
+		return store.getString(PreferenceInitializer.P_TEAMMENTOR_SESSION_ID);
 	}
 	public static void setSessionId(String value)
 	{
-		store.setValue(PreferenceConstants.P_TEAMMENTOR_SESSION_ID, value);
+		store.setValue(PreferenceInitializer.P_TEAMMENTOR_SESSION_ID, value);
 	}
 	public static String getDefaultBrowserId()
 	{
