@@ -37,8 +37,7 @@ public class Activator extends AbstractUIPlugin
 		eclipseApi = new EclipseAPI();
 		fortifyApi = new FortifyAPI(eclipseApi);
 		TeamMentorAPI.eclipseAPI = eclipseApi;
-		TeamMentorAPI.setServer_CurrentSetup();
-		TeamMentorAPI.setServer_TeamMentor();
+		TeamMentorAPI.setServer_CurrentSetup();		
 	}
 	
 	public void stop(BundleContext context)  throws Exception

@@ -55,9 +55,9 @@ public class SimpleEditor extends ViewPart {
 
 		sashForm.setWeights(new int[] { 500,100,500});
 		
-		code.setText("loginIntoTM();\n" + 
-				     "openArticle('Cross-Site Scripting')\n" +
-				     "//openArticle('SQL Injection')");	
+		code.setText( "openArticle('Cross-Site Scripting')\n" +
+				      "//openArticle('SQL Injection')\n" + 
+					  "return eclipseAPI;");	
 		
 		
 		

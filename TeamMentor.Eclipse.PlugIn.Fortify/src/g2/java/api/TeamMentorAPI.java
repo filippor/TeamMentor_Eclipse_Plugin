@@ -123,19 +123,19 @@ public class TeamMentorAPI
 	
 	//hardcoded servers and sessions
 	
-	public static void setServer_Local()
+	/*public static void setServer_Local()
 	{	
 		setServer("http://localhost:12120");
 		setSession("00000000-0000-0000-0000-000000000000");
 		open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
-	}
+	}*/
 	public static void setServer_CurrentSetup()
 	{
 		setServer(PluginPreferences.getServer());
 		setSession(PluginPreferences.getSessionId()); 
 	}
 	
-	public static void setServer_TeamMentor()
+	/*public static void setServer_TeamMentor()
 	{	
 		setServer("https://teammentor.net");
 		setSession("00000000-0000-0000-0000-000000000000"); // logged in as fortify-plugin account
@@ -146,7 +146,7 @@ public class TeamMentorAPI
 		setServer("http://owasp.teammentor.net");
 		setSession("00000000-0000-0000-0000-000000000000");
 		open_Article("57b928e2-5bc1-4d98-b3df-c7cca05dc5a8");
-	}
+	}*/
 	
 	
 	public static void mapGroovyBindings(Binding binding) 
@@ -170,9 +170,9 @@ public class TeamMentorAPI
 		
 		binding.setVariable("openPage"     , new MethodClosure(TeamMentorAPI.class, "open_Article_Page"));
 		
-		binding.setVariable("setServer_Local"     , new MethodClosure(TeamMentorAPI.class, "setServer_Local"));		
-		binding.setVariable("setServer_TeamMentor", new MethodClosure(TeamMentorAPI.class, "setServer_TeamMentor"));
-		binding.setVariable("setServer_OWASP"     , new MethodClosure(TeamMentorAPI.class, "setServer_OWASP"));
+//		binding.setVariable("setServer_Local"     , new MethodClosure(TeamMentorAPI.class, "setServer_Local"));		
+//		binding.setVariable("setServer_TeamMentor", new MethodClosure(TeamMentorAPI.class, "setServer_TeamMentor"));
+//		binding.setVariable("setServer_OWASP"     , new MethodClosure(TeamMentorAPI.class, "setServer_OWASP"));
 		
 		binding.setVariable("browser"     , lastBrowser);
 		binding.setVariable("eclipseAPI"  , TeamMentorAPI.eclipseAPI);

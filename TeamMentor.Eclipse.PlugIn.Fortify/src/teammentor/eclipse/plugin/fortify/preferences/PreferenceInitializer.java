@@ -19,6 +19,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 	public void initializeDefaultPreferences() 
 	{		
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				
 		store.setDefault(P_OPEN_ARTICLE_NEW_WINDOW, false);
 		store.setDefault(P_TEAMMENTOR_SERVER, "https://vulnerabilities.teammentor.net");
 		store.setDefault(P_TEAMMENTOR_SESSION_ID,"00000000-0000-0000-0000-000000000000");

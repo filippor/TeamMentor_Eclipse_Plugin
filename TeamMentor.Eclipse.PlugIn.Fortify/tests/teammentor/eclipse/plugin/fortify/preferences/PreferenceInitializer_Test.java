@@ -20,7 +20,7 @@ public class PreferenceInitializer_Test extends Activator_Mock
 		assertNotNull(store);
 		
 		preferenceInitializer.initializeDefaultPreferences();
-				
+
 		verify(store).setDefault(PreferenceInitializer.P_TEAMMENTOR_SERVER, "https://vulnerabilities.teammentor.net");
 		verify(store).setDefault(PreferenceInitializer.P_TEAMMENTOR_SESSION_ID, "00000000-0000-0000-0000-000000000000");
 		verify(store).setDefault(PreferenceInitializer.P_OPEN_ARTICLE_NEW_WINDOW, false);
