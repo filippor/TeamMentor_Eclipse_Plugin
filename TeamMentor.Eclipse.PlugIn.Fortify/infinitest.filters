@@ -1,2 +1,2 @@
 Tests in a certain package:
-tests\.eclipse\..*
+#tests\.eclipse\..*

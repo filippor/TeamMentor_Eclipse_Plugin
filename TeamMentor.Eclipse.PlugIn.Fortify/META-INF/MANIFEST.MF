@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.junit
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: g2.scripts;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.osgi.framework",
+Export-Package: g2.java.api.EclipseApi,
+ g2.scripts;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.osgi.framework",
  g2.scripts.actions;uses:="org.eclipse.jface.action,org.eclipse.ui,org.eclipse.jface.viewers",
  g2.scripts.editors;
   uses:="org.eclipse.jface.action,
