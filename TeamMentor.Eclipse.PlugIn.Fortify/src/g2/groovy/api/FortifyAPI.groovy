@@ -1,4 +1,4 @@
-package g2.groovy.api
+	package g2.groovy.api
 
 import g2.java.api.EclipseApi.EclipseAPI
 import org.eclipse.swt.events.SelectionAdapter
@@ -104,39 +104,7 @@ class FortifyAPI
 		
 	
 	
-	public String tmMappings = """SQL Injection ,CWE ID 89 ,2abc6c1b-dd8b-41d3-ad24-c717807e43e9,SQL Injection,PHP
-Cross-Site Scripting: Persistent ,CWE ID 79; CWE ID 80 ,add8a099-08da-40cc-a202-5e083267cef7,Cross-Site Scripting,PHP
-Cross-Site Scripting: Poor Validation ,CWE ID 79; CWE ID 80 ,add8a099-08da-40cc-a202-5e083267cef7,Cross-Site Scripting,PHP
-Cross-Site Scripting: Reflected ,CWE ID 79; CWE ID 80 ,add8a099-08da-40cc-a202-5e083267cef7,Cross-Site Scripting,PHP
-Dangerous File Inclusion ,CWE ID 94; CWE ID 98 ,80380670-a6f7-431c-8709-b7fe5db60295,Remote File Inclusion,PHP
-Open Redirect ,CWE ID 601 ,279ad567-2b34-44ce-8e56-8d96770ba500,Open Redirect,PHP
-Path Manipulation ,CWE ID 22; CWE ID 73 ,b88255fa-86f1-4d3b-9f7f-66bc144e985c,Path Traversal,PHP
-Dynamic Code Evaluation: Code Injection ,CWE ID 95 ,940d6e95-fc25-4e9d-8545-2262ed6e99ba,Code Injection,PHP
-Key Management: Hardcoded Encryption Key ,CWE ID 259; CWE ID 798 ,07d18aec-f7cc-4932-a734-97e31a6f7f07,Use of Hard-coded Cryptographic Key,PHP
-ASP.NET Misconfiguration: Missing Error Handling,CWE ID 12 ,fb0341e3-41c2-43bc-99d4-d12a037c1edd,Unchecked Error Condition,ASP.NET
-Open Redirect ,CWE ID 601 ,fdd2fa70-27b7-4399-ba3c-3b0b1bc7360b,Open Redirect,ASP.NET
-Path Manipulation ,CWE ID 22; CWE ID 73 ,ee22e5e0-0953-4276-b0e6-955becda5ee8,Path Traversal,ASP.NET
-SQL Injection ,CWE ID 89 ,5fdf23f4-8ff9-4043-a3bb-2d7d10704b0e,SQL Injection,ASP.NET
-SQL Injection: Castle ActiveRecord ,CWE ID 89 ,5fdf23f4-8ff9-4043-a3bb-2d7d10704b0e,SQL Injection,ASP.NET
-SQL Injection: LINQ ,CWE ID 89 ,5fdf23f4-8ff9-4043-a3bb-2d7d10704b0e,SQL Injection,ASP.NET
-SQL Injection: NHibernate ,CWE ID 89 ,5fdf23f4-8ff9-4043-a3bb-2d7d10704b0e,SQL Injection,ASP.NET
-SQL Injection: SubSonic ,CWE ID 89 ,5fdf23f4-8ff9-4043-a3bb-2d7d10704b0e,SQL Injection,ASP.NET
-LDAP Injection ,CWE ID 90 ,26cf3a5c-3bbd-4239-b74f-f776df950ac8,LDAP Injection,ASP.NET
-Log Forging ,CWE ID 117 ,700cbc96-fcfe-4ec7-b4cd-fc3eb8a98e40,Log Forging,ASP.NET
-Cross-Site Scripting: Persistent ,CWE ID 79; CWE ID 80 ,937f2173-5e39-48b6-bb3a-ecfd8f052bb0,Cross-Site Scripting,ASP.NET
-Cross-Site Scripting: Poor Validation ,CWE ID 79; CWE ID 80 ,937f2173-5e39-48b6-bb3a-ecfd8f052bb0,Cross-Site Scripting,ASP.NET
-Cross-Site Scripting: Reflected ,CWE ID 79; CWE ID 80 ,937f2173-5e39-48b6-bb3a-ecfd8f052bb0,Cross-Site Scripting,ASP.NET
-XPath Injection ,CWE ID 643,9da2fccb-d20c-4e74-9f59-349d799e25cf,XPath Injection,ASP.NET
-Password Management: Hardcoded Password,CWE ID 259; CWE ID 798 ,0cc358fe-0396-4142-bab5-ad327920b340,Use of Hard-coded Password,ASP.NET
-Password Management: Password in Comment ,CWE ID 615,0cc358fe-0396-4142-bab5-ad327920b340,Use of Hard-coded Password,ASP.NET
-Password Management ,CWE ID 256 ,9a44e0a4-823a-4d99-90fb-7de648a094c8,Insufficiently Protected Credentials,ASP.NET
-Password Management: Weak Cryptography ,CWE ID 261 ,9a44e0a4-823a-4d99-90fb-7de648a094c8,Insufficiently Protected Credentials,ASP.NET
-Command Injection ,CWE ID 77; CWE ID 78 ,ea00a8ee-1248-42b5-9954-439a93fb14d8,Command Injection,ASP.NET
-Missing XML Validation ,CWE ID 112 ,099d9a5b-3ac2-4acb-9192-5b6d7fafda34,Missing XML Validation,ASP.NET
-Missing XML Validation(validating_reader) ,CWE ID 112 ,099d9a5b-3ac2-4acb-9192-5b6d7fafda34,Missing XML Validation,ASP.NET
-Cross-Site Request Forgery ,CWE ID 352 ,36d0c6a6-8a5c-4586-b0d5-917a9aff9557,Cross-Site Request Forgery,ASP.NET
-Password Management: Password in Configuration File ,CWE ID 13; CWE ID 260; CWE ID 555 ,0cc358fe-0396-4142-bab5-ad327920b340,Use of Hard-coded Password,ASP.NET
-Command Injection ,CWE ID 77; CWE ID 78 ,2e03d087-3614-4927-8d20-d9efc3f7bbc4,Command Injection,Java
+	public String tmMappings = """Command Injection ,CWE ID 77; CWE ID 78 ,2e03d087-3614-4927-8d20-d9efc3f7bbc4,Command Injection,Java
 Cross-Site Scripting: DOM ,CWE ID 79; CWE ID 80 ,e1066fc2-22e3-47b3-ac0d-34a6fa70da68,Cross-Site Scripting,Java
 Cross-Site Scripting: External Links ,CWE ID 79; CWE ID 80 ,e1066fc2-22e3-47b3-ac0d-34a6fa70da68,Cross-Site Scripting,Java
 Cross-Site Scripting: Persistent ,CWE ID 79; CWE ID 80 ,e1066fc2-22e3-47b3-ac0d-34a6fa70da68,Cross-Site Scripting,Java

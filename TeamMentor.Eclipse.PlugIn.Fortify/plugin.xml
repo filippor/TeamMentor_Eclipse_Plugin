@@ -99,7 +99,7 @@
          </action>
          <action
                label="&amp;Open TeamMentor.net"
-               icon="icons/tm.ico"
+               icon="icons/TM.ico"
                class="g2.scripts.actions.OpenTeamMentor"
                tooltip="Open TeamMentor.net"
                menubarPath="teamMentorMenu/teammentorGroup"               
@@ -107,7 +107,7 @@
          </action>
          <action
                class="g2.scripts.actions.EnableTeamMentor"
-               icon="icons/tm.ico"
+               icon="icons/TM.ico"
                id="g2.scripts.actions.EnableTeamMentor"
                label="&amp;Open TeamMentor View"
                menubarPath="teamMentorMenu/teammentorGroup"
