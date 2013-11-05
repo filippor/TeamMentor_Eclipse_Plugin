@@ -7,7 +7,7 @@
       <editor
             name="G2 Script (Groovy)"
             extensions="g2"
-            icon="icons/TM.ico"
+            icon="images/icons/TM.ico"
             contributorClass="g2.scripts.editors.MultiPageEditorContributor"
             class="g2.scripts.editors.MultiPageEditor"
             id="g2.scripts.editors.MultiPageEditor">
@@ -20,13 +20,13 @@
             	id="New_G2_View">
       </category>
       <view name="Write TeamMentor Script"
-            icon="icons/TM.ico"
+            icon="images/icons/TM.ico"
             category="New_G2_View"
             class="g2.scripts.views.SimpleEditor"
             id="g2.scripts.views.SimpleEditor">
       </view>
       <view name			= "Web Browser"
-            icon			= "icons/TM.ico"
+            icon			= "images/icons/TM.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_WebBrowser"
             id				= "g2.scripts.views.DefaultPart_WebBrowser"
@@ -34,7 +34,7 @@
             restorable 		= "false">
       </view>
       <view name			= "Panel"
-            icon			= "icons/TM.ico"
+            icon			= "images/icons/TM.ico"
             category		= "New_G2_View"
             class			= "g2.scripts.views.DefaultPart_Panel"
             id				= "g2.scripts.views.DefaultPart_Panel"
@@ -51,7 +51,7 @@
       </category>
       <wizard
             name="Write G2 Script"
-            icon="icons/TM.ico"
+            icon="images/icons/TM.ico"
             category="New_G2_Wizard"
             class="g2.scripts.wizards.SampleNewWizard"
             id="g2.scripts.wizards.SampleNewWizard">
@@ -99,7 +99,7 @@
          </action>
          <action
                label="&amp;Open TeamMentor.net"
-               icon="icons/TM.ico"
+               icon="images/icons/TM.ico"
                class="g2.scripts.actions.OpenTeamMentor"
                tooltip="Open TeamMentor.net"
                menubarPath="teamMentorMenu/teammentorGroup"               
@@ -107,7 +107,7 @@
          </action>
          <action
                class="g2.scripts.actions.EnableTeamMentor"
-               icon="icons/TM.ico"
+               icon="images/icons/TM.ico"
                id="g2.scripts.actions.EnableTeamMentor"
                label="&amp;Open TeamMentor View"
                menubarPath="teamMentorMenu/teammentorGroup"
