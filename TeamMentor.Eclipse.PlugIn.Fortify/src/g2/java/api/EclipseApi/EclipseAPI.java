@@ -47,7 +47,7 @@ public class EclipseAPI
 	public EclipseAPI setEclipsePartEvents()
 	{
 		if(partEvents==null)
-		{
+		{ 
 			partEvents = new EclipsePartEvents();
 
 			IPartService partService = workbench.getActiveWorkbenchWindow().getPartService();
@@ -61,7 +61,7 @@ public class EclipseAPI
 		try
 		{
 			workbench 			  = PlatformUI.getWorkbench();
-			display    			  = workbench.getDisplay();
+			display    			  = workbench.getDisplay();	
 			activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 			shell 	   			  = activeWorkbenchWindow.getShell();		
 			workspace  			  = ResourcesPlugin.getWorkspace();

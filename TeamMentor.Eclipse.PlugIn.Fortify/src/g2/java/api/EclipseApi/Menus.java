@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.internal.WorkbenchWindow;
 
-//@SuppressWarnings("restriction")
+@SuppressWarnings("restriction")
 public class Menus 
 {
 	public IWorkbench 		workbench;

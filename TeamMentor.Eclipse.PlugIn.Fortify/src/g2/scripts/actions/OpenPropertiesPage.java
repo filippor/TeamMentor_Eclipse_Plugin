@@ -1,5 +1,4 @@
 package g2.scripts.actions;
-import g2.java.api.EclipseApi.Panels;
 import g2.scripts.Activator;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -11,7 +10,7 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 
 public class OpenPropertiesPage implements IWorkbenchWindowActionDelegate 
 {
-	private IWorkbenchWindow window;	
+	public IWorkbenchWindow window;	
 	
 	public OpenPropertiesPage() 
 	{

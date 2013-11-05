@@ -4,7 +4,6 @@ import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import g2.scripts.Activator;
-import g2.scripts.views.DefaultPart_WebBrowser;
 
 /**
  * This class represents a preference page that

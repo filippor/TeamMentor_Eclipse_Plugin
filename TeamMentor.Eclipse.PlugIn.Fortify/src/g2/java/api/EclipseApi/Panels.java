@@ -42,7 +42,7 @@ public class Panels
 		{
 			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 			DefaultPart_WebBrowser webBrowserPart = (DefaultPart_WebBrowser)page.showView(DefaultPart_WebBrowser.ID, browserId, IWorkbenchPage.VIEW_ACTIVATE);			
-			webBrowserPart.setName(title);
+			webBrowserPart.setName(title);			
 			webBrowserPart.browser.setText(htmlToShow);
 			return webBrowserPart;			
 		}
