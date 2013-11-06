@@ -3,10 +3,10 @@ package tm.eclipse.ui;
 import static org.junit.Assert.*;
 
 import java.io.File;
+
 import org.junit.*;
 
 import tm.tests.helpers.*;
-import g2.scripts.Activator;
 
 public class PluginResources_Test 
 {

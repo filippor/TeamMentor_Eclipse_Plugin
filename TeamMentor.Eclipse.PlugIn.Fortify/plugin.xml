@@ -8,8 +8,8 @@
             name="G2 Script (Groovy)"
             extensions="g2"
             icon="images/icons/TM.ico"
-            contributorClass="g2.scripts.editors.MultiPageEditorContributor"
-            class="g2.scripts.editors.MultiPageEditor"
+            contributorClass="tm.eclipse.ui.editors.MultiPageEditorContributor"
+            class="tm.eclipse.ui.editors.MultiPageEditor"
             id="g2.scripts.editors.MultiPageEditor">
       </editor>
    </extension>
@@ -22,13 +22,13 @@
       <view name="Write TeamMentor Script"
             icon="images/icons/TM.ico"
             category="New_G2_View"
-            class="g2.scripts.views.SimpleEditor"
+            class="tm.eclipse.ui.views.SimpleEditor"
             id="g2.scripts.views.SimpleEditor">
       </view>
       <view name			= "Web Browser"
             icon			= "images/icons/TM.ico"
             category		= "New_G2_View"
-            class			= "g2.scripts.views.DefaultPart_WebBrowser"
+            class			= "tm.eclipse.ui.views.DefaultPart_WebBrowser"
             id				= "g2.scripts.views.DefaultPart_WebBrowser"
             allowMultiple 	= "true"
             restorable 		= "false">
@@ -36,7 +36,7 @@
       <view name			= "Panel"
             icon			= "images/icons/TM.ico"
             category		= "New_G2_View"
-            class			= "g2.scripts.views.DefaultPart_Panel"
+            class			= "tm.eclipse.ui.views.DefaultPart_Panel"
             id				= "g2.scripts.views.DefaultPart_Panel"
             allowMultiple 	= "true"
             restorable 		= "false">
@@ -53,14 +53,14 @@
             name="Write G2 Script"
             icon="images/icons/TM.ico"
             category="New_G2_Wizard"
-            class="g2.scripts.wizards.SampleNewWizard"
+            class="tm.eclipse.ui.TO_Fix.SampleNewWizard"
             id="g2.scripts.wizards.SampleNewWizard">
       </wizard>
    </extension>
    
   <extension point="org.eclipse.ui.preferencePages">
      <page
-           class="teammentor.eclipse.plugin.fortify.preferences.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences"
            id="teammentor.eclipse.plugin.fortify.preferences.PluginPreferences"
            name="TeamMentor Preferences">
      </page>
@@ -68,7 +68,7 @@
   <extension
         point="org.eclipse.core.runtime.preferences">
      <initializer
-           class="teammentor.eclipse.plugin.fortify.preferences.PreferenceInitializer">
+           class="tm.eclipse.ui.PreferenceInitializer">
      </initializer>
   </extension>
   
@@ -84,14 +84,14 @@
             <separator name="teammentorGroup"></separator>
          </menu>
          <action
-               class="g2.scripts.actions.OpenSimpleEditor"
+               class="tm.eclipse.ui.actions.OpenSimpleEditor"
                id="g2.scripts.actions.OpenSimpleEditor"
                label="&amp;Util - Write Script (TeamMentor DSL)"
                menubarPath="teamMentorMenu/teammentorGroup"
                tooltip="Util - Write Script (TeamMentor DSL)">
          </action>
          <action
-               class="g2.scripts.actions.OpenPropertiesPage"
+               class="tm.eclipse.ui.actions.OpenPropertiesPage"
                id="g2.scripts.actions.OpenPropertiesPage"
                label="&amp;Open properties Page"
                menubarPath="teamMentorMenu/teammentorGroup"
@@ -100,13 +100,13 @@
          <action
                label="&amp;Open TeamMentor.net"
                icon="images/icons/TM.ico"
-               class="g2.scripts.actions.OpenTeamMentor"
+               class="tm.eclipse.ui.actions.OpenTeamMentor"
                tooltip="Open TeamMentor.net"
                menubarPath="teamMentorMenu/teammentorGroup"               
                id="g2.scripts.actions.OpenTeamMentor">
          </action>
          <action
-               class="g2.scripts.actions.EnableTeamMentor"
+               class="tm.eclipse.ui.actions.EnableTeamMentor"
                icon="images/icons/TM.ico"
                id="g2.scripts.actions.EnableTeamMentor"
                label="&amp;Open TeamMentor View"

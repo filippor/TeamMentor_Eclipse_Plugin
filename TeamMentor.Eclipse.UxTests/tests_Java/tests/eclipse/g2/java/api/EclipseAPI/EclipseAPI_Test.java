@@ -1,9 +1,10 @@
 package tests.eclipse.g2.java.api.EclipseAPI;
 
 import static org.junit.Assert.*;
-import g2.java.api.EclipseApi.EclipseAPI;
 
 import org.junit.Test;
+
+import tm.eclipse.api.EclipseAPI;
 
 public class EclipseAPI_Test 
 {

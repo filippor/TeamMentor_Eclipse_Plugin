@@ -1,12 +1,12 @@
 package tm.java.eclipse;
 
 import static org.junit.Assert.*;
-import g2.scripts.Activator;
 
 import org.eclipse.core.runtime.IPath;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
+import tm.eclipse.ui.Activator;
 import tm.mocks.*;
 
 class PluginResources_Test_OLD 

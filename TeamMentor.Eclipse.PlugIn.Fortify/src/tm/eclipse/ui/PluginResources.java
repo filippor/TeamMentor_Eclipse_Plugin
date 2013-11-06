@@ -8,8 +8,6 @@ import java.net.URL;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IPath;
 
-import g2.scripts.Activator;
-
 public class PluginResources  
 {	
 	public Activator plugin;

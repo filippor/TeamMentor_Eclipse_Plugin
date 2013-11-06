@@ -1,7 +1,6 @@
 package tm.eclipse.ui;
 
 import static org.junit.Assert.*;
-import g2.scripts.Activator;
 
 import org.junit.Test;
 

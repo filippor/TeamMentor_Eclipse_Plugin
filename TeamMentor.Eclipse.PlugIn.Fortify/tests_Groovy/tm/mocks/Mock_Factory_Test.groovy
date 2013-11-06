@@ -1,12 +1,13 @@
 package tm.mocks
 
 import static org.junit.Assert.*;
-import g2.scripts.Activator;
 
 import org.eclipse.core.runtime.IPath
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
+
+import tm.eclipse.ui.Activator;
 
 public class Mock_Factory_Test
 {	

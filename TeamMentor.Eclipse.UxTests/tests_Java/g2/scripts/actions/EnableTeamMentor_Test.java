@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Ignore;
 
+import tm.eclipse.ui.actions.EnableTeamMentor;
+
 public class EnableTeamMentor_Test 
 {
 	//@Test

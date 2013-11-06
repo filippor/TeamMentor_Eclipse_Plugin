@@ -1,13 +1,13 @@
 package tm.mocks
 
-import g2.java.api.EclipseApi.EclipseAPI
-import g2.scripts.Activator;
 import groovy.mock.interceptor.*;
 import helpers.Activator_Mock
 
 import org.eclipse.core.runtime.*
 import org.junit.rules.*
 import org.junit.*;
+
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.ui.*
 
 public class Mock_Factory 

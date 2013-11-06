@@ -3,9 +3,10 @@ package helpers;
 import static org.mockito.Mockito.*;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import g2.groovy.api.FortifyAPI;
-import g2.java.api.EclipseApi.EclipseAPI;
-import g2.scripts.Activator;
+
+import tm.eclipse.api.EclipseAPI;
+import tm.eclipse.groovy.FortifyAPI;
+import tm.eclipse.ui.Activator;
 
 public class Activator_Mock 
 {	

@@ -2,10 +2,13 @@ package teammentor.eclipse.plugin.fortify.preferences;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
-import g2.scripts.Activator;
 import helpers.Activator_Mock;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.Test;
+
+import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.PreferenceInitializer;
 
 public class PreferenceInitializer_Test extends Activator_Mock
 {
