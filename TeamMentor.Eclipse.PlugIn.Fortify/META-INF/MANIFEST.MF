@@ -13,10 +13,13 @@ Require-Bundle: org.eclipse.ui,
  org.codehaus.groovy;bundle-version="2.0.7",
  org.codehaus.groovy.eclipse.ui;bundle-version="2.8.0",
  org.eclipse.jface.text;bundle-version="3.7.2",
- org.junit
+ org.junit,
+ org.eclipse.equinox.registry,
+ org.eclipse.osgi.services;bundle-version="3.3.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: g2.java.api.EclipseApi,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: g2.java.api,
+ g2.java.api.EclipseApi,
  g2.scripts;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.osgi.framework",
  g2.scripts.actions;uses:="org.eclipse.jface.action,org.eclipse.ui,org.eclipse.jface.viewers",
  g2.scripts.editors;
@@ -34,4 +37,9 @@ Export-Package: g2.java.api.EclipseApi,
   uses:="org.eclipse.jface.wizard,
    org.eclipse.ui,
    org.eclipse.jface.viewers,
-   org.eclipse.swt.widgets"
+   org.eclipse.swt.widgets",
+ tm.eclipse.ui,
+ tm.java.eclipse
+Bundle-ClassPath: libs/commons-io-2.4.jar,
+ libs/mockito-all-1.9.5.jar,
+ .

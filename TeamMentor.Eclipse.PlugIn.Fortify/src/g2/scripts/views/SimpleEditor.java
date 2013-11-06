@@ -57,17 +57,7 @@ public class SimpleEditor extends ViewPart {
 		
 		code.setText( "openArticle('Cross-Site Scripting')\n" +
 				      "//openArticle('SQL Injection')\n" + 
-					  "return eclipseAPI;");	
-		
-		
-		
-		//for scripting
-		//shell 	  = parent.getShell();
-		//composite = parent;
-		//workbench = PlatformUI.getWorkbench();
-		//display   = workbench.getDisplay();
-		
-		
+					  "return eclipseAPI;");			
 	}
 
 	public void setFocus() 

@@ -2,7 +2,6 @@ package g2.scripts;
 
 import g2.groovy.api.FortifyAPI;
 import g2.java.api.TeamMentorAPI;
-import g2.java.api.TeamMentorMenu;
 import g2.java.api.EclipseApi.EclipseAPI;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -14,7 +13,7 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin 
 {
-	public static final String PLUGIN_ID = "g2.scripts"; 
+	public static final String PLUGIN_ID = "TeamMentor.Eclipse.Plugin.Fortify"; 
 
 	public static Activator plugin;
 	
@@ -32,7 +31,7 @@ public class Activator extends AbstractUIPlugin
 	{		
 		super.start(context);
 		plugin = this;
-
+		
 		//TeamMentorMenu.createTeamMentorMenu();
 		eclipseApi = new EclipseAPI();
 		fortifyApi = new FortifyAPI(eclipseApi);

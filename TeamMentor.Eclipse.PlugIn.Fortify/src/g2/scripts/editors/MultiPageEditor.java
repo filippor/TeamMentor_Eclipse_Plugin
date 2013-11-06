@@ -1,27 +1,13 @@
 package g2.scripts.editors;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-
-import org.codehaus.groovy.control.CompilationFailedException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
 import org.eclipse.swt.widgets.Shell;

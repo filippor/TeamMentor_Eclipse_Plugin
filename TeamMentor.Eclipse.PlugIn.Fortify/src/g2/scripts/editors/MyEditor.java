@@ -1,6 +1,5 @@
 package g2.scripts.editors;
 
-import g2.groovy.api.TestGroovy;
 import g2.java.api.TeamMentorAPI;
 import g2.java.api.EclipseApi.EclipseAPI;
 import groovy.lang.Binding;
@@ -10,8 +9,6 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -21,11 +18,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
-//
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 
 public class MyEditor extends GroovyEditor 
 {

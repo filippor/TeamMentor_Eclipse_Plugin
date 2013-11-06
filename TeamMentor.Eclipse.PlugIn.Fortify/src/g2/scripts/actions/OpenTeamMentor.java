@@ -9,7 +9,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 public class OpenTeamMentor implements IWorkbenchWindowActionDelegate 
 {
-	private IWorkbenchWindow window;	
+	public IWorkbenchWindow window;	
 	
 	public OpenTeamMentor() 
 	{

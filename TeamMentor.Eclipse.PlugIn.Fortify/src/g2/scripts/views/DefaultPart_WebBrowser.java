@@ -25,6 +25,7 @@ public class DefaultPart_WebBrowser extends ViewPart
 	    browser  = new Browser(parent,SWT.BORDER);
 	    
 	    browser.setText(DEFAULT_HTML);	    
+	    
 	    //browser.webBrowser.setCookie("Session=9e78f231-106b-4f73-a10f-22ab9ebee435","https://teammentor.net");
 	    
 	    //webBrowser.setUrl("https://teammentor.net/article/7d647e95-e47f-42e3-bb84-fd0dd727245c");

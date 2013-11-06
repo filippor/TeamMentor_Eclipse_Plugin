@@ -4,6 +4,7 @@ import g2.java.api.EclipseApi.EclipseAPI
 import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.ui.IViewPart
+import org.eclipse.ui.IWorkbenchPartReference
 
 class FortifyAPI 
 {
@@ -16,7 +17,7 @@ class FortifyAPI
 				
 		eclipseApi.partEvents.Part_Opened = 
 			{	
-				part ->
+				IWorkbenchPartReference part ->
 						eclipseApi.log("View Opened: " + part.id);
 						this.setFortifyHooks();
 			};		
