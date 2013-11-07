@@ -1,4 +1,4 @@
-package helpers;
+package tm.eclipse.mock;
 
 import static org.mockito.Mockito.*;
 

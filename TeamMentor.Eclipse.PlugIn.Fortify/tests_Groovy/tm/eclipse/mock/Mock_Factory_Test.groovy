@@ -1,4 +1,4 @@
-package tm.mocks
+package tm.eclipse.mock
 
 import static org.junit.Assert.*;
 
@@ -8,6 +8,7 @@ import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
 import tm.eclipse.ui.Activator;
+import tm.mocks.Mock_Factory;
 
 public class Mock_Factory_Test
 {	

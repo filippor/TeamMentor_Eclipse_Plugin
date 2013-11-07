@@ -19,7 +19,7 @@
             id="TeamMentor.Eclipse.UxTests.perspective">
       </perspective>
    </extension>
-   
+   <!--
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -41,6 +41,7 @@
          </view>
       </perspectiveExtension>
    </extension>
+   -->
    
    <extension
          point="org.eclipse.ui.menus">

@@ -21,7 +21,9 @@ public class Activator extends AbstractUIPlugin
 	public static FortifyAPI fortifyApi;
 
 	
-
+	/**
+	 * This is the first plugin method to be invoked
+	 */
 	public Activator() 
 	{
 		

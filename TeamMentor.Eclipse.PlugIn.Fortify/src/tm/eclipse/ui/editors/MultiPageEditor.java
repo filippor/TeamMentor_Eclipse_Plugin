@@ -17,15 +17,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.ide.IDE;
 
-/**
- * An example showing how to create a multi-page editor.
- * This example has 3 pages:
- * <ul>
- * <li>page 0 contains a nested text editor.
- * <li>page 1 allows you to change the font used in page 2
- * <li>page 2 shows the words in page 0 in sorted order
- * </ul>
- */
 public class MultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
 
 	/** The text editor used in page 0. */
@@ -41,19 +32,17 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 	public StyledText executionResult;
 	public Shell shell;
 	public MyEditor myEditor;
+	
 	/**
 	 * Creates a multi-page editor example.
 	 */
-	
-	
-	
 	public MultiPageEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 	/**
 	 * Creates page 0 of the multi-page editor,
-	 * which contains a text editor.
+	 * which contains a text editor....
 	 */
 	void createPage0() {
 		try 
@@ -69,109 +58,7 @@ public class MultiPageEditor extends MultiPageEditorPart implements IResourceCha
 			e.printStackTrace();
 		}
 	}
-	// setPageText(index, editor1.getTitle());
-	
-	/**
-	 * Creates page 1 of the multi-page editor,
-	 * which allows you to change the font used in page 2.
-	 */
-/*	void createPage1() 
-	{
-		Composite composite = new Composite(getContainer(), SWT.NONE);
-		
-		
-		
-		shell = composite.getShell();
-		
-		GridLayout gridLayout = new GridLayout();
-		
-		composite.setLayout(gridLayout);
-		
-		code = new StyledText(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-		code.setEditable(true);
-		GridData gridData1 = new GridData();
-		gridData1.horizontalAlignment = GridData.FILL;
-		gridData1.verticalAlignment = GridData.FILL;
-		gridData1.horizontalSpan = 3;
-		gridData1.grabExcessHorizontalSpace = true;
-		gridData1.grabExcessVerticalSpace = true;
-		code.setLayoutData(gridData1);
-		
-		 
-		
-		Button testButton = new Button(composite, SWT.NONE);
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = GridData.FILL;
-		testButton.setLayoutData(gridData);
-		testButton.setText("Compile code");
-		
-		
-		StyledText test1 = new StyledText(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-		//GroovyEditor test1 = new GroovyEditor();
-		Color backG = test1.getBackground(); 
-		Color backG2 = new Color(backG.getDevice(),200,200,255);
-		test1.setBackground(backG2);
-		GridData gridData3 = new GridData();
-		gridData3.horizontalAlignment = GridData.FILL;
-		gridData3.verticalAlignment = GridData.FILL;
-		gridData3.grabExcessVerticalSpace = true;
-		
-		test1.setLayoutData(gridData3);
-		
-		
-		executionResult = new StyledText(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-		executionResult.setEditable(false);
-		GridData gridData2 = new GridData();
-		gridData2.horizontalAlignment = GridData.FILL;
-		gridData2.verticalAlignment = GridData.FILL;
-		gridData2.horizontalSpan = 3;
-		gridData2.grabExcessHorizontalSpace = true;
-		gridData2.grabExcessVerticalSpace = true;
-		executionResult.setLayoutData(gridData2);
-		
-		testButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) 
-			{
-				
-				String text = code.getText();
-				
-				/ *MessageDialog.openInformation(
-						getSite().getShell(),
-						"The text below is",
-						text);* /
-				Binding binding = new Binding();
-				binding.setVariable("foo", new Integer(2));
-				binding.setVariable("shell", shell);
-				binding.setVariable("editor", editor);
-				binding.setVariable("result", executionResult);
-				binding.setVariable("myEditor", myEditor);
-								
-				GroovyShell shell = new GroovyShell(binding);
 
-				try 
-				{				
-					String value = shell.evaluate(text).toString();
-					executionResult.setText(value);
-				} catch (CompilationFailedException e) 
-				{					
-					// TODO Auto-generated catch block
-					executionResult.setText("COMPILATION ERROR:" + e.getMessage());
-				}
-				catch(Exception e)
-				{
-					executionResult.setText("GENERIC ERROR:" + e.getMessage());
-				}				
-			}			
-		});
-		
-		int index = addPage(composite);
-		setPageText(index, "My Layout test");
-		
-		if(true)
-			return;
-			
-	}
-	*/
 	/**
 	 * Creates the pages of the multi-page editor.
 	 */

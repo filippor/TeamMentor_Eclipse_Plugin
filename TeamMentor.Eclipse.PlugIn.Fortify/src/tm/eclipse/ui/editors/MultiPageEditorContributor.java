@@ -90,8 +90,8 @@ public class MultiPageEditorContributor extends MultiPageEditorActionBarContribu
 				IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					page.showView(SimpleEditor.ID);
-				} catch (PartInitException e) {
-					// TODO Auto-generated catch block
+				} catch (PartInitException e) 
+				{					// 
 					e.printStackTrace();
 				}
 			}
