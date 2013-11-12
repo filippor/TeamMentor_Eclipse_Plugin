@@ -6,7 +6,7 @@ import org.osgi.framework.BundleContext;
 
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
-import tm.eclipse.groovy.FortifyAPI;
+//import tm.eclipse.groovy.FortifyAPI;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -18,7 +18,7 @@ public class Activator extends AbstractUIPlugin
 	public static Activator plugin;
 	
 	public static EclipseAPI eclipseApi;
-	public static FortifyAPI fortifyApi;
+	//public static FortifyAPI fortifyApi;
 
 	
 	/**
@@ -33,10 +33,10 @@ public class Activator extends AbstractUIPlugin
 	{		
 		super.start(context);
 		plugin = this;
-		
-		//TeamMentorMenu.createTeamMentorMenu();
+		    
+		//TeamMentorMenu.createTeamMentorMenu();    
 		eclipseApi = new EclipseAPI();
-		fortifyApi = new FortifyAPI(eclipseApi);
+		//fortifyApi = new FortifyAPI(eclipseApi);
 		TeamMentorAPI.eclipseAPI = eclipseApi;
 		TeamMentorAPI.setServer_CurrentSetup();		
 	}

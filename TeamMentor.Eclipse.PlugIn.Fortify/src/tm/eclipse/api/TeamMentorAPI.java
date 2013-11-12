@@ -174,9 +174,7 @@ public class TeamMentorAPI
 //		binding.setVariable("setServer_TeamMentor", new MethodClosure(TeamMentorAPI.class, "setServer_TeamMentor"));
 //		binding.setVariable("setServer_OWASP"     , new MethodClosure(TeamMentorAPI.class, "setServer_OWASP"));
 		
-		binding.setVariable("browser"     , lastBrowser);
-		binding.setVariable("eclipseAPI"  , TeamMentorAPI.eclipseAPI);
-		binding.setVariable("teammentorAPI", TeamMentorAPI.class);
+		binding.setVariable("browser"      , lastBrowser);		
 		
 		binding.setVariable("inspect"     , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
 		binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
