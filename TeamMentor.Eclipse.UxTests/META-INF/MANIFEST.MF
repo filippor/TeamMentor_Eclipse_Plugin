@@ -7,7 +7,9 @@ Bundle-Activator: teammentor.eclipse.uxtests.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  TeamMentor.Eclipse.Plugin.Fortify;bundle-version="1.3.5",
- org.junit
+ org.junit,
+ org.eclipse.ui.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.resources
+Import-Package: groovy.lang,
+ org.eclipse.core.resources
