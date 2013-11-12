@@ -1,5 +1,9 @@
 package tm.eclipse.api;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Status;
@@ -13,34 +17,42 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.statushandlers.StatusManager;
 
-import tm.eclipse.groovy.TestGroovy;
-import tm.eclipse.groovy.Tree_ExtensionMethods;
+
+
+
+//import tm.eclipse.groovy.TestGroovy;
+//import tm.eclipse.groovy.Tree_ExtensionMethods;
 import tm.eclipse.ui.EclipsePartEvents;
 
 public class EclipseAPI 
 {
 	public static EclipsePartEvents partEvents;
-	public IWorkbenchWindow activeWorkbenchWindow;
+	public HashMap<String,Object> 	objects;
+	public List<String>     	  	extraGroovyJars;
+	
+	public IWorkbenchWindow activeWorkbenchWindow;	
 	public IWorkbench 		workbench;	
 	public Display	 		display;
 	public Shell   	    	shell;
-	public TestGroovy   	testGroovy;	
+//	public TestGroovy   	testGroovy;	
 	public IWorkspace   	workspace;
 	
 	public Menus			menus;
-	public Panels			panels;
+	public Panels			panels;	
 	
-	static 
+	/*static 
 	{
 		Tree_ExtensionMethods.setExtensionmethods();		
-	}
+	}*/
 	
 	public EclipseAPI()
 	{	
+		objects 		= new HashMap<String,Object>();
+		extraGroovyJars = new ArrayList<String>();
+		
 		captureEclipseObjects();
 		menus  = new Menus(workbench);
-		panels = new Panels(workbench);
-		
+		panels = new Panels(workbench);		
 		setEclipsePartEvents();
 	}	
 	
@@ -65,7 +77,7 @@ public class EclipseAPI
 			activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 			shell 	   			  = activeWorkbenchWindow.getShell();		
 			workspace  			  = ResourcesPlugin.getWorkspace();
-			testGroovy 			  = new TestGroovy();
+//			testGroovy 			  = new TestGroovy();
 		}
 		catch(Exception e)
 		{
