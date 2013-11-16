@@ -1,19 +1,25 @@
 package tm.swtbot;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import tm.swtbot.helpers.*;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
 public class SWTBot_Helpers
 {	
 	public SWTWorkbenchBot	bot;
-	public SWTBot_Files     files;
-	public SWTBot_Views     views;
+	public IWorkbench workbench;	
+	public Display display;
+	//public SWTBot_Files     files;
+	//public SWTBot_Views     views;
 	
 	public SWTBot_Helpers()
 	{
 		bot   = new SWTWorkbenchBot();
-		files = new SWTBot_Files(bot);
-		views = new SWTBot_Views(bot);		
+		workbench = PlatformUI.getWorkbench();
+		display = workbench.getDisplay();
+		//files = new SWTBot_Files(bot);
+		//views = new SWTBot_Views(bot);		
 	}
 	   
 	

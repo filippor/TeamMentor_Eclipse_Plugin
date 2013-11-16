@@ -1,9 +1,10 @@
 package tm.swtbot;
 
 import static org.junit.Assert.*;
-
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import static tm.swtbot.helpers.SWTBot_Views.*;
 import org.junit.Test;
+
+import tm.swtbot.models.SWTBot_View;
 
 public class SWTBot_JUnit_Test 
 {
@@ -13,7 +14,7 @@ public class SWTBot_JUnit_Test
 	public void SWTBot_JUnit_Ctor()
 	{
 		assertNotNull(swtbotJunit);
-		SWTBotView welcome = swtbotJunit.views.get_View_Fast(SWTBot_Consts.VIEW_ID_IntroView);
+		SWTBot_View welcome = swtBot_View_Fast(SWTBot_Consts.VIEW_ID_IntroView);
 		assertNull(welcome);
 	}
 }

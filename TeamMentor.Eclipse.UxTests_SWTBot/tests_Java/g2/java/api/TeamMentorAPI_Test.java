@@ -1,14 +1,10 @@
 package g2.java.api;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamMentorAPI_Test 
@@ -21,6 +17,7 @@ public class TeamMentorAPI_Test
 	}
 	
 	@Test
+	@Ignore
 	public void show_Html_With_TeamMentor_Banner()
 	{
 		SWTBotView _view = null;

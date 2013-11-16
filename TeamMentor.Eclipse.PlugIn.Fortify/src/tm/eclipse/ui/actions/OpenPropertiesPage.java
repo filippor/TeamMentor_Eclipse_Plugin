@@ -7,7 +7,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
-import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.Startup;
 
 public class OpenPropertiesPage implements IWorkbenchWindowActionDelegate 
 {
@@ -20,7 +20,7 @@ public class OpenPropertiesPage implements IWorkbenchWindowActionDelegate
 
 	public void run(IAction action) 
 	{					
-		IWorkbench workbench = Activator.eclipseApi.workbench;
+		IWorkbench workbench = Startup.eclipseApi.workbench;
 		PreferenceDialog preferenceDialog = PreferencesUtil.createPreferenceDialogOn(workbench.getActiveWorkbenchWindow().getShell(), "teammentor.eclipse.plugin.fortify.preferences.PluginPreferences", null, null);
 		preferenceDialog.open();
 	}

@@ -66,7 +66,7 @@ public class TeamMentorAPI
 		open_Article_Page("edit", articleId);
 	}
 		
-	public static void edit_Wysiwyg_withMetadata(String articleId)
+/*	public static void edit_Wysiwyg_withMetadata(String articleId)
 	{
 		final Browser  browser =  open_Article_Page("edit", articleId);
 		new Thread() {
@@ -88,10 +88,9 @@ public class TeamMentorAPI
 					e.printStackTrace();
 				}	        
 		    }
-		}.start();
-				
+		}.start();			
 	}		
-	
+*/	
 	public static Browser open_Article_Page(String mode, String articleId)
 	{
 		String tmUrl = PluginPreferences.getServer() + "/" + mode + "/" + articleId; 		

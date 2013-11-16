@@ -16,16 +16,16 @@ import tm.swtbot.models.SWTBot_View;
 
 public class SWTBot_Views 
 {
-	public boolean 		    LOG_EXCEPTION_VIEW_NOT_FOUND;	
-	public SWTWorkbenchBot	bot;
+	public static boolean 		    LOG_EXCEPTION_VIEW_NOT_FOUND;	
+	public static SWTWorkbenchBot	bot;
 	
-	public SWTBot_Views(SWTWorkbenchBot _bot) 
+	static  
 	{
-		bot = _bot;
+		bot = new SWTWorkbenchBot();
 		LOG_EXCEPTION_VIEW_NOT_FOUND = false;
 	}
 		
-	public ArrayList<SWTBot_View> get_Views()
+	public static ArrayList<SWTBot_View> swtBot_Views()
 	{
 		ArrayList<SWTBot_View> views = new ArrayList<SWTBot_View>();
 		for(SWTBotView swtBotView : bot.views())
@@ -34,15 +34,15 @@ public class SWTBot_Views
 		}
 		return views;
 	}	
-	public SWTBotView 			  get_View_Fast(String viewNameOrId)
+	public static SWTBot_View 			 swtBot_View_Fast(String viewNameOrId)
 	{
-		long originalTimeout = get_Timeout();			// save current value
-		set_Timeout(SWTBot_Consts.TIMEOUT_FAST);		// set to TIMEOUT_FAST
-		SWTBotView view = get_View(viewNameOrId);		// get view
-		set_Timeout(originalTimeout);					// reset original value
+		long originalTimeout = swtBot_Timeout();		// save current value
+		swtBot_Timeout(SWTBot_Consts.TIMEOUT_FAST);		// set to TIMEOUT_FAST
+		SWTBot_View view = swtBot_View(viewNameOrId);	// get view
+		swtBot_Timeout(originalTimeout);					// reset original value
 		return view;
 	}
-	public SWTBotView 			  get_View(String viewNameOrId)
+	public static SWTBot_View 			 swtBot_View(String viewNameOrId)
 	{
 		SWTBotView view = null;
 		
@@ -67,20 +67,26 @@ public class SWTBot_Views
 					ex.printStackTrace();
 			}
 		}
-	
-		return view;
+		if (view!= null)
+			return new SWTBot_View(view);
+		return null;
 	}
-	public long 				  get_Timeout()
+	public static long 				     swtBot_Timeout()
 	{
 		return SWTBotPreferences.TIMEOUT;
 	}
-	public SWTBotView			  open_View(String primaryId)
+	public static long 		  			 swtBot_Timeout(long value)
 	{
-		return open_View(primaryId, null);
+		SWTBotPreferences.TIMEOUT = value;
+		return value;
 	}
-	public SWTBotView			  open_View(final String primaryId, String secundaryId)
+	public static SWTBot_View			 swtBot_View_Open(String primaryId)
 	{
-		SWTBotView swtBotView = get_View_Fast(primaryId);
+		return swtBot_View_Open(primaryId, null);
+	}
+	public static SWTBot_View			 swtBot_View_Open(final String primaryId, String secundaryId)
+	{
+		SWTBot_View swtBotView = swtBot_View_Fast(primaryId);
 		if (swtBotView != null)
 			return swtBotView;
 		
@@ -96,11 +102,12 @@ public class SWTBot_Views
 						e.printStackTrace();
 					}
 				}});
-		return get_View(primaryId);
+		return swtBot_View(primaryId);
 	}
-	public SWTBot_Views 		  set_Timeout(long value)
+	
+	public static String test123()
 	{
-		SWTBotPreferences.TIMEOUT = value;
-		return this;
+		return "hello asd";
 	}
 }
+

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
-<plugin>
-
-   
-   
+<plugin>   
    <extension point="org.eclipse.ui.views">
       <category name="TeamMentor Views"
             	id="TeamMentor_Views">
       </category>
-      <view name="Write TeamMentor Script"
-            icon="images/icons/TM.ico"
+      <view
+            allowMultiple="true"
             category="TeamMentor_Views"
             class="tm.eclipse.ui.views.SimpleEditor"
-            id="g2.scripts.views.SimpleEditor">
+            icon="images/icons/TM.ico"
+            id="g2.scripts.views.SimpleEditor"
+            name="Write TeamMentor Script"
+            restorable="false">
       </view>
       <view name			= "Web Browser"
-            icon			= "images/icons/TM.ico"
+            icon			= "images/pngs/script_edit.png"
             category		= "TeamMentor_Views"
             class			= "tm.eclipse.ui.views.DefaultPart_WebBrowser"
             id				= "g2.scripts.views.DefaultPart_WebBrowser"
             allowMultiple 	= "true"
             restorable 		= "false">
       </view>
-      <view name			= "Panel"
+      <view name			= "Eclipse Panel"
             icon			= "images/icons/TM.ico"
             category		= "TeamMentor_Views"
-            class			= "tm.eclipse.ui.views.DefaultPart_Panel"
-            id				= "g2.scripts.views.DefaultPart_Panel"
+            class			= "tm.eclipse.ui.views.Eclipse_Panel"
+            id				= "tm.eclipse.ui.views.Eclipse_Panel"
             allowMultiple 	= "true"
             restorable 		= "false">
       </view>
@@ -47,7 +47,7 @@
            class="tm.eclipse.ui.PreferenceInitializer">
      </initializer>
   </extension>
-  
+ 
     <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
@@ -55,17 +55,20 @@
             visible="true"
             id="TM.actionSet">
          <menu
-               label="&amp;TeamMentor"
+               label="&amp;TeamMentor (Old)"
                id="teamMentorMenu">
             <separator name="teammentorGroup"></separator>
          </menu>
+         
          <action
                class="tm.eclipse.ui.actions.OpenSimpleEditor"
+               icon="images/pngs/script_go.png"
                id="g2.scripts.actions.OpenSimpleEditor"
                label="&amp;Util - Write Script (TeamMentor DSL)"
                menubarPath="teamMentorMenu/teammentorGroup"
                tooltip="Util - Write Script (TeamMentor DSL)">
-         </action>
+         </action>  
+                
          <action
                class="tm.eclipse.ui.actions.OpenPropertiesPage"
                id="g2.scripts.actions.OpenPropertiesPage"
@@ -73,6 +76,7 @@
                menubarPath="teamMentorMenu/teammentorGroup"
                tooltip="&amp;Open properties Page">
          </action>
+         
          <action
                label="&amp;Open TeamMentor.net"
                icon="images/icons/TM.ico"
@@ -91,5 +95,52 @@
          </action>
       </actionSet>
    </extension>
+   
+    <extension
+          point="org.eclipse.ui.startup">
+       <startup
+             class="tm.eclipse.ui.Startup">
+       </startup>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+       <menuContribution allPopups="false" locationURI="menu:org.eclipse.ui.main.menu">
+          <menu label="TeamMentor">
+             <command commandId="tm.eclipse.handlers.ShowAboutPlugin"
+                   	  icon="images/pngs/script_go.png"
+                   	  label="About TeamMentor Plugin"
+                   	  style="push">
+                <visibleWhen checkEnabled="true" />
+             </command>
+             <command
+                   commandId="tm.eclipse.commands.OpenTeamMentorWebsite"
+                   icon="images/pngs/script_go.png"
+                   label="Open TeamMentor Website"
+                   style="push">
+             </command>
+          </menu>
+       </menuContribution>
+       
+       
+    </extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <command 
+             defaultHandler="tm.eclipse.handlers.ShowHelpPage"
+             id="tm.eclipse.commands.ShowHelpPage"
+             name="ShowHelpPage">
+       </command>
+       <command
+             defaultHandler="tm.eclipse.handlers.OpenTeamMentorWebsite"
+             id="tm.eclipse.commands.OpenTeamMentorWebsite"
+             name="OpenTeamMentorWebsite">
+       </command>
+    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="tm.eclipse.handlers.ShowHelpPage"
+             commandId="tm.eclipse.handlers.ShowAboutPlugin">
+       </handler>
+    </extension>
 
 </plugin>

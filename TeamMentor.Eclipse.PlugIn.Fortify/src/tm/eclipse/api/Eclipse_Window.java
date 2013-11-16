@@ -13,12 +13,12 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
-import tm.eclipse.ui.views.DefaultPart_Panel;
+import tm.eclipse.ui.views.Eclipse_Panel;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 
 public class Eclipse_Window extends EclipseAPI
 {
-	public DefaultPart_Panel panel;
+	public Eclipse_Panel panel;
 	public String    panelId; 
 	
 	public Eclipse_Window() throws PartInitException 
@@ -34,7 +34,7 @@ public class Eclipse_Window extends EclipseAPI
 	
 	private Eclipse_Window createWindow() throws PartInitException
 	{
-		panel = (DefaultPart_Panel)activePage().showView(DefaultPart_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
+		panel = (Eclipse_Panel)activePage().showView(Eclipse_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
 		title(panelId);
 		return this;
 	}

@@ -32,5 +32,19 @@ public class SWTBot_View
 		name          = viewReference.getPartName();
 		id 		      = viewSite.getId();		
 	}
+	
+	public SWTBot_View close()
+	{
+		if (swtBotView != null)
+			swtBotView.close();
+		return this;
+	}
+	
+	public SWTBot_View focus()
+	{
+		if (swtBotView != null)
+			swtBotView.setFocus();
+		return this;
+	}	
 }
 

@@ -1,128 +1,162 @@
 package tm.eclipse.ui.views;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-
 import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.customizers.ImportCustomizer;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.SWT;
 
-import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
+import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.Startup;
 
 
 public class SimpleEditor extends ViewPart 
 {
 	public static final String ID = "g2.scripts.views.SimpleEditor";
-	
-	public EclipseAPI			 eclipseApi;
-	
-	public SashForm   			 sashForm;		
-	public Binding	    		 binding;
-	public CompilerConfiguration configuration;
-	public ImportCustomizer 	 importCustomizer;
-	public Composite   			 composite;
-	public GroovyShell 			 groovyShell;
-	public Object				 output;
-	public StyledText 			 styledText_Code;
-	public StyledText 		     styledText_Result;
-	public Button 				 execute_Button;
+			
+	public SashForm   		sashForm;			
+	public Composite   		composite;	
+	public StyledText 		styledText_Code;
+	public StyledText 		styledText_Result;
+	public ToolItem 		execute_Button;
+	public ToolItem			stop_Button;
+	public Thread		    executionThread;
+	public GroovyExecution	groovyExecution;
+	public String           lastExecutedScript;
+	public boolean			executeSync;
 	
 	public SimpleEditor() 
 	{
-		eclipseApi = Activator.eclipseApi;
+		
 	}
 
-	public Binding setBindingVariablesValues() 
-	{			
-		binding = new Binding();				
-		TeamMentorAPI.mapGroovyBindings(binding);
-		return binding;	
-	}
-	public void addLocalVariablesToBinding()
-	{
-		binding.setVariable("binding"		  , binding			);
-		binding.setVariable("configuration"	  , configuration	);
-		binding.setVariable("composite"		  , composite		);		
-		binding.setVariable("importCustomizer", importCustomizer);
-		binding.setVariable("groovyShell"	  , groovyShell		);						
-		binding.setVariable("view"			  , this			);	
-		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
-		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
-	}
-	public void setCompilerConfiguration()
-	{
-		configuration    = new CompilerConfiguration();		
-		importCustomizer = new ImportCustomizer();
-		importCustomizer.addStarImports("g2.java.api.eclipse.ui");
-		configuration.addCompilationCustomizers(importCustomizer );
-				
-	}
-	
-	public GroovyShell create_and_Load_Jars_into_GroovyShell()
-	{
-		groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);
-		
-		for(String jar : eclipseApi.extraGroovyJars)
-		{
-			try
-			{
-				URL url = new URL("file://" + jar);							
-				groovyShell.getClassLoader().addURL(url);
-			}
-			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@£$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
-			{
-				ex.printStackTrace();
-			}			
-		}		
-		return groovyShell;
-	}
-	public URL[] get_GroovyShell_ClassLoader_Urls()
-	{
-		if (groovyShell != null)
-			return groovyShell.getClassLoader().getURLs();			// (handle UnitTest exception)  java.lang.LinkageError: loader constraint violation:
-		return null;
-	}	
 	public void createPartControl(Composite _composite) 
 	{
 		composite  = _composite;
+		buildGui();
+	}
+	public SimpleEditor buildGui()
+	{	
+		composite.setLayout(new FormLayout());
 		
-		sashForm = new SashForm(_composite, SWT.VERTICAL);
-	    sashForm.setLayout(new RowLayout());
-
+		//toolbar
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.RIGHT);//SWT.FLAT | SWT.RIGHT);
+		FormData fd_toolBar = new FormData();
+		fd_toolBar.left = new FormAttachment(0);
+		fd_toolBar.right = new FormAttachment(100);
+		fd_toolBar.top = new FormAttachment(0);
+		fd_toolBar.bottom = new FormAttachment(0, 22);
+		//toolBar.setBackground(new Color(Display.getCurrent (),255,255,255));		
+		toolBar.setLayoutData(fd_toolBar);
 		
-	    styledText_Code   = new StyledText(sashForm, SWT.BORDER);
+		//sashForm
+		sashForm = new SashForm(composite, SWT.VERTICAL);
+		FormData fd_sashForm = new FormData();
+		fd_sashForm.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
+		fd_sashForm.left = new FormAttachment(0);
+		fd_sashForm.bottom = new FormAttachment(100, 0);
+		fd_sashForm.top = new FormAttachment(0, 25);
+		sashForm.setLayoutData(fd_sashForm);
+		
+		//groovy and result styleText
+		Group grpGroovyCode = new Group(sashForm, SWT.NONE);
+		grpGroovyCode.setText("Groovy Code");
+		grpGroovyCode.setLayout(new FillLayout(SWT.HORIZONTAL));		
+		Group grpExecutionResult = new Group(sashForm, SWT.NONE);
+		grpExecutionResult.setText("Execution result");
+		grpExecutionResult.setLayout(new FillLayout(SWT.HORIZONTAL));
+		sashForm.setWeights(new int[] {1, 1});
+		
+	    styledText_Code   = new StyledText(grpGroovyCode, SWT.BORDER);	   
+	    styledText_Result = new StyledText(grpExecutionResult, SWT.BORDER  | SWT.H_SCROLL | SWT.V_SCROLL);
+	    	    
+	    styledText_Result.setBackground(new Color(Display.getCurrent (),200,200,255));
+	    styledText_Result.setWordWrap(true);
 	    
-	    execute_Button    = new Button(sashForm, SWT.VERTICAL);
+	    //toolbar buttons
+	    execute_Button = new ToolItem(toolBar, SWT.NONE);
+	    execute_Button.setImage(Activator.getImageDescriptor("/images/pngs/script_go.png").createImage());
+	    execute_Button.setText("Execute");
+	    stop_Button = new ToolItem(toolBar, SWT.NONE);
+	    stop_Button.setImage(Activator.getImageDescriptor("/images/pngs/stop.png").createImage());
+	    stop_Button.setText("Stop");
+		stop_Button.setEnabled(false);
+		/*ToolItem tltmNewItem_1 = new ToolItem(toolBar, SWT.NONE);
+		tltmNewItem_1.setImage(Activator.getImageDescriptor("/images/pngs/application_view_detail.png").createImage());
+		tltmNewItem_1.setText("Inspect return value");
+		*/
+	    
+	    execute_Button.addListener(SWT.Selection, new Listener() 
+	    	{ 
+	    		public void handleEvent(Event event) 
+				{
+					compileAndExecuteCode_ASync();
+				} });
+		
+	    stop_Button.addListener(SWT.Selection, new Listener() 
+	    	{ 
+	    		@SuppressWarnings("deprecation")
+				public void handleEvent(Event event) 
+				{
+					if (executionThread != null && executionThread.isAlive())
+					{
+					//	styledText_Result.setText("...stoping execution...");
+					//	styledText_Result.setBackground(new Color(Display.getCurrent (),255,220,220));				
+						executionThread.stop();
+						showExecutionStoppedMessage();						
+					}
+				} });
+	    
+	    //default value
+	    
+		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
+				      			 "//openArticle('SQL Injection')\n" + 
+					  			 "return eclipseAPI;");
+		
+		/*
+		sashForm = new SashForm(composite, SWT.VERTICAL);
+	    sashForm.setLayout(new RowLayout());
+		
+	    styledText_Code   = new StyledText(sashForm, SWT.BORDER);	   
+	    execute_Button    = new Button(sashForm, SWT.HORIZONTAL);
 	    styledText_Result = new StyledText(sashForm, SWT.BORDER  | SWT.H_SCROLL | SWT.V_SCROLL);
 	    	    
 	    execute_Button.setText("Compile and execute code");
 	    execute_Button.addSelectionListener(new SelectionAdapter() { public void widgetSelected(SelectionEvent event) 
 						{
 	    					compileAndExecuteCode();
-						} });		
+						} });
+	    sashForm.addListener(SWT.RESIZE,new Listener() { @Override public void handleEvent(Event arg0)
+	    				{
+	    					int[] weigths = sashForm.getWeights();
+	    					weigths[1] = 100;
+	    					sashForm.setWeights(weigths);
+	    				}});	    
+	    
 	    styledText_Result.setBackground(new Color(Display.getCurrent (),200,200,255));
-
-		sashForm.setWeights(new int[] { 500,100,500});
+	    styledText_Result.setWordWrap(true);
+	    int[] weigths = sashForm.getWeights();
+	    
+		sashForm.setWeights(new int[] { 450,100,450});	 // values in % (max = 999 )
 		
 		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
 				      			 "//openArticle('SQL Injection')\n" + 
-					  			 "return eclipseAPI;");			
+					  			 "return eclipseAPI;");
+		 */
+		return this;
 	}
 
 	public void setFocus() 
@@ -130,42 +164,99 @@ public class SimpleEditor extends ViewPart
 	//	viewer.getControl().setFocus();
 	}
 	
-	public Object compileAndExecuteCode(String codeToExecute)
+	public Object 		compileAndExecuteCode(String codeToExecute)
 	{
 		if(codeToExecute==null)
 			return null;
-		styledText_Code.setText(codeToExecute);
-		return compileAndExecuteCode();
+		styledText_Code.setText(codeToExecute);		
+		return (executeSync) ? compileAndExecuteCode_Sync()
+						 	 : compileAndExecuteCode_ASync();
 	}
-	
-	public Object compileAndExecuteCode() 
+	public Object 		compileAndExecuteCode_Sync()
 	{
-		String text = styledText_Code.getText();
-		
-		setBindingVariablesValues();
-		setCompilerConfiguration();
-		
-		//binding = new Binding();
-		setBindingVariablesValues();						
-		create_and_Load_Jars_into_GroovyShell();
-		addLocalVariablesToBinding();
-		
+		compileAndExecuteCode_ASync();
 		try 
-		{						
-			output = groovyShell.evaluate(text);
-			styledText_Result.setText(output != null ? output.toString() 
-							                 : "NULL return value");
-			return output;
-		} 
-		catch (CompilationFailedException e) 
-		{					
-			styledText_Result.setText("COMPILATION ERROR:" + e.getMessage());
-		}
-		catch(Exception e)
 		{
-			String message = e.getMessage();
-			styledText_Result.setText("GENERIC ERROR:" + message + " : " + e.toString());
+			executionThread.join();
 		}
-		return null;
+		catch (InterruptedException e) 
+		{
+			showExecutionStoppedMessage();
+		}
+		return groovyExecution.returnValue;
+	}
+	public SimpleEditor compileAndExecuteCode_ASync() 
+	{
+		lastExecutedScript = styledText_Code.getText();
+		styledText_Result.setText(" ... executing script with size: " + lastExecutedScript.length());
+		groovyExecution = new GroovyExecution();
+		
+		groovyExecution.binding.setVariable("composite" , composite);
+		groovyExecution.binding.setVariable("view"		, this);	
+		
+		stop_Button.setEnabled(true);
+		execute_Button.setEnabled(false);
+		styledText_Result.setBackground(new Color(Display.getCurrent (),220,220,255));
+		
+		executionThread = new Thread(new Runnable() { public void run() 
+			{					
+				groovyExecution.executeScript(lastExecutedScript);		
+				showExecutionResult();
+			}});
+		executionThread.start();
+		return this;
+	}
+	public SimpleEditor showExecutionResult()
+	{
+		//ensure that we are back in the UI thread
+		Startup.eclipseApi.display.asyncExec(new Runnable() { public void run() 
+			{
+				Exception exception = groovyExecution.executionException;
+				Object result = groovyExecution.returnValue;			
+				if (exception == null)
+				{			
+					styledText_Result.setText(result != null ? result.toString() 
+			                 								 : "NULL return value");			
+				}
+				else if (exception instanceof CompilationFailedException) 
+				{					
+					styledText_Result.setText("COMPILATION ERROR:" + exception.getMessage());
+				}
+				else
+				{
+					String message = exception.getMessage();
+					styledText_Result.setText("GENERIC ERROR:" + message + " : " + exception.toString());
+				}
+				stop_Button.setEnabled(false);
+				execute_Button.setEnabled(true);
+				styledText_Result.setBackground(new Color(Display.getCurrent (),220,255,220));
+			}});
+		return this;
+	}
+	public SimpleEditor showExecutionStoppedMessage()
+	{
+		Startup.eclipseApi.display.asyncExec(new Runnable() { public void run()
+			{
+				styledText_Result.setText("... execution stopped... ");
+				stop_Button.setEnabled(false);
+				execute_Button.setEnabled(true);				
+				styledText_Result.setBackground(new Color(Display.getCurrent (),255,220,220));
+			}});		
+		return this;
+	}
+	public boolean		waitForExecutionComplete()
+	{
+		if(executionThread != null && executionThread.isAlive())
+		{
+			try 
+			{
+				executionThread.join();
+				return true;
+			} catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 }

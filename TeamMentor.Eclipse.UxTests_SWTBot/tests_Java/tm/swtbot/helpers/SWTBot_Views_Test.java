@@ -1,36 +1,27 @@
 package tm.swtbot.helpers;
 
 import static org.junit.Assert.*;
-
+import static tm.swtbot.helpers.SWTBot_Views.*;
 import java.util.Random;
-
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.Test;
-
 import tm.swtbot.SWTBot_Consts;
 import tm.swtbot.SWTBot_Helpers;
-import tm.swtbot.helpers.SWTBot_Views;
 import tm.swtbot.models.SWTBot_View;
 
 public class SWTBot_Views_Test 
 {
-	SWTBot_Helpers helper;
-	SWTBot_Views   views;
+	SWTBot_Helpers helper;	
 	
 	public SWTBot_Views_Test()
 	{
-		helper = new SWTBot_Helpers();
-		views  = helper.views;
+		helper = new SWTBot_Helpers();		
 	}
 	@Test 
 	public void SWTBot_Views_Test_Ctor()
 	{	
 		assertNotNull(helper);
-		assertNotNull(helper.bot);
-		assertNotNull(views);
-		assertNotNull(views.bot);
-		assertEquals (views.bot, helper.bot);
+		assertNotNull(helper.bot);		
 	}
 	
 	@Test 
@@ -39,16 +30,16 @@ public class SWTBot_Views_Test
 		long originalTimeout = SWTBotPreferences.TIMEOUT;
 		long newTimeout 	 = Math.abs(new Random().nextLong());
 		
-		assertEquals	 (originalTimeout,views.get_Timeout());
-		assertNotEquals  (newTimeout     ,views.get_Timeout());
+		assertEquals	 (originalTimeout, swtBot_Timeout());
+		assertNotEquals  (newTimeout     , swtBot_Timeout());
 		
-		views.set_Timeout(newTimeout);
-		assertNotEquals	 (originalTimeout,views.get_Timeout());
-		assertEquals 	 (newTimeout     ,views.get_Timeout());
+		swtBot_Timeout(newTimeout);
+		assertNotEquals	 (originalTimeout, swtBot_Timeout());
+		assertEquals 	 (newTimeout     , swtBot_Timeout());
 		
-		views.set_Timeout(originalTimeout);
-		assertNotEquals  (newTimeout     ,views.get_Timeout());
-		assertEquals	 (originalTimeout,views.get_Timeout());
+		swtBot_Timeout(originalTimeout);
+		assertNotEquals  (newTimeout     , swtBot_Timeout());
+		assertEquals	 (originalTimeout, swtBot_Timeout());
 		
 	}
 		
@@ -56,11 +47,11 @@ public class SWTBot_Views_Test
 	public void get_view()
 	{	
 		//this one shouldn't exist
-		SWTBotView view_ShouldNotExist = views.get_View_Fast("Welcome__ABC");
+		SWTBot_View view_ShouldNotExist = swtBot_View_Fast("Welcome__ABC");
 		assertNull(view_ShouldNotExist);
 				
 		//if this one exists, get it and close it
-		SWTBotView view_ShouldExist    = views.get_View_Fast("Welcome");
+		SWTBot_View view_ShouldExist    = swtBot_View_Fast("Welcome");
 		if (view_ShouldExist!=null)
 		{
 			assertNotNull(view_ShouldExist);
@@ -68,8 +59,8 @@ public class SWTBot_Views_Test
 		}				
 		
 		//getting the views 
-		view_ShouldExist    = views.get_View_Fast("Welcome");
-		view_ShouldNotExist = views.get_View_Fast("Welcome__ABC");		
+		view_ShouldExist    = swtBot_View_Fast("Welcome");
+		view_ShouldNotExist = swtBot_View_Fast("Welcome__ABC");		
 		
 		assertNull(view_ShouldExist);
 		assertNull(view_ShouldNotExist);			
@@ -78,7 +69,7 @@ public class SWTBot_Views_Test
 	@Test
 	public void get_views()
 	{				
-		for(SWTBot_View view : views.get_Views())			
+		for(SWTBot_View view : swtBot_Views())			
 		{
 			assertNotNull(view);			
 			assertNotNull(view.id);
@@ -99,26 +90,26 @@ public class SWTBot_Views_Test
 		String intro_View_Id = SWTBot_Consts.VIEW_ID_IntroView;
 		
 		//if it is already open, get the reference and close it
-		SWTBotView  intro_View 	  = views.get_View_Fast(intro_View_Id);
+		SWTBot_View  intro_View = swtBot_View_Fast(intro_View_Id);
 		if (intro_View!=null)
 		{
 			assertNotNull(intro_View);
 			intro_View.close();
-			intro_View 	  = views.get_View_Fast(intro_View_Id);
+			intro_View = swtBot_View_Fast(intro_View_Id);
 		}
 		assertNull(intro_View);
 				
 		//helper.addDummyTaskToWorkspace();
 		
 		//now open it 
-		SWTBotView 	  intro_View_after_Open = views.open_View(intro_View_Id);		
+		SWTBot_View 	  intro_View_after_Open = swtBot_View_Open(intro_View_Id);		
 		assertNotNull(intro_View_after_Open );
-		SWTBotView 	  intro_View_after_Get  = views.get_View_Fast(intro_View_Id);
+		SWTBot_View 	  intro_View_after_Get  = swtBot_View_Fast(intro_View_Id);
 		assertNotNull(intro_View_after_Get  );
 		
 		//and close it again
 		intro_View_after_Open.close();
-		SWTBotView 	intro_View_after_Close  = views.get_View_Fast(intro_View_Id);
+		SWTBot_View 	intro_View_after_Close  = swtBot_View_Fast(intro_View_Id);
 		assertNull( intro_View_after_Close);
 	}
 

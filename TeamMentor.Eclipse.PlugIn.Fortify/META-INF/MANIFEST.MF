@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TeamMentor Eclipse Plugin Fortify
 Bundle-SymbolicName: TeamMentor.Eclipse.Plugin.Fortify;singleton:=true
-Bundle-Version: 1.5.2.qualifier
+Bundle-Version: 1.5.4.qualifier
 Bundle-Activator: tm.eclipse.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -19,9 +19,11 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: tm.eclipse.api,
+ tm.eclipse.groovy.plugins,
  tm.eclipse.ui,
  tm.eclipse.ui.actions,
- tm.eclipse.ui.views
+ tm.eclipse.ui.views,
+ tm.tests.helpers
 Bundle-ClassPath: libs/commons-io-2.4.jar,
  libs/mockito-all-1.9.5.jar,
  libs/groovy-all-2.0.7.jar,

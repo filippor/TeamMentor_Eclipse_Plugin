@@ -1,14 +1,13 @@
 package tm.eclipse.ui.views;
 
+import static tm.swtbot.helpers.SWTBot_Views.*;
 import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
 import static org.junit.Assert.*;
-
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
 import org.junit.Test;
-
 import tm.swtbot.SWTBot_JUnit;
+import tm.swtbot.models.SWTBot_View;
 
 public class SimpleEditor_Test extends SWTBot_JUnit
 {
@@ -17,15 +16,15 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 	@Test
 	public void SimpleEditor_Open()
 	{
-		SWTBotView swtBotView = views.get_View_Fast(VIEW_ID);
+		SWTBot_View swtBotView = swtBot_View_Fast(VIEW_ID);
 		if(swtBotView != null)
 			swtBotView.close();
 		
-		swtBotView = views.open_View(VIEW_ID);
+		swtBotView = swtBot_View_Open(VIEW_ID);
 		assertNotNull(swtBotView);		
 		
 		//get StyledText (with code and result)
-		swtBotView.setFocus();
+		swtBotView.focus();
 		SWTBotStyledText code_StyledText   =  bot.styledText(0);
 		SWTBotStyledText result_StyledText =  bot.styledText(1);
 		assertNotNull(code_StyledText);
@@ -42,7 +41,8 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 		assertEquals           (groovyScript,code_StyledText.getText());
 		
 		//click on button and check result
-		SWTBotButton button =  bot.button();
+		
+		SWTBotToolbarButton button =  bot.toolbarButton();//bot.button();
 		assertNotNull(button);
 		assertNotNull(button.click());
 		assertEquals (expectedResult,result_StyledText.getText());

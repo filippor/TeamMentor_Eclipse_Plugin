@@ -14,8 +14,6 @@ public class SWTBot_Helpers_Test
 	@Test 
 	public void SWTBot_Helpers_Test_Ctor()
 	{	
-		assertNotNull(helper);
-		assertNotNull(helper.views);
-		assertNotNull(helper.files);
+		assertNotNull(helper);		
 	}
 }

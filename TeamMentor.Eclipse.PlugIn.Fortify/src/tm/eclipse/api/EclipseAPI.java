@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -15,8 +14,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.statushandlers.StatusManager;
-
+import static tm.eclipse.api.EclipseLog.*;
 
 
 
@@ -38,7 +36,8 @@ public class EclipseAPI
 	public IWorkspace   	workspace;
 	
 	public Menus			menus;
-	public Panels			panels;	
+	public Panels			panels;
+	public Views			views;
 	
 	/*static 
 	{
@@ -53,6 +52,7 @@ public class EclipseAPI
 		captureEclipseObjects();
 		menus  = new Menus(workbench);
 		panels = new Panels(workbench);		
+		views  = new Views(workbench);		
 		setEclipsePartEvents();
 	}	
 	
@@ -67,7 +67,6 @@ public class EclipseAPI
 		}
 		return this;
 	}
-	
 	public EclipseAPI captureEclipseObjects()
 	{		
 		try
@@ -88,12 +87,10 @@ public class EclipseAPI
 	}		
 	
 	//helpers
-	
 	public IWorkbench 	    workbench()
 	{
 		return workbench;
 	}
-	
 	public IWorkbenchWindow activeWorkbenchWindow()
 	{
 		if (workbench != null)
@@ -102,7 +99,6 @@ public class EclipseAPI
 		}
 		return null;
 	}
-	
 	public IWorkbenchPage 	activePage()
 	{
 		IWorkbenchWindow workbenchWindow = activeWorkbenchWindow();
@@ -110,17 +106,27 @@ public class EclipseAPI
 		 	return workbenchWindow.getActivePage();
 		return null;
 	}
-	
-	public EclipseAPI alert(String message)
+	public EclipseAPI       alert(String message)
 	{		
 		MessageDialog.openInformation(shell,"Message",message);
 		return this;
 	}
-	public EclipseAPI log(String message)
+	public EclipseAPI       log(String message)
 	{		
-		StatusManager manager = StatusManager.getManager();
+		/*StatusManager manager = StatusManager.getManager();
 		manager.handle(new Status(Status.INFO, "Message", message));		
+		*/
+		log_Info(message);
 		return this;
+	}
+	public EclipseAPI       invokeOnThread(Runnable runnable)
+	{
+		display.syncExec(runnable);
+		return this;
+	}
+	public String ping()
+	{
+		return "Pong ...";
 	}
 		
 }

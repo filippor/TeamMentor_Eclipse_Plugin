@@ -6,7 +6,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import tm.eclipse.api.Panels;
-import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.Startup;
 
 public class OpenTeamMentor implements IWorkbenchWindowActionDelegate 
 {
@@ -20,7 +20,7 @@ public class OpenTeamMentor implements IWorkbenchWindowActionDelegate
 	public void run(IAction action) 
 	{
 						
-		IWorkbench workbench = Activator.eclipseApi.workbench;
+		IWorkbench workbench = Startup.eclipseApi.workbench;
 		final Panels panels = new Panels(workbench);	
 		
 		panels.open_Url_in_WebBrowser("teammentor.net","http://teammentor.net");											

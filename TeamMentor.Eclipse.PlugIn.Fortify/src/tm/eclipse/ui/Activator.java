@@ -4,10 +4,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
-//import tm.eclipse.groovy.FortifyAPI;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -16,11 +12,7 @@ public class Activator extends AbstractUIPlugin
 	public static final String PLUGIN_ID = "TeamMentor.Eclipse.Plugin.Fortify"; 
 
 	public static Activator plugin;
-	
-	public static EclipseAPI eclipseApi;
-	//public static FortifyAPI fortifyApi;
 
-	
 	/**
 	 * This is the first plugin method to be invoked
 	 */
@@ -32,13 +24,7 @@ public class Activator extends AbstractUIPlugin
 	public void start(BundleContext context)  throws Exception
 	{		
 		super.start(context);
-		plugin = this;
-		    
-		//TeamMentorMenu.createTeamMentorMenu();    
-		eclipseApi = new EclipseAPI();
-		//fortifyApi = new FortifyAPI(eclipseApi);
-		TeamMentorAPI.eclipseAPI = eclipseApi;
-		TeamMentorAPI.setServer_CurrentSetup();		
+		plugin = this;		    		
 	}
 	
 	public void stop(BundleContext context)  throws Exception
