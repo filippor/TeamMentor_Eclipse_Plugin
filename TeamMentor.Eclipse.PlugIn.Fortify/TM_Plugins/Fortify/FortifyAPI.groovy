@@ -2,22 +2,24 @@ package tm.eclipse.groovy
 
 import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
+import org.eclipse.swt.widgets.Tree
 import org.eclipse.ui.IViewPart
 import org.eclipse.ui.IWorkbenchPartReference
-import tm.eclipse.ui.Startup;
 
 import tm.eclipse.api.EclipseAPI;
 
 class FortifyAPI 
 {
+	public static FortifyAPI current;
 	public EclipseAPI eclipseApi;
 	public String 	  partTitle = "SCA Analysis Results - With TeamMentor Support";
 	
-	public FortifyAPI()
-	{		
-		eclipseApi = Startup.eclipseApi;
-		eclipseApi.log("Configuring TeamMentor FortifyAPI");
-		
+	
+	public FortifyAPI(EclipseAPI _eclipseApi)
+	{
+		current = this;
+		eclipseApi = _eclipseApi;
+				
 		eclipseApi.partEvents.Part_Opened = 
 			{	
 				IWorkbenchPartReference part ->
@@ -27,7 +29,7 @@ class FortifyAPI
 	}
 	public IViewPart getIssuesListView()
 	{
-		def activePage =eclipseApi.activePage();
+		def activePage =eclipseApi.activeWorkbenchPage;
 		if (activePage!=null) 
 			return activePage.findView("com.fortify.awb.views.views.IssuesListView");
 		return null;		
@@ -78,14 +80,14 @@ class FortifyAPI
 				issuesList.setPartName(partTitle);
 				eclipseApi.log("Title after: " + issuesList.getPartName());
 				
-				def tree = issuesList.tree.getTree();
+				Tree tree = issuesList.tree.getTree();
 				
 				tree.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e)
 					{
-						def _eclipseApi = tm.eclipse.ui.Activator.eclipseApi;
-						def _fortifyApi = tm.eclipse.ui.Activator.fortifyApi;
+						def _eclipseApi = tm.eclipse.ui.Startup.eclipseApi;
+						def _fortifyApi = FortifyAPI.current;
 						
 						def _currentIssue = _fortifyApi.getCurrentIssueName();
 						def tmGuid =  _fortifyApi.resolveIssueNameToGuid(_currentIssue);
@@ -133,5 +135,3 @@ Password Management: Weak Cryptography ,CWE ID 261 ,ac9e0d29-dfd0-4671-98f5-7106
 Password Management: Empty Password in Configuration File,CWE ID 258 ,ac9e0d29-dfd0-4671-98f5-7106e6505c24,Insufficiently Protected Credentials,Java
 Password Management: Password in Configuration File ,CWE ID 13; CWE ID 260; CWE ID 555 ,ac9e0d29-dfd0-4671-98f5-7106e6505c24,Insufficiently Protected Credentials,Java""";
 }
-
-return new FortifyAPI();

@@ -29,6 +29,7 @@ public class EclipseAPI
 	public List<String>     	  	extraGroovyJars;
 	
 	public IWorkbenchWindow activeWorkbenchWindow;	
+	public IWorkbenchPage	activeWorkbenchPage;
 	public IWorkbench 		workbench;	
 	public Display	 		display;
 	public Shell   	    	shell;
@@ -36,8 +37,9 @@ public class EclipseAPI
 	public IWorkspace   	workspace;
 	
 	public Menus			menus;
-	public Panels			panels;
+	public Panels		panelFactory;
 	public Views			views;
+	public boolean			ready;
 	
 	/*static 
 	{
@@ -46,24 +48,30 @@ public class EclipseAPI
 	
 	public EclipseAPI()
 	{	
-		objects 		= new HashMap<String,Object>();
-		extraGroovyJars = new ArrayList<String>();
-		
-		captureEclipseObjects();
-		menus  = new Menus(workbench);
-		panels = new Panels(workbench);		
-		views  = new Views(workbench);		
-		setEclipsePartEvents();
+		display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() { public void run() 
+			{
+				objects 		= new HashMap<String,Object>();
+				extraGroovyJars = new ArrayList<String>();
+				
+				captureEclipseObjects();
+				menus  = new Menus(workbench);
+				panelFactory = new Panels(workbench);		
+				views  = new Views(workbench);		
+				setEclipsePartEvents();
+				ready = true;
+			}});
 	}	
 	
 	public EclipseAPI setEclipsePartEvents()
 	{
 		if(partEvents==null)
-		{ 
+		{ 			
 			partEvents = new EclipsePartEvents();
 
 			IPartService partService = workbench.getActiveWorkbenchWindow().getPartService();
 			partService.addPartListener(partEvents);
+				
 		}
 		return this;
 	}
@@ -72,11 +80,11 @@ public class EclipseAPI
 		try
 		{
 			workbench 			  = PlatformUI.getWorkbench();
-			display    			  = workbench.getDisplay();	
+//			display    			  = workbench.getDisplay();				
 			activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			activeWorkbenchPage	  = activeWorkbenchWindow.getActivePage();
 			shell 	   			  = activeWorkbenchWindow.getShell();		
 			workspace  			  = ResourcesPlugin.getWorkspace();
-//			testGroovy 			  = new TestGroovy();
 		}
 		catch(Exception e)
 		{
@@ -91,7 +99,7 @@ public class EclipseAPI
 	{
 		return workbench;
 	}
-	public IWorkbenchWindow activeWorkbenchWindow()
+/*	public IWorkbenchWindow activeWorkbenchWindow()
 	{
 		if (workbench != null)
 		{
@@ -105,7 +113,7 @@ public class EclipseAPI
 		if (workbenchWindow != null)
 		 	return workbenchWindow.getActivePage();
 		return null;
-	}
+	}*/
 	public EclipseAPI       alert(String message)
 	{		
 		MessageDialog.openInformation(shell,"Message",message);
@@ -118,12 +126,7 @@ public class EclipseAPI
 		*/
 		log_Info(message);
 		return this;
-	}
-	public EclipseAPI       invokeOnThread(Runnable runnable)
-	{
-		display.syncExec(runnable);
-		return this;
-	}
+	}	
 	public String ping()
 	{
 		return "Pong ...";

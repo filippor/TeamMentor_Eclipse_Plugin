@@ -7,9 +7,8 @@ import org.eclipse.core.commands.IHandlerListener;
 
 import tm.eclipse.api.TeamMentorAPI;
 
-public class ShowHelpPage implements IHandler {
-
-
+public class ShowHelpPage implements IHandler 
+{
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException 
 	{		

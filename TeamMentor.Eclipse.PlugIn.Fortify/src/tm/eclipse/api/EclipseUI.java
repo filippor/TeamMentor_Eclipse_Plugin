@@ -1,32 +1,25 @@
 package tm.eclipse.api;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 
 public class EclipseUI 
 {	
-	public IWorkbench 		workbench;
+	public  IWorkbench 		 workbench;
+	public  Display 		 display;
+	public IWorkbenchPage    activePage;
+	public IWorkbenchWindow  workbenchWindow;
 	
 	public EclipseUI(IWorkbench _workbench)
 	{
 		workbench = _workbench;
-	}
-	
-	public IWorkbenchPage   activePage()
-	{
-		return (activeWorkbenchWindow() !=null)
-					? activeWorkbenchWindow().getActivePage()
-					: null;
-
-	}
-	 
-	public IWorkbenchWindow activeWorkbenchWindow()
-	{
-		return (workbench!=null) 
-					? workbench.getActiveWorkbenchWindow()
-					: null;
-				
-		
-	}
+		display = workbench.getDisplay(); 
+		display.syncExec(new Runnable() { public void run()
+			{
+				workbenchWindow = workbench.getActiveWorkbenchWindow();
+				activePage 		= workbenchWindow.getActivePage();
+			}});
+	}	
 }

@@ -18,7 +18,7 @@
             icon			= "images/pngs/script_edit.png"
             category		= "TeamMentor_Views"
             class			= "tm.eclipse.ui.views.DefaultPart_WebBrowser"
-            id				= "g2.scripts.views.DefaultPart_WebBrowser"
+            id				= "tm.eclipse.ui.views.DefaultPart_WebBrowser"
             allowMultiple 	= "true"
             restorable 		= "false">
       </view>
@@ -50,13 +50,8 @@
  
     <extension
          point="org.eclipse.ui.actionSets">
-      <actionSet
-            label="TeamMentor Action Set"
-            visible="true"
-            id="TM.actionSet">
-         <menu
-               label="&amp;TeamMentor (Old)"
-               id="teamMentorMenu">
+      <actionSet label="TeamMentor Action Set" visible="true" id="TM.actionSet">
+         <menu label="&amp;TeamMentor (Old)" id="teamMentorMenu">
             <separator name="teammentorGroup"></separator>
          </menu>
          
@@ -105,11 +100,10 @@
     <extension point="org.eclipse.ui.menus">
        <menuContribution allPopups="false" locationURI="menu:org.eclipse.ui.main.menu">
           <menu label="TeamMentor">
-             <command commandId="tm.eclipse.handlers.ShowAboutPlugin"
+             <command commandId="tm.eclipse.commands.ShowHelpPage"
                    	  icon="images/pngs/script_go.png"
                    	  label="About TeamMentor Plugin"
                    	  style="push">
-                <visibleWhen checkEnabled="true" />
              </command>
              <command
                    commandId="tm.eclipse.commands.OpenTeamMentorWebsite"
@@ -126,21 +120,22 @@
           point="org.eclipse.ui.commands">
        <command 
              defaultHandler="tm.eclipse.handlers.ShowHelpPage"
-             id="tm.eclipse.commands.ShowHelpPage"
+             id="tm.eclipse.commands.ShowHelpPage"                         
              name="ShowHelpPage">
        </command>
        <command
              defaultHandler="tm.eclipse.handlers.OpenTeamMentorWebsite"
-             id="tm.eclipse.commands.OpenTeamMentorWebsite"
+             id="tm.eclipse.commands.OpenTeamMentorWebsite"             
              name="OpenTeamMentorWebsite">
        </command>
     </extension>
+    <!--
     <extension
           point="org.eclipse.ui.handlers">
        <handler
              class="tm.eclipse.handlers.ShowHelpPage"
-             commandId="tm.eclipse.handlers.ShowAboutPlugin">
+             commandId="tm.ShowAboutPlugin">
        </handler>
     </extension>
-
+	-->
 </plugin>

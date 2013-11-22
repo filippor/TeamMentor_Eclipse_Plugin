@@ -1,5 +1,8 @@
 package tm.eclipse.ui.views;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -8,6 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -16,8 +20,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swt.SWT;
 
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
@@ -26,7 +33,7 @@ import tm.eclipse.ui.Startup;
 public class SimpleEditor extends ViewPart 
 {
 	public static final String ID = "g2.scripts.views.SimpleEditor";
-			
+	public Display			display;		
 	public SashForm   		sashForm;			
 	public Composite   		composite;	
 	public StyledText 		styledText_Code;
@@ -36,11 +43,16 @@ public class SimpleEditor extends ViewPart
 	public Thread		    executionThread;
 	public GroovyExecution	groovyExecution;
 	public String           lastExecutedScript;
-	public boolean			executeSync;
+	public boolean			executeSync;	
 	
 	public SimpleEditor() 
 	{
-		
+		display = PlatformUI.getWorkbench().getDisplay();
+		/*	PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() { public void run() 
+			{
+				EclipseAPI eclipseApi =  Startup.eclipseApi;
+				display = eclipseApi.display;
+			}});*/
 	}
 
 	public void createPartControl(Composite _composite) 
@@ -187,29 +199,26 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor compileAndExecuteCode_ASync() 
 	{
-		lastExecutedScript = styledText_Code.getText();
-		styledText_Result.setText(" ... executing script with size: " + lastExecutedScript.length());
 		groovyExecution = new GroovyExecution();
-		
 		groovyExecution.binding.setVariable("composite" , composite);
-		groovyExecution.binding.setVariable("view"		, this);	
-		
-		stop_Button.setEnabled(true);
-		execute_Button.setEnabled(false);
-		styledText_Result.setBackground(new Color(Display.getCurrent (),220,220,255));
+		groovyExecution.binding.setVariable("view"		, this);
+				
+		prepareUIForExecution();
 		
 		executionThread = new Thread(new Runnable() { public void run() 
 			{					
 				groovyExecution.executeScript(lastExecutedScript);		
 				showExecutionResult();
 			}});
+		
 		executionThread.start();
 		return this;
 	}
 	public SimpleEditor showExecutionResult()
 	{
 		//ensure that we are back in the UI thread
-		Startup.eclipseApi.display.asyncExec(new Runnable() { public void run() 
+		//Startup.eclipseApi.display.asyncExec(new Runnable() { public void run()
+		asyncExec(new VoidResult() { public void run()
 			{
 				Exception exception = groovyExecution.executionException;
 				Object result = groovyExecution.returnValue;			
@@ -235,13 +244,26 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor showExecutionStoppedMessage()
 	{
-		Startup.eclipseApi.display.asyncExec(new Runnable() { public void run()
+		asyncExec(new VoidResult() { public void run()
 			{
 				styledText_Result.setText("... execution stopped... ");
 				stop_Button.setEnabled(false);
 				execute_Button.setEnabled(true);				
 				styledText_Result.setBackground(new Color(Display.getCurrent (),255,220,220));
 			}});		
+		return this;
+	}
+	public SimpleEditor prepareUIForExecution()
+	{
+		asyncExec(new VoidResult() {public void run()
+			{
+				lastExecutedScript = styledText_Code.getText();
+				styledText_Result.setText(" ... executing script with size: " + lastExecutedScript.length());
+				
+				stop_Button.setEnabled(true);
+				execute_Button.setEnabled(false);
+				styledText_Result.setBackground(new Color(Display.getCurrent (),220,220,255));
+			}});
 		return this;
 	}
 	public boolean		waitForExecutionComplete()
@@ -258,5 +280,25 @@ public class SimpleEditor extends ViewPart
 			}
 		}
 		return false;
+	}
+	public String       get_ScriptToExecute()
+	{			
+		return syncExec(new Result<String>() { public String run() 			
+			{
+				return  styledText_Code.getText();
+			}});			
+	}
+	public String       set_ScriptToExecute(final String value)
+	{	
+		return syncExec(new Result<String>() { public String run() 			
+		{
+			styledText_Code.setText(value);
+			return  styledText_Code.getText();
+		}});				
+	}
+
+	public SimpleEditor close() 
+	{		
+		return Startup.eclipseApi.views.close(this);					
 	}
 }

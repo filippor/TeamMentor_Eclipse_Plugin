@@ -7,7 +7,7 @@ import org.eclipse.ui.part.ViewPart;
 
 public class DefaultPart_WebBrowser extends ViewPart 
 {
-	public static final String ID = "g2.scripts.views.DefaultPart_WebBrowser";
+	public static final String ID = "tm.eclipse.ui.views.DefaultPart_WebBrowser";
 	
 	public static final String DEFAULT_HTML = "<html>" + 
     										  "<link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'>" + 

@@ -17,14 +17,18 @@ public class Startup implements IStartup {
 	public void earlyStartup() 
 	{
 		// this will be called on Eclipse startup on a separate thread
-		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() { @Override public void run() 
+		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() { @Override public void run() 
 			{
 				eclipseApi = new EclipseAPI();
 				TeamMentorAPI.eclipseAPI = eclipseApi;
 				TeamMentorAPI.setServer_CurrentSetup();
 				
+				
+			}});	
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() { @Override public void run() 
+			{
 				startDefaultTeamMentorPlugins();
-			}});		
+			}});
 	}
 	
 	public void startDefaultTeamMentorPlugins()

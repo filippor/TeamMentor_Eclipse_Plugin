@@ -25,14 +25,17 @@ public class PluginResources
 	public String get_Resource_Saved_on_TempFolder(String resourceName)
 	{
 		File file = get_Path_To_Resource_in_TempFolder(resourceName).toFile();
-		if (file.exists())
-			return file.getAbsolutePath();
+		
+		//for now override
+		//if (file.exists())			
+		//	return file.getAbsolutePath();
 		
 		InputStream inputStream = get_Resource_Stream(resourceName);
 		if (inputStream != null)
 		{		
 			try 
 			{
+				
 				FileUtils.copyInputStreamToFile(inputStream, file);
 				return file.getAbsolutePath();
 			}
@@ -40,6 +43,8 @@ public class PluginResources
 			{
 				e.printStackTrace();				
 			}	
+			if (file.exists())
+				return file.getAbsolutePath();
 		}
 
 		return null;	

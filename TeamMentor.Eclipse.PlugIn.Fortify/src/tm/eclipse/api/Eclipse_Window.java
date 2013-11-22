@@ -34,7 +34,7 @@ public class Eclipse_Window extends EclipseAPI
 	
 	private Eclipse_Window createWindow() throws PartInitException
 	{
-		panel = (Eclipse_Panel)activePage().showView(Eclipse_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
+		panel = (Eclipse_Panel)activeWorkbenchPage.showView(Eclipse_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
 		title(panelId);
 		return this;
 	}

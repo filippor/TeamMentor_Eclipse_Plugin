@@ -1,9 +1,11 @@
 package tm.eclipse.api;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import groovy.lang.Binding;
 
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.ui.PluginPreferences;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
@@ -95,20 +97,23 @@ public class TeamMentorAPI
 	{
 		String tmUrl = PluginPreferences.getServer() + "/" + mode + "/" + articleId; 		
 		String browserId = (PluginPreferences.openArticleInNewWindow()) ? articleId : PluginPreferences.getDefaultBrowserId();
-		lastBrowser = eclipseAPI.panels.open_Url_in_WebBrowser(browserId, tmUrl).browser;
+		lastBrowser = eclipseAPI.panelFactory.open_Url_in_WebBrowser(browserId, tmUrl).browser;
 		return lastBrowser;
 	}
 
-	public static DefaultPart_WebBrowser show_Html_With_TeamMentor_Banner(String htmlSnippet)
-	{
-		String htmlToShow = "<html><header><link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'></header>" +
-							"<body><img src='" + PluginPreferences.getServer() + "/Images/HeaderImage.jpg' class='HeaderImage'/><br/><br/>" + 
-							 
-							htmlSnippet +
-							"" + 
-							"</body></html>";
-		Panels panels = new Panels(eclipseAPI.workbench); 
-		return panels.open_Html_in_WebBrowser(htmlToShow);
+	public static DefaultPart_WebBrowser show_Html_With_TeamMentor_Banner(final String htmlSnippet)
+	{		
+		return syncExec(new Result<DefaultPart_WebBrowser>() { public DefaultPart_WebBrowser run() 
+			{
+				String htmlToShow = "<html><header><link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'></header>" +
+									"<body><img src='" + PluginPreferences.getServer() + "/Images/HeaderImage.jpg' class='HeaderImage'/><br/><br/>" + 
+									 
+									htmlSnippet +
+									"" + 
+									"</body></html>";
+				Panels panelFactory = new Panels(eclipseAPI.workbench); 
+				return panelFactory.open_Html_in_WebBrowser(htmlToShow);
+			}});
 		
 	}
 	public static DefaultPart_WebBrowser show_No_ArticleMessage()
