@@ -12,7 +12,7 @@ public class EclipseUI_Test
 		EclipseAPI eclipseAPI = new EclipseAPI();
 		EclipseUI  eclipseUi  = new EclipseUI(eclipseAPI.workbench);
 		assertNotNull(eclipseUi);
-		assertNotNull(eclipseUi.activePage());
-		assertNotNull(eclipseUi.activeWorkbenchWindow());
+		assertNotNull(eclipseUi.activePage);
+		assertNotNull(eclipseUi.workbenchWindow);
 	}
 }

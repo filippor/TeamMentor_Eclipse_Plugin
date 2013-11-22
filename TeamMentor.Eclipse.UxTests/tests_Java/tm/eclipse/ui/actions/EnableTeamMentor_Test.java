@@ -1,4 +1,4 @@
-package g2.scripts.actions;
+package tm.eclipse.ui.actions;
 
 import static org.junit.Assert.*;
 

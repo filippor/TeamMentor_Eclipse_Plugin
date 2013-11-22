@@ -14,8 +14,8 @@ public class EclipseAPI_Test
                 assertNotNull(eclipseAPI);
                 assertNotNull(eclipseAPI.menus);
                 assertNotNull(eclipseAPI.menus.workbench);
-                assertNotNull(eclipseAPI.panels);                
-                assertNotNull(eclipseAPI.panels.workbench);
+                assertNotNull(eclipseAPI.panelFactory);                
+                assertNotNull(eclipseAPI.panelFactory.workbench);
                 assertNotNull(eclipseAPI.views);
                 assertNotNull(eclipseAPI.views.workbench);
         }
@@ -25,8 +25,8 @@ public class EclipseAPI_Test
         {                
                 assertNotNull(eclipseAPI);
                 assertNotNull(eclipseAPI.workbench);
-                assertNotNull(eclipseAPI.activeWorkbenchWindow);
                 assertNotNull(eclipseAPI.display);
+                assertNotNull(eclipseAPI.activeWorkbenchWindow);                
                 assertNotNull(eclipseAPI.shell);
                 assertNotNull(eclipseAPI.workspace);
         }

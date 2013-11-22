@@ -1,5 +1,7 @@
 package tm.eclipse.ui.views;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import static org.junit.Assert.*;
 
 import org.eclipse.swt.SWT;
@@ -24,15 +26,17 @@ public class SimpleEditor_Test
 		eclipseAPI = Startup.eclipseApi;
 		
 		IViewPart viewPart = null;
-		try 
+		viewPart =  eclipseAPI.views.open_View(SimpleEditor.ID);
+		/*try 
 		{
 			viewPart = eclipseAPI.activePage().showView(SimpleEditor.ID);
 		} 
 		catch (PartInitException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
 		assertNotNull(viewPart);
+		assertTrue(viewPart instanceof SimpleEditor);
 		simpleEditorView = (SimpleEditor) viewPart;
 		assertNotNull(simpleEditorView);				
 	}
@@ -44,91 +48,95 @@ public class SimpleEditor_Test
 		assertNotNull(simpleEditorView.styledText_Code);
 		assertNotNull(simpleEditorView.styledText_Result);
 		assertNotNull(simpleEditorView.composite);
-		assertNull(simpleEditorView.groovyExecution);				
+		//assertNull   (simpleEditorView.groovyExecution);				
 	}
-	
+	@Test
+	public void closeSimpleEditor()
+	{
+		assertNotNull(eclipseAPI.views.get_View_Reference(SimpleEditor.ID));
+		simpleEditorView.close();
+		
+		assertNull(eclipseAPI.views.get_View_Reference(SimpleEditor.ID));
+			
+	}
 	
 	@Test
 	public void compileAndExecuteCode()
 	{
-		String testGroovy     = "40+2";
-		String expectedResult = "42";
-		
-		String originalCode = simpleEditorView.styledText_Code.getText();
-		assertNotNull(originalCode);		
-		
-		// set simple Groovy to test execution		
-		simpleEditorView.styledText_Code.setText(testGroovy);		
-		assertEquals   (testGroovy, simpleEditorView.styledText_Code.getText());
-		Object output  = simpleEditorView.compileAndExecuteCode_Sync();
-		assertNotNull  (simpleEditorView.groovyExecution.returnValue);
-		assertEquals   (output, simpleEditorView.groovyExecution.returnValue);
-		assertEquals   (expectedResult, output.toString());
-		
-		//check that 42 != 43 :)
-		//assertNotEquals(simpleEditorView.compileAndExecuteCode("40+2"), 43);
-		assertNotSame(simpleEditorView.compileAndExecuteCode("40+2"), 43);
+		eclipseAPI.display.syncExec(new Runnable() { public void run() 
+		{
+			String testGroovy     = "40+2";
+			String expectedResult = "42";
+			
+			String originalCode = simpleEditorView.get_ScriptToExecute();
+			assertNotNull(originalCode);		
+			
+			// set simple Groovy to test execution		
+			simpleEditorView.set_ScriptToExecute(testGroovy);		 
+			assertEquals   (testGroovy, simpleEditorView.get_ScriptToExecute());
+			Object output  = simpleEditorView.compileAndExecuteCode_Sync();
+			assertNotNull  (simpleEditorView.groovyExecution.returnValue);
+			assertEquals   (output, simpleEditorView.groovyExecution.returnValue);
+			assertEquals   (expectedResult, output.toString());
+			
+			//check that 42 != 43 :)
+			//assertNotEquals(simpleEditorView.compileAndExecuteCode("40+2"), 43);
+			assertNotSame(simpleEditorView.compileAndExecuteCode("40+2"), 43);
+		}});
 	}
 	
 	@Test
 	public void groovy_Execution_ViaButton()
 	{
-		simpleEditorView.styledText_Result.setText("");
-		simpleEditorView.styledText_Code  .setText("30+10+2");
-		
-		//checks that there is one listener
-		Listener[] listeners =  simpleEditorView.execute_Button.getListeners(SWT.Selection);
-		assertNotNull(listeners);
-		assertEquals(1,listeners.length);
-		
-		//invokes the button and checks the results
-		simpleEditorView.execute_Button.notifyListeners(SWT.Selection, null);
-		
-		boolean waitResult = simpleEditorView.waitForExecutionComplete();
-		assertTrue(waitResult);
+		syncExec(new VoidResult() { public void run() 
+			{
+				simpleEditorView.styledText_Result.setText("");
+				simpleEditorView.styledText_Code  .setText("30+10+2");
+				
+				//checks that there is one listener
+				Listener[] listeners =  simpleEditorView.execute_Button.getListeners(SWT.Selection);
+				assertNotNull(listeners);
+				assertEquals(1,listeners.length);
+				
+				//invokes the button and checks the results
+				simpleEditorView.execute_Button.notifyListeners(SWT.Selection, null);
+				
+				boolean waitResult = simpleEditorView.waitForExecutionComplete();
+				assertTrue(waitResult);				
+				
+			}});
 		assertEquals(simpleEditorView.groovyExecution.returnValue, 42);
 		assertEquals(simpleEditorView.groovyExecution.returnValue.toString() , "42");
-		
-		
-		//TODO: there is a race condition on the test below caused by the
-		/*    Startup.eclipseApi.display.asyncExec
-		 * in 
-		 *    showExecutionResult    
-		 */
-		/*
-		eclipseAPI.display.syncExec(new Runnable() { @Override public void run() 
-			{
-				assertEquals(simpleEditorView.styledText_Result.getText(), "42");		
-				assertEquals(simpleEditorView.groovyExecution.returnValue.toString() , "42");
-			}});
-		assertEquals(simpleEditorView.styledText_Result.getText(), "42");
-		*/				
 	}
 	@Test
 	public void groovy_Execution_Check_Binded_Variables()
 	{
-		simpleEditorView.executeSync = true;
-		assertEquals   (simpleEditorView.compileAndExecuteCode("40+2"        	  ), 42);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("40+2-10+12-2"	  ), 42);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("(40+2).toString()"),"42");
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseApi"), null);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return null"      ), null);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return binding"   	 	), simpleEditorView.groovyExecution.binding	  		);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return configuration"	), simpleEditorView.groovyExecution.configuration	);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return composite"	 	), simpleEditorView.composite	  	);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return importCustomizer"), simpleEditorView.groovyExecution.importCustomizer);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return groovyShell"		), simpleEditorView.groovyExecution.groovyShell	  	);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return view"	  	 	), simpleEditorView			  		);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI"	 	), simpleEditorView.groovyExecution.eclipseApi	  	);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return teammentorAPI"	), TeamMentorAPI.class	  			);
+		eclipseAPI.display.syncExec(new Runnable() { public void run() 
+			{
+				simpleEditorView.executeSync = true;
+				assertEquals   (simpleEditorView.compileAndExecuteCode("40+2"        	  ), 42);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("40+2-10+12-2"	  ), 42);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("(40+2).toString()"),"42");
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseApi"), null);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return null"      ), null);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return binding"   	 	), simpleEditorView.groovyExecution.binding	  		);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return configuration"	), simpleEditorView.groovyExecution.configuration	);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return composite"	 	), simpleEditorView.composite	  	);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return importCustomizer"), simpleEditorView.groovyExecution.importCustomizer);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return groovyShell"		), simpleEditorView.groovyExecution.groovyShell	  	);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return view"	  	 	), simpleEditorView			  		);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI"	 	), simpleEditorView.groovyExecution.eclipseApi	  	);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return teammentorAPI"	), TeamMentorAPI.class	  			);
+				
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.workbench   "), simpleEditorView.groovyExecution.eclipseApi.workbench);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.workspace   "), simpleEditorView.groovyExecution.eclipseApi.workspace);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.display	  "), simpleEditorView.groovyExecution.eclipseApi.display);			
+				
+				assertEquals   (simpleEditorView.compileAndExecuteCode(null),null);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("!@£$"),null);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("return nonExistentVariable"),null);
+			}});
 		
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.workbench   "), simpleEditorView.groovyExecution.eclipseApi.workbench);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.workspace   "), simpleEditorView.groovyExecution.eclipseApi.workspace);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.display	  "), simpleEditorView.groovyExecution.eclipseApi.display);			
-		
-		assertEquals   (simpleEditorView.compileAndExecuteCode(null),null);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("!@£$"),null);
-		assertEquals   (simpleEditorView.compileAndExecuteCode("return nonExistentVariable"),null);
 	}	
 	
 	@Test
@@ -136,9 +144,9 @@ public class SimpleEditor_Test
 	{
 		simpleEditorView.executeSync = true;
 		simpleEditorView.groovyExecution = new GroovyExecution();
-		simpleEditorView.groovyExecution.scriptToExecute = "return eclipseAPI.activePage()"; 
+		simpleEditorView.groovyExecution.scriptToExecute = "return eclipseAPI.activeWorkbenchPage"; 
 		simpleEditorView.groovyExecution.executeScript_UIThread_Sync();
-		assertEquals(simpleEditorView.groovyExecution.returnValue, simpleEditorView.groovyExecution.eclipseApi.activePage());
+		assertEquals(simpleEditorView.groovyExecution.returnValue, simpleEditorView.groovyExecution.eclipseApi.activeWorkbenchPage);
 		//assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.activePage()"), simpleEditorView.groovyExecution.eclipseApi.activePage());
 	}
 }

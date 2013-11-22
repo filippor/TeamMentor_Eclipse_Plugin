@@ -1,5 +1,7 @@
 package tm.eclipse.ui.views;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import static org.junit.Assert.*;
 
 import org.eclipse.swt.custom.StyledText;
@@ -23,13 +25,16 @@ public class SimpleEditor_UI_Test
 	@Test
 	public void Check_Result_StyledText_Properties()
 	{
-		StyledText result = simpleEditor.styledText_Result;
+		final StyledText result = simpleEditor.styledText_Result;
 		assertNotNull(result);
-		
-		String testText = "123";
-		result.setText(testText);
-		assertEquals(result.getText(), testText);
-		assertTrue  (result.getWordWrap());			
+		syncExec(new VoidResult() { public void run () 
+			{
+				String testText = "123";
+				result.setText(testText);
+				assertEquals(result.getText(), testText);
+				assertTrue  (result.getWordWrap());
+			}});
+					
 		//assertEquals(result.getStyle() , SWT.BORDER,  SWT.V_SCROLL| SWT.H_SCROLL );  //fails with: java.lang.AssertionError: expected:<571738882> but was:<2304>						
 	}
 }

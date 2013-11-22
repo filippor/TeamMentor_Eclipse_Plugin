@@ -1,6 +1,9 @@
 package tm.eclipse.api;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import static org.junit.Assert.*;
+
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.junit.Test;
 
 import tm.eclipse.ui.Startup;
@@ -17,9 +20,9 @@ public class Panels_Tests
 		panels = new Panels(eclipseApi.workbench);
 		assertNotNull(eclipseApi);
 		assertNotNull(panels);
-		assertNotNull(panels.activePage());
-		assertNotNull(panels.activeWorkbenchWindow());
-		assertNotNull(panels.workbench);
+		assertNotNull(panels.activePage);		
+		assertNotNull(panels.workbenchWindow);
+		assertNotNull(panels.workbench);		
 	}
 	
 	@Test 
@@ -27,13 +30,17 @@ public class Panels_Tests
 	{
 		String panelId      = "New Test Panel";
 		String defaultTitle = "Eclipse Panel";
-		String newTitle     = "A new Title";
-		Eclipse_Panel panel = panels.open_Panel(panelId);
+		final String newTitle     = "A new Title";
+		final Eclipse_Panel panel = panels.open_Panel(panelId);
 		assertNotNull(panel);
 		assertNotNull(panel.composite);
 		//assertNotEquals (!defaultTitle, panel.getTitle());
 		assertNotSame(defaultTitle, panel.getTitle());
-		panel.title(newTitle);
-		assertEquals (newTitle, panel.getTitle());		
+		syncExec(new VoidResult() { public void run() 
+			{
+				panel.title(newTitle);
+				assertEquals (newTitle, panel.getTitle());
+			}});
+				
 	}
 }
