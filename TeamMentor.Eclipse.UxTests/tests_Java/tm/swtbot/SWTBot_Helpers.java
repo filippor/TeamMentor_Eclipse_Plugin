@@ -15,9 +15,9 @@ public class SWTBot_Helpers
 	
 	public SWTBot_Helpers()
 	{
-		bot   = new SWTWorkbenchBot();
+		bot       = new SWTWorkbenchBot();
 		workbench = PlatformUI.getWorkbench();
-		display = workbench.getDisplay();
+		display   = workbench.getDisplay();
 		//files = new SWTBot_Files(bot);
 		//views = new SWTBot_Views(bot);		
 	}

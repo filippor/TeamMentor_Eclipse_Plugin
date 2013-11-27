@@ -5,9 +5,11 @@ import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import org.eclipse.swtbot.swt.finder.results.*;
 
 import static org.junit.Assert.*;
-import static tm.tests.helpers.ExtraAsserts.*;
+import static tm.utils.ExtraAsserts.*;
 
 import java.util.List;
+
+
 
 
 
@@ -22,7 +24,7 @@ import org.junit.Test;
 
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.views.SimpleEditor;
-import tm.tests.helpers.Eclipse_Consts;
+import tm.utils.Eclipse_Consts;
 
 public class Views_Test 
 {
@@ -118,5 +120,18 @@ public class Views_Test
 		IViewPart noView = views.open_View("AAAAAAA");
 		assertNull(noView);
 		//	}});
+	}
+
+	@Test
+	public void closeAboutWindow()
+	{
+		EclipseAPI eclipseAPI = Startup.eclipseApi;
+		IViewReference viewReference = eclipseAPI.views.get_View_Reference(Eclipse_Consts.VIEW_ID_WELCOME_SCREEN);
+		if (viewReference != null)
+		{
+			eclipseAPI.views.close(viewReference);
+			viewReference = eclipseAPI.views.get_View_Reference(Eclipse_Consts.VIEW_ID_WELCOME_SCREEN);
+			assertNull(viewReference);
+		}
 	}
 }

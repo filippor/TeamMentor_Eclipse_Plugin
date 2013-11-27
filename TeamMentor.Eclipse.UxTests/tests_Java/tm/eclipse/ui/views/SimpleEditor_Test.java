@@ -1,7 +1,9 @@
 package tm.eclipse.ui.views;
 
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
+
 import static org.junit.Assert.*;
 
 import org.eclipse.swt.SWT;
@@ -15,8 +17,9 @@ import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Startup;
+import tm.swtbot.SWTBot_JUnit;
 
-public class SimpleEditor_Test 
+public class SimpleEditor_Test extends SWTBot_JUnit
 {	
 	public SimpleEditor simpleEditorView;
 	public EclipseAPI   eclipseAPI;
@@ -63,8 +66,8 @@ public class SimpleEditor_Test
 	@Test
 	public void compileAndExecuteCode()
 	{
-		eclipseAPI.display.syncExec(new Runnable() { public void run() 
-		{
+		//eclipseAPI.display.syncExec(new Runnable() { public void run() 
+		//{
 			String testGroovy     = "40+2";
 			String expectedResult = "42";
 			
@@ -82,7 +85,7 @@ public class SimpleEditor_Test
 			//check that 42 != 43 :)
 			//assertNotEquals(simpleEditorView.compileAndExecuteCode("40+2"), 43);
 			assertNotSame(simpleEditorView.compileAndExecuteCode("40+2"), 43);
-		}});
+		//}});
 	}
 	
 	@Test
@@ -100,19 +103,21 @@ public class SimpleEditor_Test
 				
 				//invokes the button and checks the results
 				simpleEditorView.execute_Button.notifyListeners(SWT.Selection, null);
-				
-				boolean waitResult = simpleEditorView.waitForExecutionComplete();
-				assertTrue(waitResult);				
-				
 			}});
+		
+						
+		boolean waitResult = simpleEditorView.waitForExecutionComplete();
+		assertTrue(waitResult);				
+				
+			
 		assertEquals(simpleEditorView.groovyExecution.returnValue, 42);
 		assertEquals(simpleEditorView.groovyExecution.returnValue.toString() , "42");
 	}
 	@Test
 	public void groovy_Execution_Check_Binded_Variables()
 	{
-		eclipseAPI.display.syncExec(new Runnable() { public void run() 
-			{
+		//syncExec(new Runnable() { public void run() 
+		//	{
 				simpleEditorView.executeSync = true;
 				assertEquals   (simpleEditorView.compileAndExecuteCode("40+2"        	  ), 42);
 				assertEquals   (simpleEditorView.compileAndExecuteCode("40+2-10+12-2"	  ), 42);
@@ -135,7 +140,8 @@ public class SimpleEditor_Test
 				assertEquals   (simpleEditorView.compileAndExecuteCode(null),null);
 				assertEquals   (simpleEditorView.compileAndExecuteCode("!@£$"),null);
 				assertEquals   (simpleEditorView.compileAndExecuteCode("return nonExistentVariable"),null);
-			}});
+				simpleEditorView.executeSync = false;
+//			}});
 		
 	}	
 	
@@ -147,6 +153,7 @@ public class SimpleEditor_Test
 		simpleEditorView.groovyExecution.scriptToExecute = "return eclipseAPI.activeWorkbenchPage"; 
 		simpleEditorView.groovyExecution.executeScript_UIThread_Sync();
 		assertEquals(simpleEditorView.groovyExecution.returnValue, simpleEditorView.groovyExecution.eclipseApi.activeWorkbenchPage);
+		simpleEditorView.executeSync = false;
 		//assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.activePage()"), simpleEditorView.groovyExecution.eclipseApi.activePage());
 	}
 }

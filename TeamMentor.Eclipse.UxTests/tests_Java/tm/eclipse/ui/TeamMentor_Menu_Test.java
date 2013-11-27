@@ -1,12 +1,9 @@
 package tm.eclipse.ui;
 
 import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
+import static tm.utils.Network.*;
 import static org.junit.Assert.*;
 import static tm.swtbot.helpers.SWTBot_Views.*;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -14,30 +11,34 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.junit.Test;
 
+import tm.eclipse.Plugin_Config;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
+import tm.swtbot.SWTBot_JUnit;
 import tm.swtbot.models.SWTBot_View;
+import tm.utils.Eclipse_Consts;
 
-public class TeamMentor_Menu_Test 
+public class TeamMentor_Menu_Test extends SWTBot_JUnit
 {
-	@Test
+	@Test	
 	public void check_Expected_TeamMentor_Menu_Items()
 	{
 		
 		SWTWorkbenchBot bot = new SWTWorkbenchBot();
 		SWTBotMenu teamMentorMenu = bot.menu("TeamMentor");				
-		assertNotNull(teamMentorMenu.menu("About TeamMentor Plugin"));
+		assertNotNull(teamMentorMenu.menu("About TeamMentor Eclipse Plugin"));
 		assertNotNull(teamMentorMenu.menu("Open TeamMentor Website"));
+		assertNotNull(teamMentorMenu.menu("Open Properties Page"));
 		//assertNotNull(teamMentorMenu.menu("Open Properties Page"));		
 	}
 	
-	@Test
+	@Test	
 	public void about_TeamMentor_Plugin()
 	{			
 
 		SWTBot_View aboutView = swtBot_View_Fast("TeamMentor");
 		if (aboutView != null)
 			aboutView.close();
-		bot.menu("TeamMentor").menu("About TeamMentor Plugin").click();
+		bot.menu("TeamMentor").menu("About TeamMentor Eclipse Plugin").click();
 		
 		aboutView = swtBot_View("TeamMentor");
 		assertNotNull(aboutView);
@@ -58,19 +59,29 @@ public class TeamMentor_Menu_Test
 	@Test
 	public void open_TeamMentor_Website()
 	{
-		try 
+		if (online())
 		{
-			new URL("http://teammentor.net").openConnection().getInputStream();
-			fail("here");
-		} catch (MalformedURLException e) 
-		{
-			fail("in MalformedURLException");
-		} catch (IOException e) 
-		{
-			fail("in IOException: " + e.getMessage());
+			bot.menu("TeamMentor").menu("Open TeamMentor Website").click();
+			SWTBot_View teamMentorNet = swtBot_View_Fast("https://teammentor.net");
+			assertNotNull(teamMentorNet);
+			teamMentorNet.close();
+			teamMentorNet = swtBot_View_Fast("https://teammentor.net");
+			assertNull(teamMentorNet);			
 		}
-		//bot.menu("TeamMentor").menu("Open TeamMentor Website").click();
-		//SWTBot_View teamMentorNet = swtBot_View_Fast("http://teammentor.net");
-		//assertNotNull(teamMentorNet);
+
+		Plugin_Config.FORCE_OFFLINE = true;
+		bot.menu("TeamMentor").menu("Open TeamMentor Website").click();
+		
+		SWTBot_View teamMentorNet = swtBot_View_Fast("TeamMentor");
+		assertNotNull(teamMentorNet);		
+		final Browser webBrowser =  ((DefaultPart_WebBrowser)teamMentorNet.viewPart).browser;
+		final SWTBotBrowser swtBotBrowser = new SWTBotBrowser(webBrowser);		
+		swtBotBrowser.waitForPageLoaded();			
+		String html = swtBotBrowser.getText();
+		assertContains(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE, html);		
+		Plugin_Config.FORCE_OFFLINE = false;
+		teamMentorNet.close();
+		teamMentorNet = swtBot_View_Fast("TeamMentor");
+		assertNull(teamMentorNet);
 	}
 }
