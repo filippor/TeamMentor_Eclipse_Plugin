@@ -1,4 +1,7 @@
-package tm.eclipse.ui;
+	package tm.eclipse.ui;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.PlatformUI;
@@ -9,8 +12,9 @@ import tm.eclipse.groovy.plugins.Plugin_Fortify;
 
 public class Startup implements IStartup {
 
-	public static EclipseAPI eclipseApi;
-	public static boolean    showDebugViews = true;
+	public static EclipseAPI   eclipseApi;
+	public static boolean      showDebugViews = true;
+	public static List<Object> loadedPlugins = new ArrayList<Object>();
 	//public static FortifyAPI fortifyApi;
 
 	@Override
@@ -33,6 +37,14 @@ public class Startup implements IStartup {
 	
 	public void startDefaultTeamMentorPlugins()
 	{
-		new Plugin_Fortify().startup();		
+		if (PluginPreferences.loadPluginsOnStartup())
+		{
+			Object fortifyApi = new Plugin_Fortify().startup();
+			if (fortifyApi ==null)
+				eclipseApi.log("ERROR: Plugin_Fortify().startup() returned null");
+			else
+				loadedPlugins.add(fortifyApi);
+			
+		}
 	}
 }

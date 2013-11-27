@@ -7,7 +7,9 @@ import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
+import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.PluginPreferences;
+import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 
 public class TeamMentorAPI 
@@ -105,11 +107,12 @@ public class TeamMentorAPI
 	{		
 		return syncExec(new Result<DefaultPart_WebBrowser>() { public DefaultPart_WebBrowser run() 
 			{
-				String htmlToShow = "<html><header><link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'></header>" +
-									"<body><img src='" + PluginPreferences.getServer() + "/Images/HeaderImage.jpg' class='HeaderImage'/><br/><br/>" + 
-									 
-									htmlSnippet +
-									"" + 
+				PluginResources pluginResources = new PluginResources(Activator.plugin);
+				String headerImage = pluginResources.get_Resource_Saved_on_TempFolder("/images/jpgs/HeaderImage.jpg");
+				String bootstrapCss = pluginResources.get_Resource_Saved_on_TempFolder("/images/css/bootstrap.css");
+				String htmlToShow = "<html><header><link href='" + bootstrapCss + "' rel='stylesheet'></header>" +
+									"<body><img src='" + headerImage + "' class='HeaderImage'/><br/><br/>" + 									 
+									htmlSnippet +									 									
 									"</body></html>";
 				Panels panelFactory = new Panels(eclipseAPI.workbench); 
 				return panelFactory.open_Html_in_WebBrowser(htmlToShow);
@@ -180,7 +183,7 @@ public class TeamMentorAPI
 		
 		binding.setVariable("browser"      , lastBrowser);		
 		
-		binding.setVariable("inspect"     , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
-		binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class, "inspect"));
+		binding.setVariable("inspect"     , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class	   , "inspect"));
+		binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class	   , "inspect"));		
 	}
 }

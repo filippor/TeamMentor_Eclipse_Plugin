@@ -34,7 +34,8 @@ public class PluginPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SERVER, "TeamMentor &Server:", getFieldEditorParent()));
 		addField(new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID, "TeamMentor &SessionId:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceInitializer.P_OPEN_ARTICLE_NEW_WINDOW,"&Open TeamMentor article in new window",getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_ADVANCED_MODE,"&Show Advanced Mode Features",getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_LOAD_PLUGINS,"&Load Plugins on Startup",getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_ADVANCED_MODE,"&Show Advanced Mode Features",getFieldEditorParent()));				
 	}
 	
 	public void init(IWorkbench workbench) {
@@ -47,6 +48,10 @@ public class PluginPreferences extends FieldEditorPreferencePage implements IWor
 	public static boolean showAdvancedMode()
 	{			
 		return store.getBoolean(PreferenceInitializer.P_TEAMMENTOR_ADVANCED_MODE);
+	}
+	public static boolean loadPluginsOnStartup()
+	{			
+		return store.getBoolean(PreferenceInitializer.P_TEAMMENTOR_LOAD_PLUGINS);
 	}
 	public static String getServer()
 	{

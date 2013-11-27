@@ -1,4 +1,4 @@
-package tm.tests.helpers;
+package tm.utils;
 
 import static org.junit.Assert.*;
 

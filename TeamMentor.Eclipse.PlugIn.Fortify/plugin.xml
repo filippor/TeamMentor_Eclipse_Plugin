@@ -47,7 +47,7 @@
            class="tm.eclipse.ui.PreferenceInitializer">
      </initializer>
   </extension>
- 
+ <!--
     <extension
          point="org.eclipse.ui.actionSets">
       <actionSet label="TeamMentor Action Set" visible="true" id="TM.actionSet">
@@ -90,7 +90,7 @@
          </action>
       </actionSet>
    </extension>
-   
+  --> 
     <extension
           point="org.eclipse.ui.startup">
        <startup
@@ -101,16 +101,37 @@
        <menuContribution allPopups="false" locationURI="menu:org.eclipse.ui.main.menu">
           <menu label="TeamMentor">
              <command commandId="tm.eclipse.commands.ShowHelpPage"
-                   	  icon="images/pngs/script_go.png"
-                   	  label="About TeamMentor Plugin"
+                   	  icon="images/icons/TM.ico"
+                   	  label="About TeamMentor Eclipse Plugin"
                    	  style="push">
              </command>
              <command
                    commandId="tm.eclipse.commands.OpenTeamMentorWebsite"
-                   icon="images/pngs/script_go.png"
+                   icon="images/icons/TM.ico"
                    label="Open TeamMentor Website"
                    style="push">
              </command>
+             <command
+                   commandId="tm.eclipse.commands.OpenPropertiesPage"
+                   icon="images/pngs/application_view_detail.png"
+                   label="Open Properties Page"
+                   style="push">
+             </command>
+             <menu
+                   label="Advanced and Debug Features">
+                <command
+                      commandId="tm.eclipse.commands.OpenScriptEditor"
+                      icon="images/pngs/script_go.png"
+                      label="&amp;Util - Write Script (TeamMentor DSL)"
+                      style="push">
+                   <visibleWhen
+                         checkEnabled="true">
+                   </visibleWhen>
+                </command>
+                <visibleWhen
+                      checkEnabled="true">
+                </visibleWhen>
+             </menu>
           </menu>
        </menuContribution>
        
@@ -121,12 +142,22 @@
        <command 
              defaultHandler="tm.eclipse.handlers.ShowHelpPage"
              id="tm.eclipse.commands.ShowHelpPage"                         
-             name="ShowHelpPage">
+             name="Show TeamMentor Help Page">
        </command>
        <command
              defaultHandler="tm.eclipse.handlers.OpenTeamMentorWebsite"
              id="tm.eclipse.commands.OpenTeamMentorWebsite"             
-             name="OpenTeamMentorWebsite">
+             name="Open TeamMentor Website">
+       </command>
+       <command
+             defaultHandler="tm.eclipse.handlers.OpenPropertiesPage"
+             id="tm.eclipse.commands.OpenPropertiesPage"
+             name="Open Properties Page">
+       </command>
+       <command
+             defaultHandler="tm.eclipse.handlers.OpenScriptEditor"
+             id="tm.eclipse.commands.OpenScriptEditor"
+             name="Open TeamMentor Script Editor">
        </command>
     </extension>
     <!--

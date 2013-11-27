@@ -11,9 +11,9 @@ public class Plugin_Fortify
 	{
 		return groovyPlugins.get_PluginScript_Code("TM_Plugins/Fortify/FortifyAPI.groovy");
 	}
-	public void startup() 
+	public Object startup() 
 	{
 		String fortifyScript = "TM_Plugins/Fortify/FortifyAPI.groovy";		
-		groovyPlugins.execute_PluginScript(fortifyScript);		
+		return groovyPlugins.execute_PluginScript(fortifyScript);		
 	}
 }

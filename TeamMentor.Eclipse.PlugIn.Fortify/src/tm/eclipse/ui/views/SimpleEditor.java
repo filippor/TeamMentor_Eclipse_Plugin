@@ -1,6 +1,6 @@
 package tm.eclipse.ui.views;
 
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+//import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -24,6 +24,7 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swt.SWT;
 
+import tm.eclipse.Plugin_Config;
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
@@ -180,7 +181,7 @@ public class SimpleEditor extends ViewPart
 	{
 		if(codeToExecute==null)
 			return null;
-		styledText_Code.setText(codeToExecute);		
+		set_ScriptToExecute(codeToExecute);			
 		return (executeSync) ? compileAndExecuteCode_Sync()
 						 	 : compileAndExecuteCode_ASync();
 	}
@@ -189,7 +190,7 @@ public class SimpleEditor extends ViewPart
 		compileAndExecuteCode_ASync();
 		try 
 		{
-			executionThread.join();
+			executionThread.join(Plugin_Config.MAX_WAIT_FOR_SYNC_GROOVY_EXECUTION);
 		}
 		catch (InterruptedException e) 
 		{
@@ -218,7 +219,7 @@ public class SimpleEditor extends ViewPart
 	{
 		//ensure that we are back in the UI thread
 		//Startup.eclipseApi.display.asyncExec(new Runnable() { public void run()
-		asyncExec(new VoidResult() { public void run()
+		syncExec(new VoidResult() { public void run()
 			{
 				Exception exception = groovyExecution.executionException;
 				Object result = groovyExecution.returnValue;			
@@ -244,7 +245,7 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor showExecutionStoppedMessage()
 	{
-		asyncExec(new VoidResult() { public void run()
+		syncExec(new VoidResult() { public void run()
 			{
 				styledText_Result.setText("... execution stopped... ");
 				stop_Button.setEnabled(false);
@@ -255,7 +256,7 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor prepareUIForExecution()
 	{
-		asyncExec(new VoidResult() {public void run()
+		syncExec(new VoidResult() {public void run()
 			{
 				lastExecutedScript = styledText_Code.getText();
 				styledText_Result.setText(" ... executing script with size: " + lastExecutedScript.length());
@@ -272,7 +273,7 @@ public class SimpleEditor extends ViewPart
 		{
 			try 
 			{
-				executionThread.join();
+				executionThread.join(Plugin_Config.MAX_WAIT_FOR_SYNC_GROOVY_EXECUTION);
 				return true;
 			} catch (InterruptedException e) 
 			{

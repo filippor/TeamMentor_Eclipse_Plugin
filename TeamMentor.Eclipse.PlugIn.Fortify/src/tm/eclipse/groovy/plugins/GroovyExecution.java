@@ -248,4 +248,21 @@ public class GroovyExecution
 		thread.start();
 		return groovyExecution;
 	}
+	public static GroovyExecution dev_Execute_JUnitTest()
+	{		
+		String jUnitTestClass = "tm.eclipse.ui.TeamMentor_Menu_Test";
+		return dev_Execute_JUnitTest(jUnitTestClass);
+	}
+	public static GroovyExecution dev_Execute_JUnitTest(String jUnitTestClass)
+	{
+		String binFolder = "//Users//plugin//_Dev//git//TeamMentor_Eclipse_Plugin//TeamMentor.Eclipse.UxTests//bin//";
+		return dev_Execute_JUnitTest(binFolder, jUnitTestClass); 
+	}
+	public static GroovyExecution dev_Execute_JUnitTest(String binFolder, String jUnitTestClass)
+	{
+		GroovyExecution groovyExecution = new GroovyExecution();
+		groovyExecution.addRefToGroovyShell(binFolder);
+		groovyExecution.execute_JUnit_Test(jUnitTestClass);
+		return groovyExecution;
+	}
 }

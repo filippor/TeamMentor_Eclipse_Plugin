@@ -22,9 +22,10 @@ public class GroovyPlugins
 			return null;		
 		try 
 		{	
-			URL url = new URL("file://" + path);
+			URL url = new URL("file:///" + path); // just using file:// works on OSx but not on windows
 			//URI uri = new URI(path);
-			return IOUtils.toString(url);
+			String fileContents = IOUtils.toString(url);
+			return fileContents;
 		}
 		catch (Exception e) 
 		{		

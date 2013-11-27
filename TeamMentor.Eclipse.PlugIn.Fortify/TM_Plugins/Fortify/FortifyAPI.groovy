@@ -8,40 +8,46 @@ import org.eclipse.ui.IWorkbenchPartReference
 
 import tm.eclipse.api.EclipseAPI;
 
-class FortifyAPI 
+class FortifyAPI
 {
 	public static FortifyAPI current;
 	public EclipseAPI eclipseApi;
 	public String 	  partTitle = "SCA Analysis Results - With TeamMentor Support";
 	
 	
-	public FortifyAPI(EclipseAPI _eclipseApi)
+	public FortifyAPI()
 	{
 		current = this;
-		eclipseApi = _eclipseApi;
-				
-		eclipseApi.partEvents.Part_Opened = 
-			{	
+		eclipseApi =  tm.eclipse.ui.Startup.eclipseApi;
+		eclipseApi.log("*** Configuring FortifyAPI support");
+		eclipseApi.partEvents.Part_Opened =
+			{
 				IWorkbenchPartReference part ->
 						eclipseApi.log("View Opened: " + part.id);
 						this.setFortifyHooks();
-			};		
+			};
 	}
 	public IViewPart getIssuesListView()
 	{
 		def activePage =eclipseApi.activeWorkbenchPage;
-		if (activePage!=null) 
+		if (activePage!=null)
 			return activePage.findView("com.fortify.awb.views.views.IssuesListView");
-		return null;		
+		return null;
 	}
 	
 	public String getCurrentIssueName()
 	{
 		def issuesList = getIssuesListView();
 		if (issuesList == null)
-		return null;
+			return null;
+		if (issuesList.tree.selection == null || issuesList.tree.selection.firstElement == null)
+		{
+			eclipseApi.log("in getCurrentIssueName, got issuesList, couldn't get issuesList.tree.selection.firstElement");
+			return null;
+		}
+		//def data = issuesList.focusItem.getData();  // focus item is not working
 		
-		def data = issuesList.focusItem.getData();
+		def data = issuesList.tree.selection.firstElement;
 		if (data == null)
 			return null;
 		if (data.class.name == "com.fortify.ui.model.issue.IssueGroup")
@@ -50,7 +56,7 @@ class FortifyAPI
 			return data.parent.name;
 		if (data.parent.parent.class.name == "com.fortify.ui.model.issue.IssueGroup")
 			return data.parent.parent.name;
-		return null;	
+		return null;
 	}
 	
 	public String resolveIssueNameToGuid(String issueName)
@@ -60,7 +66,7 @@ class FortifyAPI
 			def lines = tmMappings.split("\n");
 	
 			for(line in lines)
-			{			
+			{
 				if (line.startsWith(issueName))
 					return line.split(",")[2];
 			}
@@ -69,10 +75,10 @@ class FortifyAPI
 	}
 	
 	public FortifyAPI setFortifyHooks()
-	{		
+	{
 		def issuesList = getIssuesListView();
 		if (issuesList!=null)
-		{			
+		{
 			if (issuesList.getPartName() != partTitle)
 			{
 				eclipseApi.log("*** APPLYING TEAMMENTOR FORTIFY EVENT LISTENERS");//changing Fortify IssuesListView title");
@@ -86,10 +92,16 @@ class FortifyAPI
 					@Override
 					public void widgetSelected(SelectionEvent e)
 					{
+					  try
+					  {
 						def _eclipseApi = tm.eclipse.ui.Startup.eclipseApi;
 						def _fortifyApi = FortifyAPI.current;
-						
+						_eclipseApi.log("Issue was selected on Fortify View");
+//						_eclipseApi.log("current issue: " + _currentIssue )
+//						return;
+
 						def _currentIssue = _fortifyApi.getCurrentIssueName();
+
 						def tmGuid =  _fortifyApi.resolveIssueNameToGuid(_currentIssue);
 						_eclipseApi.log("current issue: " + _currentIssue + " : GUID : " + tmGuid);
 						if (tmGuid != null)
@@ -98,8 +110,13 @@ class FortifyAPI
 						}
 						else
 						{
-							tm.eclipse.api.TeamMentorAPI.show_No_ArticleMessage();							
-						}						
+							tm.eclipse.api.TeamMentorAPI.show_No_ArticleMessage();
+						}
+					  }
+					  catch(Exception ex)
+					  {
+						tm.eclipse.ui.Startup.eclipseApi.log("ERROR in tree.addSelectionListener: " + ex.getMessage());
+					  }
 					}});
 				eclipseApi.log("*** Configured Tree listening event");
 			}
@@ -135,3 +152,5 @@ Password Management: Weak Cryptography ,CWE ID 261 ,ac9e0d29-dfd0-4671-98f5-7106
 Password Management: Empty Password in Configuration File,CWE ID 258 ,ac9e0d29-dfd0-4671-98f5-7106e6505c24,Insufficiently Protected Credentials,Java
 Password Management: Password in Configuration File ,CWE ID 13; CWE ID 260; CWE ID 555 ,ac9e0d29-dfd0-4671-98f5-7106e6505c24,Insufficiently Protected Credentials,Java""";
 }
+
+return new FortifyAPI();

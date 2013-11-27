@@ -14,6 +14,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 	public static final String P_TEAMMENTOR_SESSION_ID   	= "P_TEAMMENTOR_SESSION_ID";
 	public static final String P_TEAMMENTOR_ADVANCED_MODE   = "P_TEAMMENTOR_ADVANCED_MODE";
 	
+	public static final String P_TEAMMENTOR_LOAD_PLUGINS   = "P_TEAMMENTOR_LOAD_PLUGINS";
+	
 	public void initializeDefaultPreferences() 
 	{		
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
@@ -22,6 +24,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
 		store.setDefault(P_TEAMMENTOR_SERVER, "https://vulnerabilities.teammentor.net");
 		store.setDefault(P_TEAMMENTOR_SESSION_ID,"00000000-0000-0000-0000-000000000000");
 		store.setDefault(P_TEAMMENTOR_ADVANCED_MODE,false);
+		store.setDefault(P_TEAMMENTOR_LOAD_PLUGINS,true);
 	}
 
 }
