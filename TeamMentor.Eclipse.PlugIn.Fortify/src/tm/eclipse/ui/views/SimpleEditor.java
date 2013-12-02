@@ -1,6 +1,6 @@
 package tm.eclipse.ui.views;
-
 //import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -45,15 +45,13 @@ public class SimpleEditor extends ViewPart
 	public GroovyExecution	groovyExecution;
 	public String           lastExecutedScript;
 	public boolean			executeSync;	
+	public boolean			executeUIThread;	
 	
 	public SimpleEditor() 
 	{
-		display = PlatformUI.getWorkbench().getDisplay();
-		/*	PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() { public void run() 
-			{
-				EclipseAPI eclipseApi =  Startup.eclipseApi;
-				display = eclipseApi.display;
-			}});*/
+		display 	= PlatformUI.getWorkbench().getDisplay();
+		executeSync = false;  									// default to async execution
+		executeUIThread = true;									// on the UI Thread
 	}
 
 	public void createPartControl(Composite _composite) 
@@ -138,37 +136,6 @@ public class SimpleEditor extends ViewPart
 		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
 				      			 "//openArticle('SQL Injection')\n" + 
 					  			 "return eclipseAPI;");
-		
-		/*
-		sashForm = new SashForm(composite, SWT.VERTICAL);
-	    sashForm.setLayout(new RowLayout());
-		
-	    styledText_Code   = new StyledText(sashForm, SWT.BORDER);	   
-	    execute_Button    = new Button(sashForm, SWT.HORIZONTAL);
-	    styledText_Result = new StyledText(sashForm, SWT.BORDER  | SWT.H_SCROLL | SWT.V_SCROLL);
-	    	    
-	    execute_Button.setText("Compile and execute code");
-	    execute_Button.addSelectionListener(new SelectionAdapter() { public void widgetSelected(SelectionEvent event) 
-						{
-	    					compileAndExecuteCode();
-						} });
-	    sashForm.addListener(SWT.RESIZE,new Listener() { @Override public void handleEvent(Event arg0)
-	    				{
-	    					int[] weigths = sashForm.getWeights();
-	    					weigths[1] = 100;
-	    					sashForm.setWeights(weigths);
-	    				}});	    
-	    
-	    styledText_Result.setBackground(new Color(Display.getCurrent (),200,200,255));
-	    styledText_Result.setWordWrap(true);
-	    int[] weigths = sashForm.getWeights();
-	    
-		sashForm.setWeights(new int[] { 450,100,450});	 // values in % (max = 999 )
-		
-		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
-				      			 "//openArticle('SQL Injection')\n" + 
-					  			 "return eclipseAPI;");
-		 */
 		return this;
 	}
 
@@ -203,16 +170,22 @@ public class SimpleEditor extends ViewPart
 		groovyExecution = new GroovyExecution();
 		groovyExecution.binding.setVariable("composite" , composite);
 		groovyExecution.binding.setVariable("view"		, this);
-				
+		groovyExecution.executeOnUIThread = executeUIThread;		
+		
 		prepareUIForExecution();
 		
 		executionThread = new Thread(new Runnable() { public void run() 
-			{					
-				groovyExecution.executeScript(lastExecutedScript);		
-				showExecutionResult();
+			{								
+				executeScript_and_ShowResult();
 			}});
 		
 		executionThread.start();
+		return this;
+	}	
+	public SimpleEditor executeScript_and_ShowResult()
+	{
+		groovyExecution.executeScript(lastExecutedScript);		
+		showExecutionResult();
 		return this;
 	}
 	public SimpleEditor showExecutionResult()
@@ -292,11 +265,11 @@ public class SimpleEditor extends ViewPart
 	public String       set_ScriptToExecute(final String value)
 	{	
 		return syncExec(new Result<String>() { public String run() 			
-		{
-			styledText_Code.setText(value);
-			return  styledText_Code.getText();
-		}});				
-	}
+			{
+				styledText_Code.setText(value);				
+				return  styledText_Code.getText();
+			}});				
+	}	
 
 	public SimpleEditor close() 
 	{		

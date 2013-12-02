@@ -1,5 +1,7 @@
 package tm.eclipse.groovy.plugins;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,10 +13,13 @@ import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.Startup;
+import tm.eclipse.ui.views.SimpleEditor;
 
 public class GroovyExecution 
 {
@@ -27,6 +32,7 @@ public class GroovyExecution
 	public String 				 scriptToExecute;
 	public Runnable			     onExecutionComplete;
 	public Exception			 executionException;	
+	public boolean 				 executeOnUIThread;
 	
 	public GroovyExecution() 
 	{
@@ -49,6 +55,7 @@ public class GroovyExecution
 		binding.setVariable("importCustomizer", importCustomizer);
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
+		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
 	}	
 	public GroovyShell     setGroovyShell()
@@ -88,9 +95,15 @@ public class GroovyExecution
 	{
 		executionException = null;
 		returnValue = null;
+		setExecuteOptionsBasedOnCodeReferences();					// do this at the last minute so that we have access to the final state of the objects
 		try 
-		{	
-			returnValue =  groovyShell.evaluate(scriptToExecute);										
+		{		
+			returnValue = (executeOnUIThread)
+								? syncExec(new Result<Object>() { public Object run()
+										{
+											return groovyShell.evaluate(scriptToExecute);
+										}})
+				 				: groovyShell.evaluate(scriptToExecute);
 		} 
 		catch (Exception ex) 
 		{					
@@ -135,6 +148,16 @@ public class GroovyExecution
 			return groovyShell.getClassLoader().getURLs();			// (handle UnitTest exception)  java.lang.LinkageError: loader constraint violation:
 		return null;
 	}	
+	
+	public  GroovyExecution setExecuteOptionsBasedOnCodeReferences() 
+	{
+		//this should be done via AST, but text search is a good start:
+		if (scriptToExecute.contains("//Config:UIThread_False"))
+			executeOnUIThread = false; 
+		if (scriptToExecute.contains("//Config:UIThread_True"))
+			executeOnUIThread = true;
+		return this;		
+	}
 	public Binding 	       setBindingVariablesValues() 
 	{			
 		binding = new Binding();				
