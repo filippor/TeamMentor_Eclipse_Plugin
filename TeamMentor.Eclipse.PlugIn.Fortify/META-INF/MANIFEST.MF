@@ -21,7 +21,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: tm.eclipse,
  tm.eclipse.api,
  tm.eclipse.groovy.plugins,
+ tm.eclipse.helpers,
  tm.eclipse.ui,
+ tm.eclipse.ui.PluginPreferences,
  tm.eclipse.ui.actions,
  tm.eclipse.ui.views,
  tm.utils

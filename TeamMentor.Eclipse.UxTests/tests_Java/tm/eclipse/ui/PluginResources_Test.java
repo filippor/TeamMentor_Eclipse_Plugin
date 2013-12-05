@@ -15,7 +15,7 @@ public class PluginResources_Test
 		
 	public PluginResources_Test()
 	{
-		pluginResources = new PluginResources(Activator.plugin);
+		pluginResources = new PluginResources();
 		assertNotNull(pluginResources);
 	}
 	

@@ -29,6 +29,7 @@ import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
+import tm.utils.CollectionToString;
 
 
 public class SimpleEditor extends ViewPart 
@@ -135,7 +136,10 @@ public class SimpleEditor extends ViewPart
 	    
 		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
 				      			 "//openArticle('SQL Injection')\n" + 
-					  			 "return eclipseAPI;");
+					  			 "return eclipseAPI;" + 
+				      			 "\n" + 
+					  			 "//Use code below to execute a *.groovy file opened on an code Editor \n" + 
+				      			 "return groovy.execute_GroovyEditor()");
 		return this;
 	}
 
@@ -198,7 +202,8 @@ public class SimpleEditor extends ViewPart
 				Object result = groovyExecution.returnValue;			
 				if (exception == null)
 				{			
-					styledText_Result.setText(result != null ? result.toString() 
+					String asString = new CollectionToString(result).asString();
+					styledText_Result.setText(result != null ?  asString
 			                 								 : "NULL return value");			
 				}
 				else if (exception instanceof CompilationFailedException) 
@@ -216,6 +221,7 @@ public class SimpleEditor extends ViewPart
 			}});
 		return this;
 	}
+	
 	public SimpleEditor showExecutionStoppedMessage()
 	{
 		syncExec(new VoidResult() { public void run()

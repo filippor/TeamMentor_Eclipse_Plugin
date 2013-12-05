@@ -1,6 +1,14 @@
 package tm.eclipse.api;
 
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import groovy.lang.Binding;
 
 import org.codehaus.groovy.runtime.MethodClosure;
@@ -8,7 +16,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.ui.Activator;
-import tm.eclipse.ui.PluginPreferences;
+import tm.eclipse.ui.PluginPreferences.MainPreferences;
 import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 
@@ -23,6 +31,7 @@ public class TeamMentorAPI
 	
 	public static void open_Article(String articleId)
 	{
+		loginIntoTM();
 		open_Article_Page("article", articleId);
 	}
 	
@@ -48,17 +57,23 @@ public class TeamMentorAPI
 	}
 	public static String loginIntoTM()
 	{		
-		Browser.setCookie("Session=" + PluginPreferences.getSessionId(), PluginPreferences.getServer());
-		return PluginPreferences.getSessionId();
+		Browser.setCookie("Session=" + MainPreferences.getSessionId(), MainPreferences.getServer());
+		String session = Browser.getCookie("Session", MainPreferences.getServer());
+		String server = MainPreferences.getServer();
+		return MainPreferences.getSessionId();
 	}	
 	public static void setServer(String newServer)
 	{
-		PluginPreferences.setServer(newServer);
+		MainPreferences.setServer(newServer);
 	}
 	public static void setSession(String session)
 	{
-		PluginPreferences.setSessionId(session);
+		MainPreferences.setSessionId(session);
 		loginIntoTM();
+	}
+	public static String getSession()
+	{
+		return MainPreferences.getSessionId();		
 	}
 	public static void edit_Notepad(String articleId)
 	{
@@ -97,8 +112,8 @@ public class TeamMentorAPI
 */	
 	public static Browser open_Article_Page(String mode, String articleId)
 	{
-		String tmUrl = PluginPreferences.getServer() + "/" + mode + "/" + articleId; 		
-		String browserId = (PluginPreferences.openArticleInNewWindow()) ? articleId : PluginPreferences.getDefaultBrowserId();
+		String tmUrl = MainPreferences.getServer() + "/" + mode + "/" + articleId; 		
+		String browserId = (MainPreferences.openArticleInNewWindow()) ? articleId : MainPreferences.getDefaultBrowserId();
 		lastBrowser = eclipseAPI.panelFactory.open_Url_in_WebBrowser(browserId, tmUrl).browser;
 		return lastBrowser;
 	}
@@ -107,7 +122,8 @@ public class TeamMentorAPI
 	{		
 		return syncExec(new Result<DefaultPart_WebBrowser>() { public DefaultPart_WebBrowser run() 
 			{
-				PluginResources pluginResources = new PluginResources(Activator.plugin);
+				PluginResources pluginResources = new PluginResources();				
+				
 				String headerImage = pluginResources.get_Resource_Saved_on_TempFolder("/images/jpgs/HeaderImage.jpg");
 				String bootstrapCss = pluginResources.get_Resource_Saved_on_TempFolder("/images/css/bootstrap.css");
 				String htmlToShow = "<html><header><link href='" + bootstrapCss + "' rel='stylesheet'></header>" +
@@ -128,33 +144,37 @@ public class TeamMentorAPI
 		return show_Html_With_TeamMentor_Banner(htmlSnippet);
 	}
 	
-	//hardcoded servers and sessions
-	
-	/*public static void setServer_Local()
-	{	
-		setServer("http://localhost:12120");
-		setSession("00000000-0000-0000-0000-000000000000");
-		open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
-	}*/
 	public static void setServer_CurrentSetup()
 	{
-		setServer(PluginPreferences.getServer());
-		setSession(PluginPreferences.getSessionId()); 
+		setServer(MainPreferences.getServer());
+		setSession(MainPreferences.getSessionId()); 
 	}
-	
-	/*public static void setServer_TeamMentor()
-	{	
-		setServer("https://teammentor.net");
-		setSession("00000000-0000-0000-0000-000000000000"); // logged in as fortify-plugin account
-		//open_Article("81a240be-b2a2-411a-b54e-0f2e86d74b40");
+	public static String loginIntoTeamMentor(String username, String password) 
+	{
+		StringBuffer response = new StringBuffer();
+		URL obj;
+		try 
+		{
+			String url = String.format("%s/rest/login/%s/%s", MainPreferences.getServer() ,username, password);
+			obj = new URL(url);
+		
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			int responseCode = con.getResponseCode();		
+			BufferedReader bufferReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;			
+	 
+			while ((inputLine = bufferReader.readLine()) != null) 
+			{
+				response.append(inputLine);
+			}
+			bufferReader.close();
+		} 
+		catch (MalformedURLException e)  { e.printStackTrace(); }
+		catch (IOException e) 		     { e.printStackTrace(); }
+		String guid = response.toString().replace("<guid xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">","")
+									     .replace("</guid>","");
+		return guid;
 	}
-	public static 	void setServer_OWASP()
-	{	
-		setServer("http://owasp.teammentor.net");
-		setSession("00000000-0000-0000-0000-000000000000");
-		open_Article("57b928e2-5bc1-4d98-b3df-c7cca05dc5a8");
-	}*/
-	
 	
 	public static void mapGroovyBindings(Binding binding) 
 	{
@@ -162,6 +182,7 @@ public class TeamMentorAPI
 		binding.setVariable("loginIntoTM", new MethodClosure(TeamMentorAPI.class, "loginIntoTM"));
 		binding.setVariable("setServer"  , new MethodClosure(TeamMentorAPI.class, "setServer"));
 		binding.setVariable("setSession" , new MethodClosure(TeamMentorAPI.class, "setSession"));
+		binding.setVariable("getSession" , new MethodClosure(TeamMentorAPI.class, "getSession"));
 		
 		binding.setVariable("open"		 , new MethodClosure(TeamMentorAPI.class, "view_Article"));		
 		binding.setVariable("viewArticle", new MethodClosure(TeamMentorAPI.class, "view_Article"));		

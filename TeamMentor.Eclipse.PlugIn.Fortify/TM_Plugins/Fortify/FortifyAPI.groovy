@@ -110,7 +110,17 @@ class FortifyAPI
 						}
 						else
 						{
-							tm.eclipse.api.TeamMentorAPI.show_No_ArticleMessage();
+							def recommentdations = _eclipseApi.activeWorkbenchPage.findView("com.fortify.awb.views.views.RecommendationsView");
+							def markupReader = recommentdations.site.model.widget.children[0].children[0].children[0].children[0];
+
+							//tm.eclipse.api.TeamMentorAPI.show_No_ArticleMessage();
+						    def txt = markupReader.getText();
+							def html = "<h4>Fortify Recommentation</h4>" + 
+				             "</br>Since there is no article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" + 
+		    			         "<pre>" + txt + "</pre>"
+
+						TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
+
 						}
 					  }
 					  catch(Exception ex)

@@ -1,0 +1,72 @@
+package tm.eclipse.PluginPreferences;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotCheckBox;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
+
+import tm.eclipse.helpers.eclipseUI;
+import tm.eclipse.ui.Activator;
+
+public class Preferences_JUnit 
+{
+	public SWTWorkbenchBot  bot;
+	public IPreferenceStore store;
+	public SWTBotShell 		shell;
+	
+	public Preferences_JUnit()
+	{
+		 bot = new SWTWorkbenchBot();
+		 store = Activator.getDefault().getPreferenceStore();
+	}
+	public Preferences_JUnit closePropertiesPage()
+	{
+		shell.close();
+		return this;
+	}
+	public Preferences_JUnit openPropertiesPage(final String id)
+	{
+		new Thread() { public void run() 
+		{			
+			eclipseUI.open_PreferencesDialog(id);
+		}}.start();
+				
+		shell = bot.shell("Preferences");
+		
+		assertNotNull("openPropertiesPage shell is null", shell);
+		return this;
+	}
+	
+	public Preferences_JUnit restoreDefaults()
+	{
+		bot.button("Restore Defaults").click();
+		bot.button("Apply").click();
+		return this;
+	}
+	public void is_TextBox_equal_DefaultPreference(Integer index, String stringId, boolean equals)
+	{
+		SWTBotText text = bot.text(index);				
+		String value_default = store.getDefaultString (stringId);
+		String value_Live = text.getText();		
+		if(equals)
+			assertEquals   (value_default, value_Live);
+		else
+			assertNotEquals(value_default, value_Live);	
+	}
+	public void is_Checkbox_equal_DefaultPreference(Integer index, String stringId, boolean equals)
+	{
+		SWTBotCheckBox checkBox = bot.checkBox(index);				
+		Boolean value_default = store.getDefaultBoolean(stringId);
+		
+		Boolean value_Live = checkBox.isChecked();
+		if(equals)
+			assertEquals   (stringId, value_default, value_Live);
+		else
+			assertNotEquals(stringId, value_default, value_Live);	
+	}
+}

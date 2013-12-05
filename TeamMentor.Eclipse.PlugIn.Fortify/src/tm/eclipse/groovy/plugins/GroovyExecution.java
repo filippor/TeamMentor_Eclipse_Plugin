@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
+import tm.eclipse.helpers.eclipseUI;
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.views.SimpleEditor;
 
@@ -56,7 +57,9 @@ public class GroovyExecution
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
 		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
+		binding.setVariable("eclipseUI"       , eclipseUI.class);  		
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
+		binding.setVariable("groovy"          , GroovyExecution.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{
@@ -233,13 +236,41 @@ public class GroovyExecution
 			              "'\\n  failureCount: ' + jUnitResult.failureCount +\n" +
 			              "'\\n  runTime      : ' + jUnitResult.runTime;\n";		
 		return executeScript();		 
-	}
+	}	
+	
 	@Override
 	public String          toString()
 	{
 		if (executionException == null)
 			return "GroovyExecution OK: " + returnValue;
 		return "GroovyExecution ERROR: " + executionException.toString();
+	}
+	
+	/*
+	 * 
+	 */
+	public static String 		execute_GroovyEditor_Code(String title)
+	{
+		String groovyCode = (title == null)
+								? "def activeEditor = eclipse.activeWorkbenchPage.getActiveEditor();\n" 
+								: "def title = '"+ title +  "';             					    \n" +  
+								  "def editor = eclipseUI.editor(title);						    \n" +
+								  "if (editor == null)                  							\n" +
+								  "  return 'ERROR: No editor found with title: ' + title;			\n" +
+								  "def activeEditor = editor.getPart(true)							\n";
+		return  groovyCode + 
+		  	   "if (activeEditor.class.name == \"org.codehaus.groovy.eclipse.editor.GroovyEditor\") \n" +
+		  	   "{ 																					\n" + 
+		  	   "		def source = activeEditor.groovyCompilationUnit.source; 					\n" + 
+		  	   "      return new GroovyExecution().executeScript(source); 							\n" +
+		  	   "} 																					\n" + 
+		  	   "return 'ERROR: Current editor is not a groovy editor' 								\n";
+	}
+
+	public static Object 		execute_GroovyEditor(String title)
+	{
+		String scriptToExecute = execute_GroovyEditor_Code(title);
+		return new GroovyExecution().executeScript(scriptToExecute);	
 	}
 	
 	public static GroovyExecution execute_SWTBot(String swtBotScriptToExecute)
@@ -287,5 +318,10 @@ public class GroovyExecution
 		groovyExecution.addRefToGroovyShell(binFolder);
 		groovyExecution.execute_JUnit_Test(jUnitTestClass);
 		return groovyExecution;
+	}
+	
+	public static void inspect_Object(Object target)
+	{
+		groovy.inspect.swingui.ObjectBrowser.inspect(target);
 	}
 }
