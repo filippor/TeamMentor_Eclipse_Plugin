@@ -1,6 +1,6 @@
 package tm.eclipse.api;
 
-import static tm.eclipse.api.EclipseLog.*;
+import static tm.eclipse.helpers.log.*;
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
 import org.eclipse.swtbot.swt.finder.results.Result;
@@ -82,7 +82,7 @@ public class Panels  extends EclipseUI
 				{	
 					if (activePage == null)				
 					{
-						log_Error("in open_Html_in_WebBrowser, activePage was null, which usually means that the caller was not on the UI thread");
+						error("in open_Html_in_WebBrowser, activePage was null, which usually means that the caller was not on the UI thread");
 						return null;
 					}
 					IViewPart viewPart = activePage.showView(DefaultPart_WebBrowser.ID, browserId, IWorkbenchPage.VIEW_ACTIVATE);

@@ -1,13 +1,6 @@
 package tm.eclipse.handlers;
 
-import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
-import static org.junit.Assert.*;
-import static tm.swtbot.helpers.SWTBot_Views.swtBot_View_Fast;
-
 import org.eclipse.swt.browser.Browser;
-import org.junit.Test;
-
-import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.swtbot.SWTBot_JUnit;
 import tm.swtbot.models.SWTBot_View;
 

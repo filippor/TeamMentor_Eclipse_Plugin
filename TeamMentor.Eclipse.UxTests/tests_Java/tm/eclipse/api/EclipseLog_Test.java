@@ -1,7 +1,7 @@
 package tm.eclipse.api;
 
 import static org.junit.Assert.*;
-import static tm.eclipse.api.EclipseLog.*;
+import static tm.eclipse.helpers.log.*;
 
 import org.eclipse.core.internal.runtime.*;
 import org.eclipse.core.runtime.*;
@@ -55,19 +55,19 @@ public class EclipseLog_Test
 	@Test
 	public void test_log_Methods()
 	{
-		log_Cancel ("cancel Message");	   
+		cancel ("cancel Message");	   
 		check_LastLogEntry(Status.CANCEL , "cancel Message" );
 		
-		log_Error  ("error Message");
+		error  ("error Message");
 		check_LastLogEntry(Status.ERROR  , "error Message"  );
 				
-		log_Info   ("info Message");
+		info   ("info Message");
 		check_LastLogEntry(Status.INFO   , "info Message"   );
 		
-		log_Ok     ("ok Message");
+		ok     ("ok Message");
 		check_LastLogEntry(Status.OK     , "ok Message"     );
 		
-		log_Warning("warning Message");
+		warning("warning Message");
 		check_LastLogEntry(Status.WARNING, "warning Message");
 	}
 	

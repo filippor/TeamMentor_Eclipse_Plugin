@@ -5,7 +5,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import tm.eclipse.groovy.plugins.GroovyPlugins;
 import tm.eclipse.ui.Activator;
-import tm.eclipse.ui.PluginResources;
 
 /**
  * Class used to initialize default preference values.

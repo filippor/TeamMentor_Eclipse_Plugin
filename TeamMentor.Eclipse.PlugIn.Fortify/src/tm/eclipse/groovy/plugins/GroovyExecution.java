@@ -14,13 +14,10 @@ import groovy.lang.GroovyShell;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.eclipse.swtbot.swt.finder.results.Result;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
-
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.helpers.eclipseUI;
 import tm.eclipse.ui.Startup;
-import tm.eclipse.ui.views.SimpleEditor;
 
 public class GroovyExecution 
 {

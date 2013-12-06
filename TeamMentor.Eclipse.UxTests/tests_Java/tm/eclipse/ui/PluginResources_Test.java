@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.*;
 
-import tm.tests.helpers.*;
 import tm.utils.Action_T1;
 
 public class PluginResources_Test 

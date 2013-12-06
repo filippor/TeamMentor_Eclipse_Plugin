@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import tm.eclipse.groovy.plugins.GroovyExecution;
-
 public class EditAboutPage_Test extends Preferences_JUnit 
 {
 	@Test

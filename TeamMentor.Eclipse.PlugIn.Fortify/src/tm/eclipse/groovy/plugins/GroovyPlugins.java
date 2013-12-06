@@ -4,7 +4,6 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
-import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.PluginResources;
 
 public class GroovyPlugins 

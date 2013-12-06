@@ -37,9 +37,9 @@ public class CollectionToString_Test
 		assertEquals   (new CollectionToString(list1  ).target, list1);
 		assertEquals   (new CollectionToString(map1   ).target, map1);
 		
-		assertNotEquals(new CollectionToString(target1).target, target2);
-		assertNotEquals(new CollectionToString(target2).target, target1);
-		assertNotEquals(new CollectionToString(target2).target, target1);
+		assertFalse    (new CollectionToString(target1).target.equals(target2)); // assertNotEquals(new CollectionToString(target1).target, target2);
+		assertFalse    (new CollectionToString(target2).target.equals(target1)); // assertNotEquals(new CollectionToString(target2).target, target1);
+		assertFalse    (new CollectionToString(target2).target.equals(target1)); // assertNotEquals(new CollectionToString(target2).target, target1);
 	}
 	
 	@Test
@@ -66,11 +66,11 @@ public class CollectionToString_Test
 		
 		assertEquals    (target2_asArray.length ,target2.length);
 		assertEquals    (list1_asArray.length   ,list1.size()  );
-		assertNotEquals (target2_asArray.length ,list1_asArray.length);
-		assertNotEquals (target2_asArray[0]     ,target2_asArray[1]);
-		assertNotEquals (list1_asArray[0]       ,list1_asArray[1]);
+		assertFalse     (target2_asArray.length == list1_asArray.length);  // assertNotEquals (target2_asArray.length ,list1_asArray.length);
+		assertFalse     (target2_asArray[0].equals(target2_asArray[1]));    // assertNotEquals (target2_asArray.length ,list1_asArray.length);
+		assertFalse     (list1_asArray[0].equals(list1_asArray[1]));      // assertNotEquals (list1_asArray[0]       ,list1_asArray[1]);
 		assertEquals    (target2_asArray[0]     ,list1_asArray[0]);
-		assertNotEquals (target2_asArray[1]     ,list1_asArray[1]);
+		assertFalse     (target2_asArray[1].equals(list1_asArray[1]));      // assertNotEquals (target2_asArray[1]     ,list1_asArray[1]);
 	}
 	
 	@Test

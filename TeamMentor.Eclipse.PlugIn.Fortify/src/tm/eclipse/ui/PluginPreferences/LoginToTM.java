@@ -1,6 +1,8 @@
 package tm.eclipse.ui.PluginPreferences;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -9,13 +11,18 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import tm.eclipse.api.TeamMentorAPI;
-import tm.eclipse.ui.Startup;
+import tm.eclipse.ui.Activator;
+import tm.utils.Consts_TM;
 
-public class LoginToTM extends PreferencePage implements
-		IWorkbenchPreferencePage {
-
-	public LoginToTM() {
-		// TODO Auto-generated constructor stub
+public class LoginToTM extends PreferencePage implements IWorkbenchPreferencePage 
+{
+	public StringFieldEditor fieldEditor;
+	
+	public LoginToTM() 
+	{
+		IPreferenceStore store =
+				Activator.getDefault().getPreferenceStore();
+			setPreferenceStore(store);
 	}
 
 	public LoginToTM(String title) {
@@ -42,7 +49,6 @@ public class LoginToTM extends PreferencePage implements
 		  
 		  final Text username = new Text(parent, SWT.SINGLE | SWT.BORDER);
 		  username.setText("");
-		  //username.setTextLimit(30);
 		  
 		  Label label2=new Label(parent, SWT.NULL);
 		  label2.setText("Password: ");
@@ -50,28 +56,39 @@ public class LoginToTM extends PreferencePage implements
 		  final Text password = new Text(parent, SWT.SINGLE | SWT.BORDER);
 		  System.out.println(password.getEchoChar());
 		  password.setEchoChar('*');
-		  //password.setTextLimit(30);
 
 		  Button button=new Button(parent,SWT.PUSH);
 		  button.setText("Submit");
 		  
-		  final Label result=new Label(parent, SWT.NULL);
-		  result.setText("                                              ");
+		  final Label result =new Label(parent, SWT.WRAP);
+		  result.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)); // needed or the setText below will not show
+
 		  
-		   
+		  fieldEditor = new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID, "TeamMentor &Session ID:",parent);
+		  //fieldEditor.setPreferencePage(this);
+		  fieldEditor.setPreferenceStore(getPreferenceStore());
+		  fieldEditor.load();
+		  fieldEditor.getTextControl(parent).setVisible(false);
+		  fieldEditor.getLabelControl(parent).setVisible(false);
+		  
 		  button.addListener(SWT.Selection, new Listener() 
 		  	{	
-			  Shell shell = Startup.eclipseApi.shell;
+			  //Shell shell = Startup.eclipseApi.shell;
 			  public void handleEvent(Event event) 
 			  {				  
 				  result.setText("Logging in...");
 				  String sessionId = TeamMentorAPI.loginIntoTeamMentor(username.getText(), password.getText());
-				  if (sessionId == null || sessionId.equals("") || sessionId.equals("00000000-0000-0000-0000-000000000000"))
-					 result.setText("Login Failed, please try again");
+				  if (sessionId == null || sessionId.equals("") || sessionId.equals(Consts_TM.EMPTY_GUID))
+					 result.setText(Consts_TM.MSG_LOGIN_FAILED); 
 				  else
 				  {
+					  //log.info("Before: "+ MainPreferences.getSessionId());
 					  MainPreferences.setSessionId(sessionId);
-					  result.setText("Login OK (sessionId updated)");
+					  //log.info("After: "+ MainPreferences.getSessionId());
+					  result.setText(Consts_TM.MSG_LOGIN_OK); 
+					  //shell.layout();
+					  //getShell().layout();
+					  fieldEditor.load();
 					  performApply();
 					  performOk();					  
 				  }
@@ -94,11 +111,12 @@ public class LoginToTM extends PreferencePage implements
 	}
 	public boolean performOk()
 	{
-		return true;
+		fieldEditor.store();
+		return super.performOk();
 	}
-	protected void performDefaults() 
+	/*protected void performDefaults() 
 	{
 		
-	}
+	}*/
 
 }

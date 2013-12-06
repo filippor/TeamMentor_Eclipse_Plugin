@@ -1,12 +1,13 @@
 package tm.eclipse.helpers;
 
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.*;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.dialogs.PreferencesUtil;
@@ -21,6 +22,15 @@ public class eclipseUI
 	static
 	{
 		eclipse = Startup.eclipseApi;
+	}
+	
+	public static void asyncExec(final Runnable runnable)
+	{
+		UIThreadRunnable.asyncExec(new VoidResult() { public void run()
+			{
+				runnable.run();
+			}});
+		
 	}
 	public static PreferenceDialog open_PreferencesDialog(final String id)
 	{		
@@ -70,4 +80,5 @@ public class eclipseUI
 	{
 		return get_Views();
 	}
+
 }

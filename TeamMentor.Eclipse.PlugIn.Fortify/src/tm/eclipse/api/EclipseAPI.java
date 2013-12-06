@@ -14,10 +14,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import static tm.eclipse.api.EclipseLog.*;
 
 
 
+
+import static tm.eclipse.helpers.log.*;
 //import tm.eclipse.groovy.TestGroovy;
 //import tm.eclipse.groovy.Tree_ExtensionMethods;
 import tm.eclipse.ui.EclipsePartEvents;
@@ -124,7 +125,7 @@ public class EclipseAPI
 		/*StatusManager manager = StatusManager.getManager();
 		manager.handle(new Status(Status.INFO, "Message", message));		
 		*/
-		log_Info(message);
+		info(message);
 		return this;
 	}	
 	public String ping()

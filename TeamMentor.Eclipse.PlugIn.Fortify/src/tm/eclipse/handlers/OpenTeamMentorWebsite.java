@@ -11,7 +11,7 @@ import org.eclipse.ui.IWorkbench;
 import tm.eclipse.api.Panels;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.Startup;
-import tm.utils.Eclipse_Consts;
+import tm.utils.Consts_Eclipse;
 
 public class OpenTeamMentorWebsite implements IHandler 
 {
@@ -24,7 +24,7 @@ public class OpenTeamMentorWebsite implements IHandler
 			panels.open_Url_in_WebBrowser("teammentor.net","https://teammentor.net");
 		else
 			//panels.open_Html_in_WebBrowser(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE);
-			TeamMentorAPI.show_Html_With_TeamMentor_Banner(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE);		
+			TeamMentorAPI.show_Html_With_TeamMentor_Banner(Consts_Eclipse.DEFAULT_TM_NET_OFFLINE_MESSAGE);		
 		return null;
 	}
 

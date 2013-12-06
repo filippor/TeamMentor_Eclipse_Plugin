@@ -1,8 +1,6 @@
 package tm.eclipse.PluginPreferences;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -18,6 +16,7 @@ public class Preferences_JUnit
 	public SWTWorkbenchBot  bot;
 	public IPreferenceStore store;
 	public SWTBotShell 		shell;
+	public String 			viewId;
 	
 	public Preferences_JUnit()
 	{
@@ -29,11 +28,16 @@ public class Preferences_JUnit
 		shell.close();
 		return this;
 	}
-	public Preferences_JUnit openPropertiesPage(final String id)
+	public Preferences_JUnit openPropertiesPage( String _viewId)
+	{
+		viewId = _viewId;
+		return openPropertiesPage();
+	}
+	public Preferences_JUnit openPropertiesPage()	
 	{
 		new Thread() { public void run() 
 		{			
-			eclipseUI.open_PreferencesDialog(id);
+			eclipseUI.open_PreferencesDialog(viewId);
 		}}.start();
 				
 		shell = bot.shell("Preferences");
@@ -56,7 +60,7 @@ public class Preferences_JUnit
 		if(equals)
 			assertEquals   (value_default, value_Live);
 		else
-			assertNotEquals(value_default, value_Live);	
+			assertFalse(value_default.equals(value_Live));  // assertNotEquals(value_default, value_Live);	
 	}
 	public void is_Checkbox_equal_DefaultPreference(Integer index, String stringId, boolean equals)
 	{
@@ -67,6 +71,6 @@ public class Preferences_JUnit
 		if(equals)
 			assertEquals   (stringId, value_default, value_Live);
 		else
-			assertNotEquals(stringId, value_default, value_Live);	
+			assertFalse(stringId,value_default.equals(value_Live));  //			assertNotEquals(stringId, value_default, value_Live);		
 	}
 }

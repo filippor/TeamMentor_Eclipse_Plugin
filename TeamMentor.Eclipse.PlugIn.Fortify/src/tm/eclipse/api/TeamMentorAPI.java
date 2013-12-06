@@ -15,10 +15,11 @@ import org.codehaus.groovy.runtime.MethodClosure;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
-import tm.eclipse.ui.Activator;
+import tm.eclipse.Plugin_Config;
 import tm.eclipse.ui.PluginPreferences.MainPreferences;
 import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
+import tm.utils.Consts_TM;
 
 public class TeamMentorAPI 
 {
@@ -58,8 +59,6 @@ public class TeamMentorAPI
 	public static String loginIntoTM()
 	{		
 		Browser.setCookie("Session=" + MainPreferences.getSessionId(), MainPreferences.getServer());
-		String session = Browser.getCookie("Session", MainPreferences.getServer());
-		String server = MainPreferences.getServer();
 		return MainPreferences.getSessionId();
 	}	
 	public static void setServer(String newServer)
@@ -151,6 +150,17 @@ public class TeamMentorAPI
 	}
 	public static String loginIntoTeamMentor(String username, String password) 
 	{
+		if(Plugin_Config.UNIT_TEST_MODE)
+		{
+			if(username.equals("123") || username.equals(Consts_TM.QA_LOGIN_USERNAME) && password.equals(Consts_TM.QA_LOGIN_PASSWORD))
+				return Consts_TM.QA_LOGIN_SESSION; 
+			else
+				return Consts_TM.EMPTY_GUID;
+		}
+		
+		if (username.equals("") || password.equals(""))
+			return Consts_TM.EMPTY_GUID;
+		
 		StringBuffer response = new StringBuffer();
 		URL obj;
 		try 
@@ -159,7 +169,9 @@ public class TeamMentorAPI
 			obj = new URL(url);
 		
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-			int responseCode = con.getResponseCode();		
+			int responseCode = con.getResponseCode();
+			if (responseCode != 200)
+				return Consts_TM.EMPTY_GUID;
 			BufferedReader bufferReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;			
 	 

@@ -1,7 +1,5 @@
 package tm.eclipse.helpers;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class eclipseUI_Test 
