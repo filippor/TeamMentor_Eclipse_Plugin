@@ -20,13 +20,90 @@ class FortifyAPI
 		current = this;
 		eclipseApi =  tm.eclipse.ui.Startup.eclipseApi;
 		eclipseApi.log("*** Configuring FortifyAPI support");
-		eclipseApi.partEvents.Part_Opened =
+
+		add_ContentProviderStateListener();
+
+/*		eclipseApi.partEvents.Part_Opened =
 			{
 				IWorkbenchPartReference part ->
 						eclipseApi.log("View Opened: " + part.id);
 						this.setFortifyHooks();
-			};
+			};*/
 	}
+	public FortifyAPI add_ContentProviderStateListener()
+    { 
+	    eclipseApi.log("   - addContentProviderStateListener");
+		def issuesList     		    = eclipseApi.activeWorkbenchPage.findView("com.fortify.awb.views.views.IssuesListView");  // gets a reference to the Fortify view
+		def fortifyClassLoader  = issuesList.class.getClassLoader();																		 // gets the class loader of the Fortify plugin
+		def currentThread = Thread.currentThread();																						   // get the curren thead
+		def originalClassLoader = currentThread.getContextClassLoader();														   // save its class loader
+		currentThread.setContextClassLoader(fortifyClassLoader);	
+	   
+		removeExisting_ContentProviderStateListener()
+
+		def interpreter = new bsh.Interpreter();
+        interpreter.set("fortifyApi", this); 
+		def stateListener = interpreter.eval(beanShell_ContentProviderStateListener);	
+
+		def beanShellScript =  "return com.fortify.awb.util.SWTIntegrationUtil.class";
+		def swtIntegrationUtil_Class  =  new bsh.Interpreter().eval(beanShellScript);			
+		def swtIntegration = swtIntegrationUtil_Class.newInstance();
+		swtIntegration.registerContentProviderStateListener(stateListener);
+		eclipseApi.log("   - new stateListener: " + stateListener.toString());
+
+		currentThread.setContextClassLoader(originalClassLoader);																	  // restore original class loader
+
+		return this;
+    }
+
+	public FortifyAPI removeExisting_ContentProviderStateListener()
+	{
+		def beanShellScript =  "return com.fortify.awb.util.SWTIntegrationUtil.class";
+		def swtIntegrationUtil_Class  =  new bsh.Interpreter().eval(beanShellScript);			
+		def swtIntegration = swtIntegrationUtil_Class.newInstance();
+		swtIntegration.cpStateListeners.toList().collect
+		{
+			if (it.toString().contains("Bsh object"))
+			{
+				swtIntegration.removeContentProviderStateListener(it)
+				 eclipseApi.log("   - removing ContentProviderStateListener: " + it.toString());
+			}
+			//		swtIntegration.issueListeners.remove(it)
+//			 eclipseApi.log("   - ContentProviderStateListener: " + it.toString());
+		}
+		return this;
+	}
+
+	public void showIssue(Object issue, String category, String recommendation)
+    {
+
+		if (recommendation != null && recommendation != "")
+		{
+			def tmGuid =  resolveIssueNameToGuid(category);
+			eclipseApi.log("issue category: " + category + " : GUID : " + tmGuid);
+			if (tmGuid != null)
+			{
+				tm.eclipse.api.TeamMentorAPI.open_Article(tmGuid);
+			}
+			else
+			{
+				def html = "<h4>Fortify Recommentation</h4>" + 
+				                  "</br>Since there is no article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" + 
+		    			              "<pre>" + recommendation + "</pre>"
+				tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
+			}
+		}
+		else
+			showNoIssueMessage();
+		
+    }
+
+	public void showNoIssueMessage()
+	{
+		eclipseApi.log("showNoIssueMessage");
+		tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner("No Fortify issue selected.");
+	}
+
 	public IViewPart getIssuesListView()
 	{
 		def activePage =eclipseApi.activeWorkbenchPage;
@@ -74,7 +151,7 @@ class FortifyAPI
 		return null;
 	}
 	
-	public FortifyAPI setFortifyHooks()
+/*	public FortifyAPI setFortifyHooks()
 	{
 		def issuesList = getIssuesListView();
 		if (issuesList!=null)
@@ -133,8 +210,67 @@ class FortifyAPI
 		}
 		return this;
 	}
+*/
 
-		
+
+	public String beanShell_ContentProviderStateListener = """ 
+
+		import com.fortify.awb.util.SWTIntegrationUtil;
+		import com.fortify.ui.model.contentProvider.listeners.*;
+		import com.fortify.ui.model.issue.*;
+		import com.fortify.ui.model.contentProvider.*;
+		import com.fortify.ui.model.util.render.SCAPrettyPrinter;
+
+
+     	return new ContentProviderStateListener() 
+	 	   {
+			public abstract void notifyEvent(ContentProvider contentProvider,
+												 			 ContentProviderEventType eventType)
+			{		
+				    currentThread =  Thread.currentThread();
+					originalClassLoader = currentThread.getContextClassLoader();	
+				    fortifyClassLoader  = 	contentProvider.getClass().getClassLoader();
+					currentThread.setContextClassLoader(fortifyClassLoader);
+					
+ 
+					tm.eclipse.ui.Startup.eclipseApi.log(" **** ContentProviderStateListener notify event: " + eventType);
+
+				   if (eventType == ContentProviderEventType.SELECTED_ISSUES_CHANGED)
+					{
+//						fortifyApi.eclipseApi.log("HHEEEERE!!!!!");
+						tm.eclipse.ui.Startup.eclipseApi.log("    - contentProvider : "     + contentProvider.toString());
+						issue = contentProvider.getSelectedIssue();
+						tm.eclipse.ui.Startup.eclipseApi.log("    - issue : "     + issue.toString());
+						
+						descriptableIssue = issue.getDescriptableIssue();				
+					    if(descriptableIssue == null)
+						{
+							tm.eclipse.ui.Startup.eclipseApi.log("Error: descriptableIssue was null");
+							fortifyApi.showIssue(null, "","");
+					    }
+						else
+						{
+							category = IssueUtil.getCategoryString(descriptableIssue);
+							recommendation = SCAPrettyPrinter.getRecommendation(descriptableIssue, false);
+
+							fortifyApi.showIssue(issue, category, recommendation);
+						}
+/*						if (recommendation != null && recommendation != "")
+						{
+
+
+//							recommendation = "</br>Since there is no TeamMentor article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" +
+//														   "<pre>" + recommendation + " </pre>";
+//						    tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner(recommendation);	
+						}
+						else
+							fortifyApi.showNoIssueMessage();*/
+					}
+ 					currentThread.setContextClassLoader(originalClassLoader);
+			}
+          } 
+""";	
+	
 	
 	
 	public String tmMappings = """Command Injection ,CWE ID 77; CWE ID 78 ,2e03d087-3614-4927-8d20-d9efc3f7bbc4,Command Injection,Java

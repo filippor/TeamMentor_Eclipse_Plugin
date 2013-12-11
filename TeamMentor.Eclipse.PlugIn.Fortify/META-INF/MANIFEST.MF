@@ -5,6 +5,7 @@ Bundle-SymbolicName: TeamMentor.Eclipse.Plugin.Fortify;singleton:=true
 Bundle-Version: 1.5.6.qualifier
 Bundle-Activator: tm.eclipse.ui.Activator
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.swt,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ui.editors,
@@ -17,7 +18,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: tm.eclipse,
+Export-Package: bsh,
+ tm.eclipse,
  tm.eclipse.api,
  tm.eclipse.groovy.plugins,
  tm.eclipse.helpers,
@@ -25,8 +27,11 @@ Export-Package: tm.eclipse,
  tm.eclipse.ui.PluginPreferences,
  tm.eclipse.ui.actions,
  tm.eclipse.ui.views,
+ tm.swt,
+ tm.swt.controls,
  tm.utils
 Bundle-ClassPath: .,
+ libs/bsh-2.0b4.jar,
  libs/commons-io-2.4.jar,
  libs/groovy-all-2.0.7.jar,
  libs/groovy-eclipse.jar,
@@ -37,4 +42,5 @@ Bundle-ClassPath: .,
  libs/org.hamcrest.core_1.3.0.v201303031735.jar,
  libs/org.hamcrest.library_1.3.0.v201305281000.jar,
  libs/junit.jar
-Import-Package: org.eclipse.core.filesystem
+Import-Package: org.eclipse.core.filesystem,
+ tm.swt.controls

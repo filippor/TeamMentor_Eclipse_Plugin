@@ -14,6 +14,7 @@ import groovy.lang.GroovyShell;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.eclipse.swtbot.swt.finder.results.Result;
+
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.helpers.eclipseUI;
@@ -57,6 +58,8 @@ public class GroovyExecution
 		binding.setVariable("eclipseUI"       , eclipseUI.class);  		
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
 		binding.setVariable("groovy"          , GroovyExecution.class);
+		binding.setVariable("log"             , tm.eclipse.helpers.log.class);		
+		binding.setVariable("form"            , tm.swt.controls.Form_Ex.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{
@@ -70,7 +73,7 @@ public class GroovyExecution
 		{
 			try
 			{
-				URL url = new URL("file://" + refToAdd);							
+				URL url = new URL("file:///" + refToAdd);							
 				groovyShell.getClassLoader().addURL(url);
 			}
 			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@£$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
@@ -167,9 +170,9 @@ public class GroovyExecution
 	public void 	       setCompilerConfiguration()
 	{
 		configuration    = new CompilerConfiguration();		
-		importCustomizer = new ImportCustomizer();
+		importCustomizer = new ImportCustomizer();		
 		importCustomizer.addStarImports("tm.eclipse.ui");
-		importCustomizer.addStarImports("tm.eclipse.api");
+		importCustomizer.addStarImports("tm.eclipse.api");		
 		importCustomizer.addStarImports("tm.eclipse.groovy.plugins");
 		importCustomizer.addStaticStars("tm.eclipse.groovy.plugins.GroovyExecution");
 		

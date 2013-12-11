@@ -28,6 +28,7 @@ import tm.eclipse.Plugin_Config;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
+import tm.utils.BeanShell;
 import tm.utils.CollectionToString;
 
 
@@ -43,6 +44,7 @@ public class SimpleEditor extends ViewPart
 	public ToolItem			stop_Button;
 	public Thread		    executionThread;
 	public GroovyExecution	groovyExecution;
+	public BeanShell		beanShell;
 	public String           lastExecutedScript;
 	public boolean			executeSync;	
 	public boolean			executeUIThread;	
@@ -170,6 +172,35 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor compileAndExecuteCode_ASync() 
 	{
+		if (get_ScriptToExecute().contains("//Config:BeanShell"))
+			return handle_BeanShellExecution();
+		return handle_GroovyExecution();
+	}
+	public SimpleEditor handle_BeanShellExecution() 
+	{ 
+		prepareUIForExecution();
+		executionThread = new Thread(new Runnable() { public void run() 
+		{		
+			beanShell = new BeanShell();
+			beanShell.eval(get_ScriptToExecute());
+			
+			syncExec(new VoidResult() { public void run()
+			{
+				Object result = beanShell.lastReturnValue;
+				String asString = new CollectionToString(result).asString();
+				styledText_Result.setText(result != null ?  asString
+		                 								 : "NULL return value");
+				stop_Button.setEnabled(false);
+				execute_Button.setEnabled(true);
+				styledText_Result.setBackground(new Color(Display.getCurrent (),220,255,220));
+			}});
+		
+		}});
+		executionThread.start();
+		return this;
+	}
+	public SimpleEditor handle_GroovyExecution() 
+	{		
 		groovyExecution = new GroovyExecution();
 		groovyExecution.binding.setVariable("composite" , composite);
 		groovyExecution.binding.setVariable("view"		, this);
