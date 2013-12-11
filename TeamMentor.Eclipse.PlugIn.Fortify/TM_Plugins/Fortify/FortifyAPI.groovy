@@ -68,8 +68,6 @@ class FortifyAPI
 				swtIntegration.removeContentProviderStateListener(it)
 				 eclipseApi.log("   - removing ContentProviderStateListener: " + it.toString());
 			}
-			//		swtIntegration.issueListeners.remove(it)
-//			 eclipseApi.log("   - ContentProviderStateListener: " + it.toString());
 		}
 		return this;
 	}
@@ -83,7 +81,8 @@ class FortifyAPI
 			eclipseApi.log("issue category: " + category + " : GUID : " + tmGuid);
 			if (tmGuid != null)
 			{
-				tm.eclipse.api.TeamMentorAPI.open_Article(tmGuid);
+//				tm.eclipse.api.TeamMentorAPI.open_Article(tmGuid);   // this allows edits but it is slowed and doesn't look very good when the TM window doesn't have at least 400px in width
+				tm.eclipse.api.TeamMentorAPI.view_Html(tmGuid);
 			}
 			else
 			{
@@ -112,30 +111,6 @@ class FortifyAPI
 		return null;
 	}
 	
-	public String getCurrentIssueName()
-	{
-		def issuesList = getIssuesListView();
-		if (issuesList == null)
-			return null;
-		if (issuesList.tree.selection == null || issuesList.tree.selection.firstElement == null)
-		{
-			eclipseApi.log("in getCurrentIssueName, got issuesList, couldn't get issuesList.tree.selection.firstElement");
-			return null;
-		}
-		//def data = issuesList.focusItem.getData();  // focus item is not working
-		
-		def data = issuesList.tree.selection.firstElement;
-		if (data == null)
-			return null;
-		if (data.class.name == "com.fortify.ui.model.issue.IssueGroup")
-			return data.name;
-		if (data.parent.class.name == "com.fortify.ui.model.issue.IssueGroup")
-			return data.parent.name;
-		if (data.parent.parent.class.name == "com.fortify.ui.model.issue.IssueGroup")
-			return data.parent.parent.name;
-		return null;
-	}
-	
 	public String resolveIssueNameToGuid(String issueName)
 	{
 		if (issueName!= null)
@@ -151,68 +126,6 @@ class FortifyAPI
 		return null;
 	}
 	
-/*	public FortifyAPI setFortifyHooks()
-	{
-		def issuesList = getIssuesListView();
-		if (issuesList!=null)
-		{
-			if (issuesList.getPartName() != partTitle)
-			{
-				eclipseApi.log("*** APPLYING TEAMMENTOR FORTIFY EVENT LISTENERS");//changing Fortify IssuesListView title");
-				eclipseApi.log("Title before: " + issuesList.getPartName());
-				issuesList.setPartName(partTitle);
-				eclipseApi.log("Title after: " + issuesList.getPartName());
-				
-				Tree tree = issuesList.tree.getTree();
-				
-				tree.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e)
-					{
-					  try
-					  {
-						def _eclipseApi = tm.eclipse.ui.Startup.eclipseApi;
-						def _fortifyApi = FortifyAPI.current;
-						_eclipseApi.log("Issue was selected on Fortify View");
-//						_eclipseApi.log("current issue: " + _currentIssue )
-//						return;
-
-						def _currentIssue = _fortifyApi.getCurrentIssueName();
-
-						def tmGuid =  _fortifyApi.resolveIssueNameToGuid(_currentIssue);
-						_eclipseApi.log("current issue: " + _currentIssue + " : GUID : " + tmGuid);
-						if (tmGuid != null)
-						{
-							tm.eclipse.api.TeamMentorAPI.open_Article(tmGuid);
-						}
-						else
-						{
-							def recommentdations = _eclipseApi.activeWorkbenchPage.findView("com.fortify.awb.views.views.RecommendationsView");
-							def markupReader = recommentdations.site.model.widget.children[0].children[0].children[0].children[0];
-
-							//tm.eclipse.api.TeamMentorAPI.show_No_ArticleMessage();
-						    def txt = markupReader.getText();
-							def html = "<h4>Fortify Recommentation</h4>" + 
-				             "</br>Since there is no article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" + 
-		    			         "<pre>" + txt + "</pre>"
-
-						TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
-
-						}
-					  }
-					  catch(Exception ex)
-					  {
-						tm.eclipse.ui.Startup.eclipseApi.log("ERROR in tree.addSelectionListener: " + ex.getMessage());
-					  }
-					}});
-				eclipseApi.log("*** Configured Tree listening event");
-			}
-		}
-		return this;
-	}
-*/
-
-
 	public String beanShell_ContentProviderStateListener = """ 
 
 		import com.fortify.awb.util.SWTIntegrationUtil;
@@ -237,7 +150,6 @@ class FortifyAPI
 
 				   if (eventType == ContentProviderEventType.SELECTED_ISSUES_CHANGED)
 					{
-//						fortifyApi.eclipseApi.log("HHEEEERE!!!!!");
 						tm.eclipse.ui.Startup.eclipseApi.log("    - contentProvider : "     + contentProvider.toString());
 						issue = contentProvider.getSelectedIssue();
 						tm.eclipse.ui.Startup.eclipseApi.log("    - issue : "     + issue.toString());
