@@ -86,9 +86,9 @@ class FortifyAPI
 			}
 			else
 			{
-				def html = "<h4>Fortify Recommentation</h4>" + 
+				def html = "<h4>Fortify Recommendation</h4>" + 
 				                  "</br>Since there is no article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" + 
-		    			              "<pre>" + recommendation + "</pre>"
+		    			              "<pre style='word-break: normal;'>" + recommendation + "</pre>"
 				tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
 			}
 		}
