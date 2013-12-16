@@ -1,6 +1,6 @@
 package tm.eclipse.ui.views;
-
 //import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -25,10 +25,11 @@ import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swt.SWT;
 
 import tm.eclipse.Plugin_Config;
-import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
+import tm.utils.BeanShell;
+import tm.utils.CollectionToString;
 
 
 public class SimpleEditor extends ViewPart 
@@ -43,17 +44,16 @@ public class SimpleEditor extends ViewPart
 	public ToolItem			stop_Button;
 	public Thread		    executionThread;
 	public GroovyExecution	groovyExecution;
+	public BeanShell		beanShell;
 	public String           lastExecutedScript;
 	public boolean			executeSync;	
+	public boolean			executeUIThread;	
 	
 	public SimpleEditor() 
 	{
-		display = PlatformUI.getWorkbench().getDisplay();
-		/*	PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() { public void run() 
-			{
-				EclipseAPI eclipseApi =  Startup.eclipseApi;
-				display = eclipseApi.display;
-			}});*/
+		display 	= PlatformUI.getWorkbench().getDisplay();
+		executeSync = false;  									// default to async execution
+		executeUIThread = true;									// on the UI Thread
 	}
 
 	public void createPartControl(Composite _composite) 
@@ -137,38 +137,10 @@ public class SimpleEditor extends ViewPart
 	    
 		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
 				      			 "//openArticle('SQL Injection')\n" + 
-					  			 "return eclipseAPI;");
-		
-		/*
-		sashForm = new SashForm(composite, SWT.VERTICAL);
-	    sashForm.setLayout(new RowLayout());
-		
-	    styledText_Code   = new StyledText(sashForm, SWT.BORDER);	   
-	    execute_Button    = new Button(sashForm, SWT.HORIZONTAL);
-	    styledText_Result = new StyledText(sashForm, SWT.BORDER  | SWT.H_SCROLL | SWT.V_SCROLL);
-	    	    
-	    execute_Button.setText("Compile and execute code");
-	    execute_Button.addSelectionListener(new SelectionAdapter() { public void widgetSelected(SelectionEvent event) 
-						{
-	    					compileAndExecuteCode();
-						} });
-	    sashForm.addListener(SWT.RESIZE,new Listener() { @Override public void handleEvent(Event arg0)
-	    				{
-	    					int[] weigths = sashForm.getWeights();
-	    					weigths[1] = 100;
-	    					sashForm.setWeights(weigths);
-	    				}});	    
-	    
-	    styledText_Result.setBackground(new Color(Display.getCurrent (),200,200,255));
-	    styledText_Result.setWordWrap(true);
-	    int[] weigths = sashForm.getWeights();
-	    
-		sashForm.setWeights(new int[] { 450,100,450});	 // values in % (max = 999 )
-		
-		styledText_Code.setText( "openArticle('Cross-Site Scripting')\n" +
-				      			 "//openArticle('SQL Injection')\n" + 
-					  			 "return eclipseAPI;");
-		 */
+					  			 "return eclipseAPI;" + 
+				      			 "\n" + 
+					  			 "//Use code below to execute a *.groovy file opened on an code Editor \n" + 
+				      			 "return groovy.execute_GroovyEditor()");
 		return this;
 	}
 
@@ -200,19 +172,54 @@ public class SimpleEditor extends ViewPart
 	}
 	public SimpleEditor compileAndExecuteCode_ASync() 
 	{
+		if (get_ScriptToExecute().contains("//Config:BeanShell"))
+			return handle_BeanShellExecution();
+		return handle_GroovyExecution();
+	}
+	public SimpleEditor handle_BeanShellExecution() 
+	{ 
+		prepareUIForExecution();
+		executionThread = new Thread(new Runnable() { public void run() 
+		{		
+			beanShell = new BeanShell();
+			beanShell.eval(get_ScriptToExecute());
+			
+			syncExec(new VoidResult() { public void run()
+			{
+				Object result = beanShell.lastReturnValue;
+				String asString = new CollectionToString(result).asString();
+				styledText_Result.setText(result != null ?  asString
+		                 								 : "NULL return value");
+				stop_Button.setEnabled(false);
+				execute_Button.setEnabled(true);
+				styledText_Result.setBackground(new Color(Display.getCurrent (),220,255,220));
+			}});
+		
+		}});
+		executionThread.start();
+		return this;
+	}
+	public SimpleEditor handle_GroovyExecution() 
+	{		
 		groovyExecution = new GroovyExecution();
 		groovyExecution.binding.setVariable("composite" , composite);
 		groovyExecution.binding.setVariable("view"		, this);
-				
+		groovyExecution.executeOnUIThread = executeUIThread;		
+		
 		prepareUIForExecution();
 		
 		executionThread = new Thread(new Runnable() { public void run() 
-			{					
-				groovyExecution.executeScript(lastExecutedScript);		
-				showExecutionResult();
+			{								
+				executeScript_and_ShowResult();
 			}});
 		
 		executionThread.start();
+		return this;
+	}	
+	public SimpleEditor executeScript_and_ShowResult()
+	{
+		groovyExecution.executeScript(lastExecutedScript);		
+		showExecutionResult();
 		return this;
 	}
 	public SimpleEditor showExecutionResult()
@@ -225,7 +232,8 @@ public class SimpleEditor extends ViewPart
 				Object result = groovyExecution.returnValue;			
 				if (exception == null)
 				{			
-					styledText_Result.setText(result != null ? result.toString() 
+					String asString = new CollectionToString(result).asString();
+					styledText_Result.setText(result != null ?  asString
 			                 								 : "NULL return value");			
 				}
 				else if (exception instanceof CompilationFailedException) 
@@ -243,6 +251,7 @@ public class SimpleEditor extends ViewPart
 			}});
 		return this;
 	}
+	
 	public SimpleEditor showExecutionStoppedMessage()
 	{
 		syncExec(new VoidResult() { public void run()
@@ -292,11 +301,11 @@ public class SimpleEditor extends ViewPart
 	public String       set_ScriptToExecute(final String value)
 	{	
 		return syncExec(new Result<String>() { public String run() 			
-		{
-			styledText_Code.setText(value);
-			return  styledText_Code.getText();
-		}});				
-	}
+			{
+				styledText_Code.setText(value);				
+				return  styledText_Code.getText();
+			}});				
+	}	
 
 	public SimpleEditor close() 
 	{		

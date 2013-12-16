@@ -9,8 +9,6 @@ import static org.junit.Assert.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.junit.Test;
 
 import tm.eclipse.api.EclipseAPI;

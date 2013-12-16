@@ -1,16 +1,8 @@
 package tm.eclipse.api;
 
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import static org.junit.Assert.*;
-import static tm.eclipse.api.EclipseLog.*;
-
-import java.util.List;
-
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
-import org.eclipse.swtbot.swt.finder.waits.WaitForObjectCondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
-import org.eclipse.ui.IViewReference;
 import org.junit.Test;
 
 import tm.eclipse.api.TeamMentorAPI;
@@ -27,7 +19,7 @@ public class TeamMentorAPI_Test
 	public TeamMentorAPI_Test()
 	{
 		teamMentorApi = new TeamMentorAPI();
-		elipseAPI     = teamMentorApi.eclipseAPI;
+		elipseAPI     = TeamMentorAPI.eclipseAPI;
 	}
 	
 	@Test

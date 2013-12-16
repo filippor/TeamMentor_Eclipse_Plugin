@@ -57,8 +57,7 @@ public class Views extends EclipseUI
 				String title = viewReference.getTitle(); 
 				if (title.equals(viewId))  
 					return viewReference;				
-			}
-			String a = "";
+			}			
 			return null;					
 		}});
 	}

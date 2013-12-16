@@ -1,7 +1,8 @@
 package tm.eclipse.api;
 
-import static tm.eclipse.api.EclipseLog.*;
+import static tm.eclipse.helpers.log.*;
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -9,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.swt.widgets.Composite;
 
-import tm.eclipse.ui.PluginPreferences;
+import tm.eclipse.ui.PluginPreferences.MainPreferences;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.eclipse.ui.views.Eclipse_Panel;
 
@@ -71,7 +72,7 @@ public class Panels  extends EclipseUI
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(String htmlToShow)
 	{
-		return open_Html_in_WebBrowser(PluginPreferences.getDefaultBrowserId(), PluginPreferences.getDefaultBrowserTitle(), htmlToShow);
+		return open_Html_in_WebBrowser(MainPreferences.getDefaultBrowserId(), MainPreferences.getDefaultBrowserTitle(), htmlToShow);
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(final String browserId, final String title, final String htmlToShow)
 	{	
@@ -81,7 +82,7 @@ public class Panels  extends EclipseUI
 				{	
 					if (activePage == null)				
 					{
-						log_Error("in open_Html_in_WebBrowser, activePage was null, which usually means that the caller was not on the UI thread");
+						error("in open_Html_in_WebBrowser, activePage was null, which usually means that the caller was not on the UI thread");
 						return null;
 					}
 					IViewPart viewPart = activePage.showView(DefaultPart_WebBrowser.ID, browserId, IWorkbenchPage.VIEW_ACTIVATE);

@@ -3,6 +3,7 @@ package tm.eclipse.ui;
 import static org.junit.Assert.*;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.Test;
+import tm.eclipse.ui.PluginPreferences.*;
 
 public class PreferenceInitializer_Test
 {

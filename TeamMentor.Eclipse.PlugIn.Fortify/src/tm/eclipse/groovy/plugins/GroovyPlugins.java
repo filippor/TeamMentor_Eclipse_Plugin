@@ -4,14 +4,13 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
-import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.PluginResources;
 
 public class GroovyPlugins 
 {
 	public String get_PluginScript_Path(String scriptPath)
 	{
-		PluginResources pluginResources = new PluginResources(Activator.plugin);
+		PluginResources pluginResources = new PluginResources();
 		return pluginResources.get_Resource_Saved_on_TempFolder(scriptPath);
 	}
 	

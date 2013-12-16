@@ -6,13 +6,14 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
 import tm.eclipse.api.TeamMentorAPI;
+import tm.eclipse.ui.PluginPreferences.MainPreferences;
 
 public class ShowHelpPage implements IHandler 
 {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException 
 	{		
-		String message = 	"<h4>TeamMentor Eclipse Plugin</h1>Welcome to Teammentor Eclipse Plugin for Fortify. You should now see TeamMentor Articles when you click on a Fortify Finding";
+		String message = MainPreferences.getAboutHtml();// 	"<h4>TeamMentor Eclipse Plugin</h1>Welcome to Teammentor Eclipse Plugin for Fortify. You should now see TeamMentor Articles when you click on a Fortify Finding";
 		TeamMentorAPI.show_Html_With_TeamMentor_Banner(message);
 		return null;
 	}

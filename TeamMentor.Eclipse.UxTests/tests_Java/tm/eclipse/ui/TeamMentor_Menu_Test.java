@@ -15,7 +15,7 @@ import tm.eclipse.Plugin_Config;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.swtbot.SWTBot_JUnit;
 import tm.swtbot.models.SWTBot_View;
-import tm.utils.Eclipse_Consts;
+import tm.utils.Consts_Eclipse;
 
 public class TeamMentor_Menu_Test extends SWTBot_JUnit
 {
@@ -78,7 +78,7 @@ public class TeamMentor_Menu_Test extends SWTBot_JUnit
 		final SWTBotBrowser swtBotBrowser = new SWTBotBrowser(webBrowser);		
 		swtBotBrowser.waitForPageLoaded();			
 		String html = swtBotBrowser.getText();
-		assertContains(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE, html);		
+		assertContains(Consts_Eclipse.DEFAULT_TM_NET_OFFLINE_MESSAGE, html);		
 		Plugin_Config.FORCE_OFFLINE = false;
 		teamMentorNet.close();
 		teamMentorNet = swtBot_View_Fast("TeamMentor");

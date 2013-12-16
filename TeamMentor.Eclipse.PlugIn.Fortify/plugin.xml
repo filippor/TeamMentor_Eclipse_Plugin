@@ -36,15 +36,49 @@
    
   <extension point="org.eclipse.ui.preferencePages">
      <page
-           class="tm.eclipse.ui.PluginPreferences"
-           id="teammentor.eclipse.plugin.fortify.preferences.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.MainPreferences"
+           id="tm.eclipse.ui.PluginPreferences"
            name="TeamMentor Preferences">
      </page>
+     <page
+           category="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.LoginToTM"
+           id="tm.eclipse.ui.PluginPreferences.LoginToTM"
+           name="Login to TeamMentor">
+     </page>
+     <!--
+     <page
+           category="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.Register"
+           id="tm.eclipse.ui.PluginPreferences.Register"
+           name="Register in TM">
+     </page>
+     -->
+     <page
+           category="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.EditAboutPage"
+           id="tm.eclipse.ui.PluginPreferences.EditAboutPage"
+           name="Edit About Page">
+     </page>
+     <!--
+     <page
+           category="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.EditTemplate"
+           id="tm.eclipse.ui.PluginPreferences.EditTemplate"
+           name="Edit HtmlTemplate">
+     </page>
+     <page
+           category="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.PluginPreferences.EditMappingsForTM"
+           id="tm.eclipse.ui.PluginPreferences.EditMappingsForTM"
+           name="Edit GUIDs Mappings">
+     </page>
+     -->
   </extension>
   <extension
         point="org.eclipse.core.runtime.preferences">
      <initializer
-           class="tm.eclipse.ui.PreferenceInitializer">
+           class="tm.eclipse.ui.PluginPreferences.PreferenceInitializer">
      </initializer>
   </extension>
  <!--

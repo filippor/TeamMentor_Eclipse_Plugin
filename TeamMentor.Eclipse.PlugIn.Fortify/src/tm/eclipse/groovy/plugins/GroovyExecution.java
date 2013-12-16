@@ -1,5 +1,7 @@
 package tm.eclipse.groovy.plugins;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,9 +13,11 @@ import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
+import tm.eclipse.helpers.eclipseUI;
 import tm.eclipse.ui.Startup;
 
 public class GroovyExecution 
@@ -27,6 +31,7 @@ public class GroovyExecution
 	public String 				 scriptToExecute;
 	public Runnable			     onExecutionComplete;
 	public Exception			 executionException;	
+	public boolean 				 executeOnUIThread;
 	
 	public GroovyExecution() 
 	{
@@ -49,7 +54,12 @@ public class GroovyExecution
 		binding.setVariable("importCustomizer", importCustomizer);
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
+		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
+		binding.setVariable("eclipseUI"       , eclipseUI.class);  		
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
+		binding.setVariable("groovy"          , GroovyExecution.class);
+		binding.setVariable("log"             , tm.eclipse.helpers.log.class);		
+		binding.setVariable("form"            , tm.swt.controls.Form_Ex.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{
@@ -63,7 +73,7 @@ public class GroovyExecution
 		{
 			try
 			{
-				URL url = new URL("file://" + refToAdd);							
+				URL url = new URL("file:///" + refToAdd);							
 				groovyShell.getClassLoader().addURL(url);
 			}
 			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@£$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
@@ -88,9 +98,15 @@ public class GroovyExecution
 	{
 		executionException = null;
 		returnValue = null;
+		setExecuteOptionsBasedOnCodeReferences();					// do this at the last minute so that we have access to the final state of the objects
 		try 
-		{	
-			returnValue =  groovyShell.evaluate(scriptToExecute);										
+		{		
+			returnValue = (executeOnUIThread)
+								? syncExec(new Result<Object>() { public Object run()
+										{
+											return groovyShell.evaluate(scriptToExecute);
+										}})
+				 				: groovyShell.evaluate(scriptToExecute);
 		} 
 		catch (Exception ex) 
 		{					
@@ -135,6 +151,16 @@ public class GroovyExecution
 			return groovyShell.getClassLoader().getURLs();			// (handle UnitTest exception)  java.lang.LinkageError: loader constraint violation:
 		return null;
 	}	
+	
+	public  GroovyExecution setExecuteOptionsBasedOnCodeReferences() 
+	{
+		//this should be done via AST, but text search is a good start:
+		if (scriptToExecute.contains("//Config:UIThread_False"))
+			executeOnUIThread = false; 
+		if (scriptToExecute.contains("//Config:UIThread_True"))
+			executeOnUIThread = true;
+		return this;		
+	}
 	public Binding 	       setBindingVariablesValues() 
 	{			
 		binding = new Binding();				
@@ -144,9 +170,9 @@ public class GroovyExecution
 	public void 	       setCompilerConfiguration()
 	{
 		configuration    = new CompilerConfiguration();		
-		importCustomizer = new ImportCustomizer();
+		importCustomizer = new ImportCustomizer();		
 		importCustomizer.addStarImports("tm.eclipse.ui");
-		importCustomizer.addStarImports("tm.eclipse.api");
+		importCustomizer.addStarImports("tm.eclipse.api");		
 		importCustomizer.addStarImports("tm.eclipse.groovy.plugins");
 		importCustomizer.addStaticStars("tm.eclipse.groovy.plugins.GroovyExecution");
 		
@@ -210,13 +236,41 @@ public class GroovyExecution
 			              "'\\n  failureCount: ' + jUnitResult.failureCount +\n" +
 			              "'\\n  runTime      : ' + jUnitResult.runTime;\n";		
 		return executeScript();		 
-	}
+	}	
+	
 	@Override
 	public String          toString()
 	{
 		if (executionException == null)
 			return "GroovyExecution OK: " + returnValue;
 		return "GroovyExecution ERROR: " + executionException.toString();
+	}
+	
+	/*
+	 * 
+	 */
+	public static String 		execute_GroovyEditor_Code(String title)
+	{
+		String groovyCode = (title == null)
+								? "def activeEditor = eclipse.activeWorkbenchPage.getActiveEditor();\n" 
+								: "def title = '"+ title +  "';             					    \n" +  
+								  "def editor = eclipseUI.editor(title);						    \n" +
+								  "if (editor == null)                  							\n" +
+								  "  return 'ERROR: No editor found with title: ' + title;			\n" +
+								  "def activeEditor = editor.getPart(true)							\n";
+		return  groovyCode + 
+		  	   "if (activeEditor.class.name == \"org.codehaus.groovy.eclipse.editor.GroovyEditor\") \n" +
+		  	   "{ 																					\n" + 
+		  	   "		def source = activeEditor.groovyCompilationUnit.source; 					\n" + 
+		  	   "      return new GroovyExecution().executeScript(source); 							\n" +
+		  	   "} 																					\n" + 
+		  	   "return 'ERROR: Current editor is not a groovy editor' 								\n";
+	}
+
+	public static Object 		execute_GroovyEditor(String title)
+	{
+		String scriptToExecute = execute_GroovyEditor_Code(title);
+		return new GroovyExecution().executeScript(scriptToExecute);	
 	}
 	
 	public static GroovyExecution execute_SWTBot(String swtBotScriptToExecute)
@@ -264,5 +318,10 @@ public class GroovyExecution
 		groovyExecution.addRefToGroovyShell(binFolder);
 		groovyExecution.execute_JUnit_Test(jUnitTestClass);
 		return groovyExecution;
+	}
+	
+	public static void inspect_Object(Object target)
+	{
+		groovy.inspect.swingui.ObjectBrowser.inspect(target);
 	}
 }

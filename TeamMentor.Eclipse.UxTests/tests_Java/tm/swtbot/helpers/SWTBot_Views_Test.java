@@ -30,16 +30,16 @@ public class SWTBot_Views_Test
 		long originalTimeout = SWTBotPreferences.TIMEOUT;
 		long newTimeout 	 = Math.abs(new Random().nextLong());
 		
-		assertEquals	 (originalTimeout, swtBot_Timeout());
-		assertNotEquals  (newTimeout     , swtBot_Timeout());
+		assertEquals	 (originalTimeout, swtBot_Timeout());		 
+		assertFalse      (newTimeout    == swtBot_Timeout()); //assertNotEquals  (newTimeout     , swtBot_Timeout());
 		
 		swtBot_Timeout(newTimeout);
-		assertNotEquals	 (originalTimeout, swtBot_Timeout());
-		assertEquals 	 (newTimeout     , swtBot_Timeout());
+		assertFalse	  (originalTimeout  == swtBot_Timeout()); //assertNotEquals	 (originalTimeout, swtBot_Timeout());
+		assertEquals  (newTimeout        , swtBot_Timeout());
 		
 		swtBot_Timeout(originalTimeout);
-		assertNotEquals  (newTimeout     , swtBot_Timeout());
-		assertEquals	 (originalTimeout, swtBot_Timeout());
+		assertFalse   (newTimeout    == swtBot_Timeout()); //assertNotEquals  (newTimeout     , swtBot_Timeout());
+		assertEquals  (originalTimeout, swtBot_Timeout());
 		
 	}
 		

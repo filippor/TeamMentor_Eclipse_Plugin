@@ -12,9 +12,9 @@ public class PluginResources
 {	
 	public Activator plugin;
 	
-	public PluginResources(Activator _plugin)
+	public PluginResources()
 	{
-		plugin = _plugin;
+		plugin = Activator.plugin;
 	}
 	
 	public IPath get_Plugin_TempPath()

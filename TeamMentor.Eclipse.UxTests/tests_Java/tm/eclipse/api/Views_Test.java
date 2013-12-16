@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.views.SimpleEditor;
-import tm.utils.Eclipse_Consts;
+import tm.utils.Consts_Eclipse;
 
 public class Views_Test 
 {
@@ -98,8 +98,7 @@ public class Views_Test
 				}
 			}});
 	}
-	
-	@SuppressWarnings("restriction")
+
 	@Test 
 	public void open_View() throws InterruptedException
 	{	
@@ -126,11 +125,11 @@ public class Views_Test
 	public void closeAboutWindow()
 	{
 		EclipseAPI eclipseAPI = Startup.eclipseApi;
-		IViewReference viewReference = eclipseAPI.views.get_View_Reference(Eclipse_Consts.VIEW_ID_WELCOME_SCREEN);
+		IViewReference viewReference = eclipseAPI.views.get_View_Reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 		if (viewReference != null)
 		{
 			eclipseAPI.views.close(viewReference);
-			viewReference = eclipseAPI.views.get_View_Reference(Eclipse_Consts.VIEW_ID_WELCOME_SCREEN);
+			viewReference = eclipseAPI.views.get_View_Reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 			assertNull(viewReference);
 		}
 	}
