@@ -37,8 +37,9 @@ public class EclipseAPI
 //	public TestGroovy   	testGroovy;	
 	public IWorkspace   	workspace;
 	
+	public Console			console;
 	public Menus			menus;
-	public Panels		panelFactory;
+	public Panels		    panelFactory;
 	public Views			views;
 	public boolean			ready;
 	
@@ -47,7 +48,7 @@ public class EclipseAPI
 		Tree_ExtensionMethods.setExtensionmethods();		
 	}*/
 	
-	public EclipseAPI()
+	public EclipseAPI() 
 	{	
 		display = PlatformUI.getWorkbench().getDisplay();
 		display.syncExec(new Runnable() { public void run() 
@@ -56,9 +57,10 @@ public class EclipseAPI
 				extraGroovyJars = new ArrayList<String>();
 				
 				captureEclipseObjects();
-				menus  = new Menus(workbench);
+				menus  		 = new Menus(workbench);
 				panelFactory = new Panels(workbench);		
-				views  = new Views(workbench);		
+				views  		 = new Views(workbench);
+				console 	 = new Console(workbench);
 				setEclipsePartEvents();
 				ready = true;
 			}});

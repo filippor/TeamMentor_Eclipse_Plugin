@@ -1,4 +1,4 @@
-package tm.swt.controls;
+package tm.eclipse.swt.controls;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +26,14 @@ public class Tree_Ex extends Tree
 	}	
 	
 	public static Tree_Ex add_Tree(final Composite target)
+	{
+		return add_Tree(target, SWT.None);
+	}
+	public static Tree_Ex add_Tree(final Composite target, final int style)
 	{	
 		return UIThreadRunnable.syncExec(target.getDisplay(),new Result<Tree_Ex>() { public Tree_Ex run() 
 					{
-						Tree_Ex tree = new Tree_Ex(target,SWT.None);
+						Tree_Ex tree = new Tree_Ex(target, style);
 						target.layout(true);
 						return tree;
 					}});

@@ -1,16 +1,19 @@
 package tm.eclipse.groovy.plugins;
 
+import java.io.File;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.core.runtime.IPath;
 
 import tm.eclipse.ui.PluginResources;
 
 public class GroovyPlugins 
 {
+	PluginResources pluginResources = new PluginResources();
+	
 	public String get_PluginScript_Path(String scriptPath)
-	{
-		PluginResources pluginResources = new PluginResources();
+	{		
 		return pluginResources.get_Resource_Saved_on_TempFolder(scriptPath);
 	}
 	
@@ -32,7 +35,15 @@ public class GroovyPlugins
 		}
 		return null;
 	}
-	
+	public IPath get_FilesInPlugin()
+	{
+		File file = get_PluginBaseFolderPath().toFile();
+		return null;
+	}
+	public IPath get_PluginBaseFolderPath()
+	{
+		return pluginResources.get_Path_To_Resource_in_TempFolder("TM_Plugins");							  
+	}
 	public Object execute_PluginScript(String scriptPath)
 	{
 		String pluginScript = get_PluginScript_Code(scriptPath);

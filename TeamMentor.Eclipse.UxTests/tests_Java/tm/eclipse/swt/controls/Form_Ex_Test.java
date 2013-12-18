@@ -1,12 +1,11 @@
 package tm.eclipse.swt.controls;
 
 import static org.junit.Assert.*;
+
 import org.eclipse.swt.SWTException;
 import org.junit.Test;
-import tm.swt.controls.Browser_Ex;
-import tm.swt.controls.Form_Ex;
 
-public class form_Test 
+public class Form_Ex_Test 
 {
 	@Test(expected = SWTException.class)
 	public void form_Ctor()
@@ -37,10 +36,13 @@ public class form_Test
 		Form_Ex form = new Form_Ex().layout_Fill();	
 		Browser_Ex browser = Browser_Ex.add_Browser(form.shell);
 		String htmlText = "this is some test <h1>Html Content</h1>";
-		
+		form.show();
+		browser.open("about:blank");
 		browser.setText(htmlText);
 		
-		form.show().wait_MiliSeconds(500);
+		form.wait_MiliSeconds(500);
+		if (browser.getText().equals(htmlText) == false)	// wait a bit more if needed
+			form.wait_MiliSeconds(500);	
 		assertEquals(browser.getText(),htmlText);		
 		form.close();
 	}
@@ -52,8 +54,7 @@ public class form_Test
 		Browser_Ex browser = form.add_Browser();		
 		assertNotNull(browser);
 		assertTrue(form.controls().size() > 0);
-		assertEquals(browser, form.controls().get(0));		
-		form.wait_Seconds(2);
+		assertEquals(browser, form.controls().get(0));				
 		form.close();
 	}
 	

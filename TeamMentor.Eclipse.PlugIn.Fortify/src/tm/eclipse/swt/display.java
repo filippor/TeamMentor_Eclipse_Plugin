@@ -1,4 +1,4 @@
-package tm.swt;
+package tm.eclipse.swt;
 
 import java.util.ArrayList;
 import java.util.List;

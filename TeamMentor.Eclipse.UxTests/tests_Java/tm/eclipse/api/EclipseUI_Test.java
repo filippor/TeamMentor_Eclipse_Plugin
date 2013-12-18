@@ -10,7 +10,7 @@ public class EclipseUI_Test
 	public void EclipseUI_Ctor()
 	{
 		EclipseAPI eclipseAPI = new EclipseAPI();
-		EclipseUI  eclipseUi  = new EclipseUI(eclipseAPI.workbench);
+		EclipseBase  eclipseUi  = new EclipseBase(eclipseAPI.workbench);
 		assertNotNull(eclipseUi);
 		assertNotNull(eclipseUi.activePage);
 		assertNotNull(eclipseUi.workbenchWindow);

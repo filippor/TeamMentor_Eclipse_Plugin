@@ -5,14 +5,14 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 
-public class EclipseUI 
+public class EclipseBase 
 {	
 	public  IWorkbench 		 workbench;
 	public  Display 		 display;
 	public IWorkbenchPage    activePage;
 	public IWorkbenchWindow  workbenchWindow;
 	
-	public EclipseUI(IWorkbench _workbench)
+	public EclipseBase(IWorkbench _workbench)
 	{
 		workbench = _workbench;
 		display = workbench.getDisplay(); 

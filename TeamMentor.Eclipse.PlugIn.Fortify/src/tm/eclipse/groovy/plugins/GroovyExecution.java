@@ -2,7 +2,9 @@ package tm.eclipse.groovy.plugins;
 
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,7 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
-import tm.eclipse.helpers.eclipseUI;
+import tm.eclipse.helpers.*;
 import tm.eclipse.ui.Startup;
 
 public class GroovyExecution 
@@ -55,11 +57,13 @@ public class GroovyExecution
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
 		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
-		binding.setVariable("eclipseUI"       , eclipseUI.class);  		
+		binding.setVariable("eclipseUI"       , eclipseUI.class);
+		binding.setVariable("images"          , images.class);
+		binding.setVariable("colors"          , colors.class);
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
 		binding.setVariable("groovy"          , GroovyExecution.class);
 		binding.setVariable("log"             , tm.eclipse.helpers.log.class);		
-		binding.setVariable("form"            , tm.swt.controls.Form_Ex.class);
+		binding.setVariable("form"            , tm.eclipse.swt.controls.Form_Ex.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{
@@ -76,7 +80,7 @@ public class GroovyExecution
 				URL url = new URL("file:///" + refToAdd);							
 				groovyShell.getClassLoader().addURL(url);
 			}
-			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@£$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
+			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
 			{
 				ex.printStackTrace();
 			}
@@ -302,7 +306,7 @@ public class GroovyExecution
 		thread.start();
 		return groovyExecution;
 	}
-	public static GroovyExecution dev_Execute_JUnitTest()
+	/*public static GroovyExecution dev_Execute_JUnitTest()
 	{		
 		String jUnitTestClass = "tm.eclipse.ui.TeamMentor_Menu_Test";
 		return dev_Execute_JUnitTest(jUnitTestClass);
@@ -318,8 +322,30 @@ public class GroovyExecution
 		groovyExecution.addRefToGroovyShell(binFolder);
 		groovyExecution.execute_JUnit_Test(jUnitTestClass);
 		return groovyExecution;
+	}*/
+	public static Object 		  dev_Execute_TM_JUnit()
+	{
+		return dev_Execute_TM_JUnit("tm.utils.Network_Test");
 	}
-	
+	public static Object 		  dev_Execute_TM_JUnit(String jUnitClassName)
+	{
+		GroovyExecution groovyExecution = new GroovyExecution();
+		try {
+			URL binFolder_TMCode   = GroovyExecution.class.getProtectionDomain().getCodeSource().getLocation();
+			URL binFolder_TMJUnit;
+		
+			binFolder_TMJUnit = new URL(binFolder_TMCode, "../../TeamMentor.Eclipse.UxTests/bin/");
+				 	
+			groovyExecution.addRefToGroovyShell(binFolder_TMJUnit.getPath());
+
+			groovyExecution.execute_JUnit_Test(jUnitClassName);
+		}
+		catch (MalformedURLException e) 
+		{
+			e.printStackTrace();
+		}			
+		return groovyExecution;
+	}	
 	public static void inspect_Object(Object target)
 	{
 		groovy.inspect.swingui.ObjectBrowser.inspect(target);

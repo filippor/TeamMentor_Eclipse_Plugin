@@ -1,4 +1,4 @@
-package tm.swt.controls;
+package tm.eclipse.swt.controls;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Form_Ex
 	
 	public Form_Ex()
 	{
-		display = tm.swt.display.current();
+		display = tm.eclipse.swt.display.current();
 		display.syncExec(new Runnable() { public void run() 
 					{
 						shell = new Shell(display);		
@@ -154,6 +154,22 @@ public class Form_Ex
 	{
 		return Browser_Ex.add_Browser(this.shell);
 	}
+	public Button_Ex      add_Button()
+	{
+		return Button_Ex.add_Button(this.shell);
+	}
+	public Button_Ex      add_Button(String text)
+	{
+		return Button_Ex.add_Button(this.shell, text);
+	}
+	public Text_Ex      add_Text()
+	{
+		return Text_Ex.add_Text(this.shell);
+	}
+	public Text_Ex      add_Text_Search()
+	{
+		return Text_Ex.add_Text_Search(this.shell);
+	}
 	public Tree_Ex      add_Tree()
 	{
 		return Tree_Ex.add_Tree(this.shell);
@@ -170,6 +186,6 @@ public class Form_Ex
 	public static Form_Ex popupWindow()
 	{
 		return new Form_Ex().layout_Fill()
-						  .show();
+						    .show();
 	}
 }

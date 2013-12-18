@@ -8,10 +8,10 @@ import org.junit.Test;
 import tm.eclipse.Plugin_Config;
 
 public class Network_Test 
-{	
+{		
 	@Test 
 	public void test_url_Exists()
-	{		
+	{				
 		if(online())
 		{						
 			assertTrue (url_Exists("http://www.google.com"));

@@ -9,7 +9,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.internal.WorkbenchWindow;
 
 @SuppressWarnings("restriction")
-public class Menus extends EclipseUI 
+public class Menus extends EclipseBase 
 {
 	public Menus(IWorkbench workbench)
 	{

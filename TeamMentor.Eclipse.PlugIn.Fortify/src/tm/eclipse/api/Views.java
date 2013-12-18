@@ -14,7 +14,7 @@ import org.eclipse.ui.PartInitException;
 
 import tm.eclipse.ui.Startup;
 
-public class Views extends EclipseUI
+public class Views extends EclipseBase
 {		
 	public Views(IWorkbench workbench)
 	{

@@ -59,6 +59,7 @@ public class TeamMentorAPI
 	public static String loginIntoTM()
 	{		
 		Browser.setCookie("Session=" + MainPreferences.getSessionId(), MainPreferences.getServer());
+		String cookie = Browser.getCookie("Session", MainPreferences.getServer());
 		return MainPreferences.getSessionId();
 	}	
 	public static void setServer(String newServer)
@@ -126,8 +127,10 @@ public class TeamMentorAPI
 				String headerImage = pluginResources.get_Resource_Saved_on_TempFolder("/images/jpgs/HeaderImage.jpg");
 				String bootstrapCss = pluginResources.get_Resource_Saved_on_TempFolder("/images/css/bootstrap.css");
 				String htmlToShow = "<html><header><link href='" + bootstrapCss + "' rel='stylesheet'></header>" +
-									"<body><img src='" + headerImage + "' class='HeaderImage'/><br/><br/>" + 									 
-									htmlSnippet +									 									
+									"<body><img src='" + headerImage + "' class='HeaderImage'/><br/><br/>" +
+									"<div  style='padding: 4px;'>" + 
+									htmlSnippet +					
+									"</div>" + 
 									"</body></html>";
 				Panels panelFactory = new Panels(eclipseAPI.workbench); 
 				return panelFactory.open_Html_in_WebBrowser(htmlToShow);
@@ -136,7 +139,7 @@ public class TeamMentorAPI
 	}
 	public static DefaultPart_WebBrowser show_No_ArticleMessage()
 	{
-		String htmlSnippet = "<h3>No article for selected finding</h3>" +
+		String htmlSnippet = "<h4>No article for selected finding</h4>" +
 					  "Sorry, there is no article for the current Fortify mapping. Please send your views and requirements to" +
 					  " <a href='mailto:suport@securityinnovation.com'>TeamMentor Support</a>";
 

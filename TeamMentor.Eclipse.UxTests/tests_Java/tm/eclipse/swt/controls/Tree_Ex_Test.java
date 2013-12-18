@@ -1,7 +1,9 @@
 package tm.eclipse.swt.controls;
 
 import static org.junit.Assert.*;
+
 import java.util.List;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.browser.*;
 import org.eclipse.swt.layout.*;
@@ -10,10 +12,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.Ignore;
 import org.junit.Test;
-import tm.swt.controls.Form_Ex;
-import tm.swt.controls.Tree_Ex;
 
-public class tree_Test
+public class Tree_Ex_Test
 {
 	@Test
 	public void tree_Ctor()
