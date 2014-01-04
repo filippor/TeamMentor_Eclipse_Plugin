@@ -20,11 +20,11 @@ public class Button_Ex_Test
 	{
 		Form_Ex form = Form_Ex.popupWindow();
 				
-		Button_Ex button = Button_Ex.add_Button(form.shell);
+		Button button = Button.add_Button(form.shell);
 		
 		assertTrue(form.controls().size() == 1);
 		assertEquals(form.controls().get(0), button);
-		assertEquals(form.controls().get(0).getClass(), Button_Ex.class);
+		assertEquals(form.controls().get(0).getClass(), Button.class);
 		form.close();
 		assertTrue(form.shell.isDisposed());
 		assertTrue(button.isDisposed());
@@ -35,7 +35,7 @@ public class Button_Ex_Test
 	{
 		Form_Ex form = Form_Ex.popupWindow();
 				
-		Button_Ex button = form.add_Button();
+		Button button = form.add_Button();
 	
 		assertEquals("", button.getText());
 		
@@ -46,7 +46,7 @@ public class Button_Ex_Test
 		assertTrue (sampleText1.equals(button.getText()));
 		
 		String sampleText2 = "abcdef";		
-		Button_Ex button2 = form.add_Button(sampleText2);
+		Button button2 = form.add_Button(sampleText2);
 		
 		assertEquals (sampleText2, button2.getText());
 		assertTrue   (sampleText2.equals(button2.getText()));

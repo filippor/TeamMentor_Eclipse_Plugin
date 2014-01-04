@@ -1,4 +1,4 @@
-package tm.eclipse.PluginPreferences;
+package tm.eclipse.pluginPreferences;
 
 import static org.junit.Assert.*;
 
@@ -8,7 +8,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Test;
 
 import tm.eclipse.Plugin_Config;
-import tm.eclipse.ui.PluginPreferences.MainPreferences;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.utils.Consts_TM;
 
 public class LoginToTM_Test extends Preferences_JUnit
@@ -87,15 +87,15 @@ public class LoginToTM_Test extends Preferences_JUnit
 	//@Ignore
 	public void check_Properties_Values_After_Login()
 	{		
-		MainPreferences.setSessionId("12345_ABCDEF");		
-		assertFalse(Consts_TM.QA_LOGIN_SESSION.equals(MainPreferences.getSessionId()));	// was assertNotEquals 
+		TM_Preferences.setSessionId("12345_ABCDEF");		
+		assertFalse(Consts_TM.QA_LOGIN_SESSION.equals(TM_Preferences.getSessionId()));	// was assertNotEquals 
 
 		loginUser(Consts_TM.QA_LOGIN_USERNAME,Consts_TM.QA_LOGIN_PASSWORD, Consts_TM.MSG_LOGIN_OK);
-		assertEquals(Consts_TM.QA_LOGIN_SESSION, MainPreferences.getSessionId());
+		assertEquals(Consts_TM.QA_LOGIN_SESSION, TM_Preferences.getSessionId());
 		//assertEquals(Consts_TM.QA_LOGIN_SESSION,sessionIdText.getText());
 		
 		okButton.click();	
-		assertEquals(Consts_TM.QA_LOGIN_SESSION, MainPreferences.getSessionId());	
+		assertEquals(Consts_TM.QA_LOGIN_SESSION, TM_Preferences.getSessionId());	
 	}
 	
 /*	@Test		

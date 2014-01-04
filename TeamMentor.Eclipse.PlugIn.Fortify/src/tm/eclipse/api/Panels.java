@@ -13,7 +13,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.swt.widgets.Composite;
 
-import tm.eclipse.ui.PluginPreferences.MainPreferences;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.eclipse.ui.views.Eclipse_Panel;
 
@@ -82,7 +82,7 @@ public class Panels  extends EclipseBase
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(String htmlToShow)
 	{
-		return open_Html_in_WebBrowser(MainPreferences.getDefaultBrowserId(), MainPreferences.getDefaultBrowserTitle(), htmlToShow);
+		return open_Html_in_WebBrowser(TM_Preferences.getDefaultBrowserId(), TM_Preferences.getDefaultBrowserTitle(), htmlToShow);
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(final String browserId, final String title, final String htmlToShow)
 	{	

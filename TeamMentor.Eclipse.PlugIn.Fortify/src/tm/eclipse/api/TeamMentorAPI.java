@@ -16,7 +16,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.Plugin_Config;
-import tm.eclipse.ui.PluginPreferences.MainPreferences;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.utils.Consts_TM;
@@ -58,22 +58,22 @@ public class TeamMentorAPI
 	}
 	public static String loginIntoTM()
 	{		
-		Browser.setCookie("Session=" + MainPreferences.getSessionId(), MainPreferences.getServer());
-		String cookie = Browser.getCookie("Session", MainPreferences.getServer());
-		return MainPreferences.getSessionId();
+		Browser.setCookie("Session=" + TM_Preferences.getSessionId(), TM_Preferences.getServer());
+		String cookie = Browser.getCookie("Session", TM_Preferences.getServer());
+		return TM_Preferences.getSessionId();
 	}	
 	public static void setServer(String newServer)
 	{
-		MainPreferences.setServer(newServer);
+		TM_Preferences.setServer(newServer);
 	}
 	public static void setSession(String session)
 	{
-		MainPreferences.setSessionId(session);
+		TM_Preferences.setSessionId(session);
 		loginIntoTM();
 	}
 	public static String getSession()
 	{
-		return MainPreferences.getSessionId();		
+		return TM_Preferences.getSessionId();		
 	}
 	public static void edit_Notepad(String articleId)
 	{
@@ -112,8 +112,8 @@ public class TeamMentorAPI
 */	
 	public static Browser open_Article_Page(String mode, String articleId)
 	{
-		String tmUrl = MainPreferences.getServer() + "/" + mode + "/" + articleId; 		
-		String browserId = (MainPreferences.openArticleInNewWindow()) ? articleId : MainPreferences.getDefaultBrowserId();
+		String tmUrl = TM_Preferences.getServer() + "/" + mode + "/" + articleId; 		
+		String browserId = (TM_Preferences.openArticleInNewWindow()) ? articleId : TM_Preferences.getDefaultBrowserId();
 		lastBrowser = eclipseAPI.panelFactory.open_Url_in_WebBrowser(browserId, tmUrl).browser;
 		return lastBrowser;
 	}
@@ -148,8 +148,8 @@ public class TeamMentorAPI
 	
 	public static void setServer_CurrentSetup()
 	{
-		setServer(MainPreferences.getServer());
-		setSession(MainPreferences.getSessionId()); 
+		setServer(TM_Preferences.getServer());
+		setSession(TM_Preferences.getSessionId()); 
 	}
 	public static String loginIntoTeamMentor(String username, String password) 
 	{
@@ -168,7 +168,7 @@ public class TeamMentorAPI
 		URL obj;
 		try 
 		{
-			String url = String.format("%s/rest/login/%s/%s", MainPreferences.getServer() ,username, password);
+			String url = String.format("%s/rest/login/%s/%s", TM_Preferences.getServer() ,username, password);
 			obj = new URL(url);
 		
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();

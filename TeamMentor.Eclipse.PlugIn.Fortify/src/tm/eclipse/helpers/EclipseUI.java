@@ -1,7 +1,6 @@
 package tm.eclipse.helpers;
 
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.*;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import tm.eclipse.swt.controls.Form_Ex;
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.views.Eclipse_Panel;
 
-public class eclipseUI 
+public class EclipseUI 
 {
 	public static EclipseAPI eclipse;
 	
@@ -40,6 +39,11 @@ public class eclipseUI
 			}});
 		
 	}
+	public static Class<EclipseUI>		 close_View(String viewIdPartNameTitle)
+	{
+		eclipse.views.close(view(viewIdPartNameTitle));		
+		return EclipseUI.class;
+	}
 	public static IEditorReference 		 editor(String title)
 	{
 		return get_Editor(title);
@@ -59,10 +63,11 @@ public class eclipseUI
 	{
 		return Arrays.asList(eclipse.activeWorkbenchPage.getEditorReferences());
 	}
-	public static IViewReference 		 get_View(String titleOrId)
+	public static IViewReference 		 get_View(String idPartNameTitle)
 	{
+		
 		for(IViewReference editor : get_Views())
-			if(editor.getTitle().equals(titleOrId) || editor.getId().equals(titleOrId))
+			if(editor.getId().equals(idPartNameTitle) || editor.getPartName().equals(idPartNameTitle)|| editor.getTitle().equals(idPartNameTitle))
 					return editor;
 		return null;
 	}	public static List<IViewReference> 	 get_Views()
@@ -138,9 +143,30 @@ public class eclipseUI
 	{
 		return get_View(title);
 	}	
-
 	public static List<IViewReference>   views()
 	{
 		return get_Views();
 	}
+	public static List<String>           views_Ids()
+	{
+		List<String> ids = new ArrayList<String>();
+		for(IViewReference view : views())
+			ids.add(view.getId());
+		return  ids;
+	}
+	public static List<String>           views_PartNames()
+	{
+		List<String> ids = new ArrayList<String>();
+		for(IViewReference view : views())
+			ids.add(view.getPartName());
+		return  ids;
+	}
+	public static List<String>           views_Titles()
+	{
+		List<String> titles = new ArrayList<String>();
+		for(IViewReference view : views())
+			titles.add(view.getTitle());
+		return  titles;
+	}
+	
 }

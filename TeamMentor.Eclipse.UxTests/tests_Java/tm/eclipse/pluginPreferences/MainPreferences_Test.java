@@ -1,8 +1,8 @@
-package tm.eclipse.PluginPreferences;
+package tm.eclipse.pluginPreferences;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import tm.eclipse.ui.PluginPreferences.*;
+import tm.eclipse.ui.pluginPreferences.*;
 
 public class MainPreferences_Test extends Preferences_JUnit
 {
@@ -10,7 +10,7 @@ public class MainPreferences_Test extends Preferences_JUnit
 	@Test
 	public void checkPreferencesPage_DefaultValues()
 	{						
-		openPropertiesPage("tm.eclipse.ui.PluginPreferences")		
+		openPropertiesPage("tm.eclipse.ui.pluginPreferences")		
 			.restoreDefaults();
 		
 		is_TextBox_equal_DefaultPreference(1, PreferenceInitializer.P_TEAMMENTOR_SERVER    , true);
@@ -29,7 +29,7 @@ public class MainPreferences_Test extends Preferences_JUnit
 	public void checkPreferencesPage_ValueChanges()
 	{		
 		//Open and set defaults
-		openPropertiesPage("tm.eclipse.ui.PluginPreferences")
+		openPropertiesPage("tm.eclipse.ui.pluginPreferences")
 			.restoreDefaults();
 		assertFalse("1st chedckbox (default)", bot.checkBox(0).isChecked());
 		assertTrue ("2nd chedckbox (default)", bot.checkBox(1).isChecked());

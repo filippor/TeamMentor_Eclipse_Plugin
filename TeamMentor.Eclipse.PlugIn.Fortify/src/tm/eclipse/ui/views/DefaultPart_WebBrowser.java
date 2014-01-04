@@ -11,7 +11,9 @@ public class DefaultPart_WebBrowser extends ViewPart
 	
 	public static final String DEFAULT_HTML = "<html>" + 
     										  "<link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet'>" + 
-    										  "<h1 class='alert alert-success'>TeamMentor window</h1>... some content will go here....</html>";
+    										  "<h1 class='alert alert-success'>Empty Browser</h1>Humm, it looks like your Eclipse crashed and left this window behind." +
+    										 "<br/><br/>Please close this window" +
+    										  "</html>";
 	public  Browser browser;
 	
 	public void createPartControl(Composite parent) 

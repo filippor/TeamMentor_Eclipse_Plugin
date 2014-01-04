@@ -1,4 +1,4 @@
-package tm.eclipse.ui.PluginPreferences;
+package tm.eclipse.ui.pluginPreferences.pages;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
@@ -10,6 +10,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 
 public class EditAboutPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage 
 {
@@ -33,7 +34,7 @@ public class EditAboutPage extends FieldEditorPreferencePage implements IWorkben
 		aboutText.setLayoutData(gridData);
 		
 		aboutText.setWordWrap(true);
-		aboutText.setText(MainPreferences.getAboutHtml());
+		aboutText.setText(TM_Preferences.getAboutHtml());
 		return parent;
 	}
 	@Override
@@ -48,7 +49,7 @@ public class EditAboutPage extends FieldEditorPreferencePage implements IWorkben
 	{	
 		//.load();
 		super.performDefaults();
-		aboutText.setText(MainPreferences.getAboutHtml());
+		aboutText.setText(TM_Preferences.getAboutHtml());
 	}
 	
 	/*
@@ -58,7 +59,7 @@ public class EditAboutPage extends FieldEditorPreferencePage implements IWorkben
 	public boolean performOk() 
 	{
 		//.store();
-		MainPreferences.setAboutHtml(aboutText.getText());
+		TM_Preferences.setAboutHtml(aboutText.getText());
 		return super.performOk();
 	}
 

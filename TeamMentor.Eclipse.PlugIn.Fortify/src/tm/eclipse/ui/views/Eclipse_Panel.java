@@ -5,24 +5,35 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
+//import org.eclipse.swt.widgets.*;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.part.ViewPart;
 
+import tm.eclipse.swt.Add_Composite;
+import tm.eclipse.swt.Get_Composite;
+import tm.eclipse.swt.Set_Composite;
 import tm.eclipse.swt.controls.*;
-import tm.swt.controls.*;
 
 public class Eclipse_Panel extends ViewPart 
 {
 	public static final String ID = "tm.eclipse.ui.views.Eclipse_Panel";
 	public Composite composite;
+	public Add_Composite<Composite> add;
+	public Get_Composite<Composite> get;
+	public Set_Composite<Composite> set;
 	
 	//required implementations
 	public void createPartControl(Composite parent) 
 	{
 		composite  = parent;
+		add = new Add_Composite<Composite>(parent);
+		set = new Set_Composite<Composite>(parent);
+		get = new Get_Composite<Composite>(parent);
 	}
 	public void setFocus() 
 	{
@@ -42,33 +53,33 @@ public class Eclipse_Panel extends ViewPart
 	{
 		return add_WebBrowser();	    	    
 	}	
-	public Button_Ex  add_Button()
+	public Button  add_Button()
 	{
-		return Button_Ex.add_Button(composite, SWT.NONE);	    	    
+		return Button.add_Button(composite, SWT.NONE);	    	    
 	}
-	public Button_Ex  add_Button(int style)
+	public Button  add_Button(int style)
 	{
-		return Button_Ex.add_Button(composite, style);	    	    
+		return Button.add_Button(composite, style);	    	    
 	}
-	public Button_Ex  add_Button(String text)
+	public Button  add_Button(String text)
 	{
-		return Button_Ex.add_Button(composite, SWT.NONE, text);
+		return Button.add_Button(composite, SWT.NONE, text);
 	}
-	public Text_Ex    add_Text()
+	public Text    add_Text()
 	{
-		return Text_Ex.add_Text(composite);	    	    
+		return Text.add_Text(composite);	    	    
 	}
-	public Text_Ex    add_Text(int style)
+	public Text    add_Text(int style)
 	{
-		return Text_Ex.add_Text(composite, style);	    	    
+		return Text.add_Text(composite, style);	    	    
 	}
-	public Text_Ex    add_Text(String text)
+	public Text    add_Text(String text)
 	{
-		return Text_Ex.add_Text(composite, text);	    	    
+		return Text.add_Text(composite, text);	    	    
 	}
-	public Text_Ex    add_Text_Search()
+	public Text    add_Text_Search()
 	{
-		return Text_Ex.add_Text_Search(composite);	    	    
+		return Text.add_Text_Search(composite);	    	    
 	}
 	public Tree_Ex 	  add_Tree()
 	{	

@@ -154,21 +154,21 @@ public class Form_Ex
 	{
 		return Browser_Ex.add_Browser(this.shell);
 	}
-	public Button_Ex      add_Button()
+	public Button      add_Button()
 	{
-		return Button_Ex.add_Button(this.shell);
+		return Button.add_Button(this.shell);
 	}
-	public Button_Ex      add_Button(String text)
+	public Button      add_Button(String text)
 	{
-		return Button_Ex.add_Button(this.shell, text);
+		return Button.add_Button(this.shell, text);
 	}
-	public Text_Ex      add_Text()
+	public Text      add_Text()
 	{
-		return Text_Ex.add_Text(this.shell);
+		return Text.add_Text(this.shell);
 	}
-	public Text_Ex      add_Text_Search()
+	public Text      add_Text_Search()
 	{
-		return Text_Ex.add_Text_Search(this.shell);
+		return Text.add_Text_Search(this.shell);
 	}
 	public Tree_Ex      add_Tree()
 	{

@@ -1,4 +1,4 @@
-package tm.eclipse.ui.PluginPreferences;
+package tm.eclipse.ui.pluginPreferences.pages;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -12,6 +12,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.Activator;
+import tm.eclipse.ui.pluginPreferences.PreferenceInitializer;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.utils.Consts_TM;
 
 public class LoginToTM extends PreferencePage implements IWorkbenchPreferencePage 
@@ -83,7 +85,7 @@ public class LoginToTM extends PreferencePage implements IWorkbenchPreferencePag
 				  else
 				  {
 					  //log.info("Before: "+ MainPreferences.getSessionId());
-					  MainPreferences.setSessionId(sessionId);
+					  TM_Preferences.setSessionId(sessionId);
 					  //log.info("After: "+ MainPreferences.getSessionId());
 					  result.setText(Consts_TM.MSG_LOGIN_OK); 
 					  //shell.layout();

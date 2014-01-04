@@ -9,7 +9,7 @@ import org.eclipse.ui.PlatformUI;
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.groovy.plugins.Plugin_Fortify;
-import tm.eclipse.ui.PluginPreferences.MainPreferences;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 
 public class Startup implements IStartup {
 
@@ -37,7 +37,7 @@ public class Startup implements IStartup {
 	
 	public void startDefaultTeamMentorPlugins()
 	{
-		if (MainPreferences.loadPluginsOnStartup())
+		if (TM_Preferences.loadPluginsOnStartup())
 		{
 			Object fortifyApi = new Plugin_Fortify().startup();
 			if (fortifyApi ==null)

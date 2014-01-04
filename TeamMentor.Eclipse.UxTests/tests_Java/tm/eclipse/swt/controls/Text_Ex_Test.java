@@ -20,7 +20,7 @@ public class Text_Ex_Test
 	{
 		Form_Ex form = Form_Ex.popupWindow();
 				
-		Text_Ex text = Text_Ex.add_Text(form.shell);
+		Text text = Text.add_Text(form.shell);
 		
 		assertTrue(form.controls().size() == 1);
 		assertEquals(form.controls().get(0), text);
@@ -34,7 +34,7 @@ public class Text_Ex_Test
 	{
 		Form_Ex form = Form_Ex.popupWindow();
 				
-		Text_Ex text = form.add_Text();
+		Text text = form.add_Text();
 		assertEquals("", text.getText());
 		
 		String sampleText1 = "123456";
@@ -60,13 +60,13 @@ public class Text_Ex_Test
 	public void text_Search()
 	{
 		Form_Ex form = Form_Ex.popupWindow();
-		Text_Ex text = form.add_Text_Search();
+		Text text = form.add_Text_Search();
 		assertNotNull(text);
 		assertEquals(1,form.controls().size());
-		Text_Ex.add_Text_Search(form.shell);
+		Text.add_Text_Search(form.shell);
 		assertEquals(2,form.controls().size());
-		assertEquals(Text_Ex.class,form.controls().get(0).getClass());
-		assertEquals(Text_Ex.class,form.controls().get(1).getClass());
+		assertEquals(Text.class,form.controls().get(0).getClass());
+		assertEquals(Text.class,form.controls().get(1).getClass());
 		
 	}
 }

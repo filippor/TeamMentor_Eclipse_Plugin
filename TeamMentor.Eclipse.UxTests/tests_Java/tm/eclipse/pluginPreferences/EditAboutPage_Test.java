@@ -1,4 +1,4 @@
-package tm.eclipse.PluginPreferences;
+package tm.eclipse.pluginPreferences;
 
 import static org.junit.Assert.*;
 

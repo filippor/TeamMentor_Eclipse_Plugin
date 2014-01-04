@@ -1,4 +1,4 @@
-package tm.eclipse.PluginPreferences;
+package tm.eclipse.pluginPreferences;
 
 import static org.junit.Assert.*;
 
@@ -8,7 +8,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCheckBox;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
-import tm.eclipse.helpers.eclipseUI;
+import tm.eclipse.helpers.EclipseUI;
 import tm.eclipse.ui.Activator;
 
 public class Preferences_JUnit 
@@ -37,7 +37,7 @@ public class Preferences_JUnit
 	{
 		new Thread() { public void run() 
 		{			
-			eclipseUI.open_PreferencesDialog(viewId);
+			EclipseUI.open_PreferencesDialog(viewId);
 		}}.start();
 				
 		shell = bot.shell("Preferences");

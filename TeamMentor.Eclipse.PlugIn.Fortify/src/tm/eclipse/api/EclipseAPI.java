@@ -55,12 +55,12 @@ public class EclipseAPI
 			{
 				objects 		= new HashMap<String,Object>();
 				extraGroovyJars = new ArrayList<String>();
-				
+				 
 				captureEclipseObjects();
 				menus  		 = new Menus(workbench);
 				panelFactory = new Panels(workbench);		
 				views  		 = new Views(workbench);
-				console 	 = new Console(workbench);
+				console 	 = new Console();
 				setEclipsePartEvents();
 				ready = true;
 			}});

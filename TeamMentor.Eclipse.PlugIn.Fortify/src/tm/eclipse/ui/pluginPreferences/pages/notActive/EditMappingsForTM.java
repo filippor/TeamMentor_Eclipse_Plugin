@@ -1,4 +1,4 @@
-package tm.eclipse.ui.PluginPreferences;
+package tm.eclipse.ui.pluginPreferences.pages.notActive;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;

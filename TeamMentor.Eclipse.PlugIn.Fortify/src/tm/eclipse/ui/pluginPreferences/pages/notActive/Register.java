@@ -1,4 +1,4 @@
-package tm.eclipse.ui.PluginPreferences;
+package tm.eclipse.ui.pluginPreferences.pages.notActive;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -7,19 +7,19 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class EditTemplate extends PreferencePage implements
+public class Register extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
-	public EditTemplate() {
+	public Register() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public EditTemplate(String title) {
+	public Register(String title) {
 		super(title);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EditTemplate(String title, ImageDescriptor image) {
+	public Register(String title, ImageDescriptor image) {
 		super(title, image);
 		// TODO Auto-generated constructor stub
 	}

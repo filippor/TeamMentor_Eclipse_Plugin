@@ -18,6 +18,14 @@ public class colors
 	{
 		return get(SWT.COLOR_BLUE);
 	}
+	public static Color control()
+	{
+		return get(SWT.CONTROL);
+	}	
+	public static Color gray()
+	{
+		return get(SWT.COLOR_GRAY);
+	}
 	public static Color green()
 	{
 		return get(SWT.COLOR_GREEN);

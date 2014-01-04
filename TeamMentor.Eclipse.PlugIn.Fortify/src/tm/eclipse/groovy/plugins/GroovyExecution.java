@@ -57,7 +57,7 @@ public class GroovyExecution
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
 		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
-		binding.setVariable("eclipseUI"       , eclipseUI.class);
+		binding.setVariable("eclipseUI"       , EclipseUI.class);
 		binding.setVariable("images"          , images.class);
 		binding.setVariable("colors"          , colors.class);
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
