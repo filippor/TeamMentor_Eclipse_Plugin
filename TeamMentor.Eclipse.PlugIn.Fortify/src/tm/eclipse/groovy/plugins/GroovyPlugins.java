@@ -1,6 +1,6 @@
 package tm.eclipse.groovy.plugins;
 
-import java.io.File;
+//import java.io.File;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
@@ -35,11 +35,11 @@ public class GroovyPlugins
 		}
 		return null;
 	}
-	public IPath get_FilesInPlugin()
+/*	public File[] get_FilesInPlugin()
 	{
 		File file = get_PluginBaseFolderPath().toFile();
-		return null;
-	}
+		return file.listFiles();		
+	}*/
 	public IPath get_PluginBaseFolderPath()
 	{
 		return pluginResources.get_Path_To_Resource_in_TempFolder("TM_Plugins");							  

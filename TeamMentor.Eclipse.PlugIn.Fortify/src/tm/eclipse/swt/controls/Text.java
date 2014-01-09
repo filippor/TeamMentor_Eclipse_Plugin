@@ -44,12 +44,17 @@ public class Text extends org.eclipse.swt.widgets.Text
 	{
 		return add_Text(target, SWT.BORDER, text);
 	}
+	public static Text add_Text_MultiLine(final Composite target, String text)
+	{
+		return add_Text(target, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL, text);
+	}
+	
 	public static Text add_Text_Search(final Composite target)
 	{
 		return add_Text(target, SWT.SEARCH | SWT.ICON_SEARCH | SWT.CANCEL | SWT.BORDER);
 	}	
 	public Display 			 display;
-public ControlDecoration controlDecoration;
+    public ControlDecoration controlDecoration;
 	public Text(Composite parent, int style) 
 	{		
 		super(parent, style);

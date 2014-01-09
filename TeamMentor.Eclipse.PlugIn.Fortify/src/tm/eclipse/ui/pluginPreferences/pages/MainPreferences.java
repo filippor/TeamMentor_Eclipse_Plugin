@@ -1,6 +1,7 @@
 package tm.eclipse.ui.pluginPreferences.pages;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
@@ -10,9 +11,9 @@ import org.eclipse.jface.preference.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -49,20 +50,29 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 	public Button			 authenticate_Button;
 	public Composite 	     parent;
 	public AuthFieldsStatus  setAuthFieldsStatus;
-	public AuthButtonStatus  setAuthButtonStatus;
+	public AuthButtonStatus  setAuthButtonStatus;	
+	public ParseSSOTokenUrl  parseSSOTokenUrl;	
 	
-	public class loginIntoTM_UsingPassword implements Listener
+	public class loginIntoTM_UsingPasswordOrSSo implements Listener
 	{
 		public void handleEvent(Event event) 
-		{	
-			result.setText("Logging in using password...");
+		{				
 			MainPreferences.this.parent.layout(true);
-			final String username = username_Text.getText();
-			final String password = password_Text.getText();
+			
+			final String  username 			 = username_Text.getText().trim();
+			final String  password			 = password_Text.getText().trim();
+			final String  ssoToken			 = ssoToken_Text.getText().trim();
+			final String  server  			 = server_FieldEditor.getStringValue().trim();
+			final boolean loginUsingPassword = ssoToken.equals("");
+			
+			result.setText("Logging in using " + ((loginUsingPassword) ? "Password" : "SSO Token "));
+			
 			new Thread(new Runnable() { public void run() 
 				{
-					final String sessionId = TeamMentorAPI.loginIntoTeamMentor(username, password);
-					
+					final String sessionId = (loginUsingPassword) 
+													? TeamMentorAPI.loginIntoTeamMentor(server, username, password)
+													: TeamMentorAPI.loginIntoTeamMentor_SSOToken(server,username, ssoToken);
+										
 					UIThreadRunnable.syncExec(new VoidResult() { public void run() 
 						{
 							if (sessionId == null || sessionId.equals("") || sessionId.equals(Consts_TM.EMPTY_GUID))
@@ -74,21 +84,19 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 							{
 								logMessage("Login Ok");
 								result.setText(Consts_TM.MSG_LOGIN_OK);
-								TM_Preferences.setSessionId(sessionId);
-								updateApplyButton();
-								loginToken.load();
-							}	
+							}
+							TM_Preferences.setServer(server);
+							TM_Preferences.setSessionId(sessionId);
+							updateApplyButton();
+							loginToken.load();		
+							
+							TeamMentorAPI.setBrowserCookieToTMSession();
+							
 						}});							
 				}}).start();
 		}
 	}
-	/*public class UpdateSessionId
-	{
-		public UpdateSession(String sessionId)
-		{
-			
-		}
-	}*/
+
 	public class AuthFieldsStatus implements ModifyListener
 	{		
 		@Override
@@ -112,23 +120,55 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 			{		
 				password_Label.setForeground(colors.gray());
 				or_Label.setForeground(colors.gray());
-			}			
+			}	
 		}
 	}
 	public class AuthButtonStatus implements ModifyListener 
 	{
 		@Override
 		public void modifyText(ModifyEvent e) 
-		{
-			authenticate_Button.disable(); 
+		{					
+			if(server_FieldEditor.getStringValue().equals("") || username_Text.getText().equals("") || 
+			   password_Text.getText().equals("") && ssoToken_Text.getText().equals("")) 
+			{
+				authenticate_Button.disable();
+			}
+			else
+			{
+				authenticate_Button.enable();
+			}
 		}
 	}
-	public class loginIntoTM_UsingSSO implements Listener
+	
+	public class ParseSSOTokenUrl implements ModifyListener 
 	{
-		public void handleEvent(Event event) 
-		{	
-			result.setText("Logging in using SSO...");
-			//Map<String,String> splitedQuery = splitQuery(new URL("https://teammentor-33-ci.azurewebsites.net/_customizations/sso.aspx?username=A_New_123@user.com&requestToken=07e3e666019a9148d72464498719f57e");
+		@Override
+		public void modifyText(ModifyEvent e) 
+		{					
+			String ssoToken = ssoToken_Text.getText();
+
+			URL url;
+			try 
+			{
+				url = new URL(ssoToken);
+				
+				 Map<String, String> query = splitQuery(url);
+				 if (query.containsKey("username") && query.containsKey("requestToken"))
+				 {
+					 String host 		 = String.format("%s://%s", url.getProtocol(), url.getHost());
+					 String username     = query.get("username");
+					 String requestToken = query.get("requestToken");
+					 
+					 server_FieldEditor.setStringValue(host);
+					 username_Text.setText(username);
+					 ssoToken_Text.setText(requestToken);
+				 }
+			} 
+			catch (Exception ex) 
+			{
+				//not an url
+			}
+			
 		}
 	}
 	
@@ -138,45 +178,24 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setAuthFieldsStatus = new AuthFieldsStatus();
 		setAuthButtonStatus = new AuthButtonStatus();
-		
-		//setDescription("\nPlease use the fields below to configure the TeamMentor behaviour,server and account\n\n");
-		
-		//https://teammentor-33-ci.azurewebsites.net/_customizations/sso.aspx?username=A_New_123@user.com&requestToken=07e3e666019a9148d72464498719f57e
+		parseSSOTokenUrl    = new ParseSSOTokenUrl();
 	}
 	public void addGroup_TeamMentorServer()
-	{
-		//parent.setLayout(new GridLayout(2, false));	
-		String title = "To access password protected instances of TeamMentor you need to provide a valid Login Token.\n\n" + 
+	{	
+		String title = "To access password protected instances of TeamMentor you need to have a valid Session ID.\n\n" + 
 				             "Please use the fields below to set the required options:";
-		
-		/*new Label(parent,SWT.BORDER).setText(serverTitle);
-		
-		
-		Group server_Config = new Group(parent, SWT.NONE);		
-		server_Config.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));*/
+	
 		Group group = addGroup(title);
-		
 		
 		server_FieldEditor = new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SERVER		 , "TeamMentor &Server:", group);
 		addField(server_FieldEditor);
 		
-		
+		server_FieldEditor.getTextControl(group).addModifyListener(setAuthButtonStatus);
 		
 	}
 	public void addGroup_LoginAndGetToken()
 	{
-		/*String groupTitle = "To get a token You can use the form below to login into the current TeamMentor server (set above)";
-		new Label(parent,SWT.BORDER).setText(groupTitle);
-		
-		
-		Group group = new Group(parent, SWT.NONE);
-		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
-		gridData.verticalAlignment = 20;
-		group.setLayoutData(gridData);
-		
-		group.setLayout(new GridLayout(2, false));	*/
-		
-		String groupTitle = "To get a Session Token you have to provide a password or a token";
+		String groupTitle = "Please provide provide a valid username and either a password or SSO token";
 		Group group  = addGroup(groupTitle);	
 			
 		//Username
@@ -205,80 +224,39 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 				
 		
 		new Label(group,SWT.BORDER);
-//		final Label result  = new Label(group, SWT.WRAP);
-		authenticate_Button = new Button(group, SWT.NONE);		
-		authenticate_Button.setText("Authenticate");
-		
+		tm.eclipse.swt.controls.Composite composite = new tm.eclipse.swt.controls.Composite(group);
+		composite.set.layout_Grid(2);
+		authenticate_Button = composite.add.button("Authenticate");
+		result = composite.add.label("",SWT.NONE);
+		composite.layout(true);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
+		
 		//Events
 		password_Text.addModifyListener(setAuthFieldsStatus);
 		ssoToken_Text.addModifyListener(setAuthFieldsStatus);
-		authenticate_Button.addListener(SWT.Selection, new loginIntoTM_UsingPassword());
 		
-		/*login_Button.addListener(SWT.Selection, new Listener()		
-			  	{	
-					public void handleEvent(Event event) 
-					{	
-						result.setText("aLogging in...");
-						MainPreferences.this.parent.layout(true);
-						final String username = username_Text.getText();
-						final String password = password_Text.getText();
-						new Thread(new Runnable() { public void run() 
-							{
-								final String sessionId = TeamMentorAPI.loginIntoTeamMentor(username, password);
-								UIThreadRunnable.syncExec(new VoidResult() { public void run() 
-									{
-										if (sessionId == null || sessionId.equals("") || sessionId.equals(Consts_TM.EMPTY_GUID))
-										{
-											logMessage("Login failed");									
-											result.setText(Consts_TM.MSG_LOGIN_FAILED);
-										}
-										else
-										{
-											logMessage("Login Ok");
-											result.setText(Consts_TM.MSG_LOGIN_OK);
-											TM_Preferences.setSessionId(sessionId);
-											updateApplyButton();
-											loginToken.load();
-										}	
-									}});							
-							}}).start();
-					}
-				});*/
-	}
-	/*public void addGroup_SSO()
-	{
-		//String ssoTitle = "If you have access to a SSO token (Sign-sign on), please use the form below";
-		String ssoTitle =  "Option 2) login using a SSO Token (note you can paste the entire Login URL or just the SSO GUID)";
-		Group sso_Group  = addGroup(ssoTitle);	
-					
-		new Label(sso_Group,SWT.BORDER).setText("SSO Token");
-		final Text sso_Token = new Text(sso_Group,SWT.BORDER);
-		sso_Token.setText("");
-		sso_Token.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		username_Text.addModifyListener(setAuthButtonStatus);
+		password_Text.addModifyListener(setAuthButtonStatus);
+		ssoToken_Text.addModifyListener(setAuthButtonStatus);
 		
-		new Label(sso_Group,SWT.BORDER);
-		Button sso_Button = new Button(sso_Group, SWT.NONE);		
-		sso_Button.setText("Get Login Token (using SSO)");
-		sso_Button.addListener(SWT.Selection, new loginIntoTM_UsingSSO());
+		ssoToken_Text.addModifyListener(parseSSOTokenUrl); 
 		
-		//new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL)
-		//	.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-	}*/
+		authenticate_Button.addListener(SWT.Selection, new loginIntoTM_UsingPasswordOrSSo());
+		
+		new AuthButtonStatus().modifyText(null);
+		
 	
+	}
+		
 	public void addGroupCurrentSessionId()
 	{
-		String title = "For reference, here is your current SessionID";
+		String title = "For reference, here is your current Session ID:";
 		Group group  = addGroup(title);	
 		
 		loginToken = new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID	 , "Session ID:"		, group);
 		loginToken.setEnabled(false, group);
 		addField(loginToken);
-		/*new Label(group,SWT.BORDER).setText("Login Status:");
-		result = new Label(group,SWT.BORDER);
-		result.setText("");
-		result.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)); // needed or the setText below will not show
-		*/
 	}
 	
 	public Group addGroup(String title)
@@ -292,57 +270,32 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 	public void createFieldEditors() 
 	{	
 		parent = getFieldEditorParent();
-
 		
 		addGroup_TeamMentorServer();
 		addGroup_LoginAndGetToken();
-	//	addGroup_SSO();
 		addGroupCurrentSessionId();
-//		new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL)
-//			 .setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-	
-		// Login form
-		
-		
-		
-		//new Label(group,SWT.BORDER);
-
-		// SSO form
-		
-			
-		
-		// config options
-			
-		//new Label(parent,SWT.BORDER).setText("Misc Plugin Config Options");
-		
-/*		Group group_Config = new Group(parent, SWT.NONE);		
-		group_Config.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		
-		addField(new BooleanFieldEditor(PreferenceInitializer.P_OPEN_ARTICLE_NEW_WINDOW	 , "&Open TeamMentor article in new window"	, group_Config));		
-		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_LOAD_PLUGINS	 , "&Load Plugins on Startup"				, group_Config));		
-		addField(new BooleanFieldEditor(PreferenceInitializer.P_TEAMMENTOR_ADVANCED_MODE , "&Show Advanced Mode Features"			, group_Config));
-*/
-		
-		
-		
 		
 	}
 
 	public void logMessage(String message)
-	{
-		//String consoleName = "TeamMentor Scripts"; 
-		Console console = Startup.eclipseApi.console;
-		//console.new_MessageConsole(consoleName);
-		//console.get(consoleName).clearConsole();			// use to clear
+	{ 
+		Console console = Startup.eclipseApi.console;	
 		console.write(message);
-
 	}
 	
 
 	public void init(IWorkbench workbench) { }
 
+	protected void setControl(Control newControl)
+	{
+		super.setControl(newControl);
+	}
+	protected Control createContents(Composite parent)
+	{
+		return super.createContents(parent);
+	}
 	
-	//URL util
+	//URL util (move to another class)
 	public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
 	    Map<String, String> query_pairs = new LinkedHashMap<String, String>();
 	    String query = url.getQuery();

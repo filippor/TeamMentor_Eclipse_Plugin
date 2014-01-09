@@ -9,6 +9,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -18,7 +20,11 @@ import org.eclipse.ui.PlatformUI;
 
 
 
+
+
+
 import static tm.eclipse.helpers.log.*;
+import tm.eclipse.swt.Mouse;
 //import tm.eclipse.groovy.TestGroovy;
 //import tm.eclipse.groovy.Tree_ExtensionMethods;
 import tm.eclipse.ui.EclipsePartEvents;
@@ -41,6 +47,8 @@ public class EclipseAPI
 	public Menus			menus;
 	public Panels		    panelFactory;
 	public Views			views;
+	public Editors		    editors;
+	public Mouse			mouse;
 	public boolean			ready;
 	
 	/*static 
@@ -57,9 +65,11 @@ public class EclipseAPI
 				extraGroovyJars = new ArrayList<String>();
 				 
 				captureEclipseObjects();
+				mouse 		 = new Mouse(display);
 				menus  		 = new Menus(workbench);
 				panelFactory = new Panels(workbench);		
-				views  		 = new Views(workbench);
+				views  		 = new Views(EclipseAPI.this);
+				editors  	 = new Editors(EclipseAPI.this);
 				console 	 = new Console();
 				setEclipsePartEvents();
 				ready = true;
@@ -134,6 +144,14 @@ public class EclipseAPI
 	{
 		return "Pong ...";
 	}
-		
+	
+	public EclipseAPI syncExec(final Runnable runnable)
+	{
+		UIThreadRunnable.syncExec(display, new VoidResult() { public void run()	
+			{
+				runnable.run();
+			}});
+		return this;
+	}
 }
 

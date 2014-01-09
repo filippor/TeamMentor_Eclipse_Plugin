@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.Composite;
+//import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 //import org.eclipse.swt.widgets.*;
@@ -17,23 +17,27 @@ import org.eclipse.ui.part.ViewPart;
 import tm.eclipse.swt.Add_Composite;
 import tm.eclipse.swt.Get_Composite;
 import tm.eclipse.swt.Set_Composite;
+import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.*;
 
 public class Eclipse_Panel extends ViewPart 
 {
 	public static final String ID = "tm.eclipse.ui.views.Eclipse_Panel";
 	public Composite composite;
+	public Mouse 					mouse;
 	public Add_Composite<Composite> add;
 	public Get_Composite<Composite> get;
 	public Set_Composite<Composite> set;
 	
 	//required implementations
-	public void createPartControl(Composite parent) 
+	public void createPartControl(org.eclipse.swt.widgets.Composite parent) 
 	{
-		composite  = parent;
-		add = new Add_Composite<Composite>(parent);
-		set = new Set_Composite<Composite>(parent);
-		get = new Get_Composite<Composite>(parent);
+		composite  = new Composite(parent);
+		 
+		mouse = composite.mouse;
+		add   = composite.add;
+		set   = composite.set;
+		get   = composite.get;
 	}
 	public void setFocus() 
 	{
@@ -49,7 +53,7 @@ public class Eclipse_Panel extends ViewPart
 	}
 	
 	//helper methods
-	public Browser_Ex add_Browser()
+	public Browser add_Browser()
 	{
 		return add_WebBrowser();	    	    
 	}	
@@ -81,17 +85,17 @@ public class Eclipse_Panel extends ViewPart
 	{
 		return Text.add_Text_Search(composite);	    	    
 	}
-	public Tree_Ex 	  add_Tree()
+	public Tree 	  add_Tree()
 	{	
-		return Tree_Ex.add_Tree(composite);	  			    	   
+		return Tree.add_Tree(composite);	  			    	   
 	}
-	public Tree_Ex 	  add_Tree(int style)
+	public Tree 	  add_Tree(int style)
 	{	
-		return Tree_Ex.add_Tree(composite, style);	  			    	   
+		return Tree.add_Tree(composite, style);	  			    	   
 	}
-	public Browser_Ex add_WebBrowser()
+	public Browser add_WebBrowser()
 	{
-		return Browser_Ex.add_Browser(composite, this);			    	   
+		return Browser.add_Browser(composite, this);			    	   
 	}
 	
 	

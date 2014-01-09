@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.console.*;
 
 import tm.eclipse.Plugin_Config;

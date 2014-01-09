@@ -1,7 +1,6 @@
 package tm.eclipse.swt.controls;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
@@ -11,29 +10,29 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.eclipse.ui.part.ViewPart;
 
 
-public class Browser_Ex extends Browser
+public class Browser extends org.eclipse.swt.browser.Browser
 {			
-	public Display 		 _display;
-	public SWTBotBrowser swtBotBrowser;
-	public Control_Ex    control;
+	public Display 		 display;
+	public Composite     parent;
 	public ViewPart		 viewPart;
+	public SWTBotBrowser swtBotBrowser;
 	
-	public Browser_Ex(Composite parent, int style) 
+	public Browser(Composite parent, int style) 
 	{				
 		super(parent, style);
+		display      = parent.getDisplay();
+		this.parent   = parent;
 		swtBotBrowser = new SWTBotBrowser(this);
-		_display      = parent.getDisplay();
-		control       = new Control_Ex(this); 
 	} 
-	public static Browser_Ex add_Browser(final Composite target)
+	public static Browser add_Browser(final Composite target)
 	{
 		return add_Browser(target, null);
 	}
-	public static Browser_Ex add_Browser(final Composite target, final ViewPart _viewPart)
+	public static Browser add_Browser(final Composite target, final ViewPart _viewPart)
 	{	
-		return UIThreadRunnable.syncExec(target.getDisplay(),new Result<Browser_Ex>() { public Browser_Ex run() 
+		return UIThreadRunnable.syncExec(target.getDisplay(),new Result<Browser>() { public Browser run() 
 					{
-						Browser_Ex browser = new Browser_Ex(target,SWT.None);
+						Browser browser = new Browser(target,SWT.None);
 						browser.viewPart   = _viewPart;
 						target.layout(true);
 						return browser;
@@ -53,7 +52,7 @@ public class Browser_Ex extends Browser
 		// the problem was calling super.setText(text) inside the IThreadRunnable.syncExec
 		if(SWTUtils.isUIThread())
 			return super.getText();
-		return UIThreadRunnable.syncExec(_display,new Result<String>() { public String run() 
+		return UIThreadRunnable.syncExec(display,new Result<String>() { public String run() 
 									{
 										return getText();  		
 									}});		
@@ -61,12 +60,12 @@ public class Browser_Ex extends Browser
 
 	public boolean setText(final String text)
 	{			
-		return UIThreadRunnable.syncExec(_display,new Result<Boolean>() { public Boolean run() 
+		return UIThreadRunnable.syncExec(display,new Result<Boolean>() { public Boolean run() 
 									{
-										return Browser_Ex.super.setText(text);
+										return Browser.super.setText(text);
 									}});		
 	}
-	public Browser_Ex open(String url)
+	public Browser open(String url)
 	{
 		swtBotBrowser.setUrl(url);
 		swtBotBrowser.waitForPageLoaded();

@@ -4,21 +4,26 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
+import tm.eclipse.swt.controls.Composite;
+import tm.lang.Reflection;
+
 public class  Set_Composite<T extends Composite>  
 {	
 	public T target;
 	public Display   display;
+	public Reflection reflection;
 	
 	public Set_Composite(T target)
 	{
 		this.target  = target;
 		this.display = target.getDisplay();
+		this.reflection = new Reflection(this);
 	}
 	
 	public T layout(final Layout layout)
@@ -77,6 +82,7 @@ public class  Set_Composite<T extends Composite>
 		}});	
 		return target;
 	}
+	
 	
 	/*public T rowLayout()
 	{

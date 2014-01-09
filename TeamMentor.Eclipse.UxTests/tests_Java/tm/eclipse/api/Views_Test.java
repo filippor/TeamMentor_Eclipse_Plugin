@@ -34,15 +34,9 @@ public class Views_Test
 	public Views_Test()
 	{
 		eclipseApi = Startup.eclipseApi;
-		views = new Views(eclipseApi.workbench);
+		views = new Views(eclipseApi);
 		assertNotNull(eclipseApi);
-		syncExec(new VoidResult() { @Override public void run() 		
-			{ 
-				assertNotNull(views);
-				assertNotNull(views.activePage);
-				assertNotNull(views.workbenchWindow);
-				assertNotNull(views.workbench);	
-			}});
+		assertNotNull(views);		
 	}
 	
 	@Test 
@@ -50,7 +44,7 @@ public class Views_Test
 	{		
 		syncExec(new VoidResult() { public void run() 		
 			{ 
-				List<IViewReference> viewReferences = views.get_Views_References();		
+				List<IViewReference> viewReferences = views.references();		
 				assertNotNull(viewReferences);
 				if(viewReferences.size() >0)
 				{
@@ -70,22 +64,22 @@ public class Views_Test
 	{
 		syncExec(new VoidResult() { @Override public void run() 		
 			{ 
-				List<IViewReference> viewReferences = views.get_Views_References();
+				List<IViewReference> viewReferences = views.references();
 				assertNotNull(viewReferences);
 				if (viewReferences.size() >0)
 				{
 					for(IViewReference viewReference : viewReferences)
 					{
 						System.out.println("id:  " + viewReference.getId());
-						IViewReference getViewReference = views.get_View_Reference(viewReference.getId());
+						IViewReference getViewReference = views.reference(viewReference.getId());
 						assertNotNull(getViewReference);
 					}
 				}
 				else
 				{
-					IViewPart viewPart = views.open_View(SimpleEditor.ID);
+					IViewPart viewPart = views.open(SimpleEditor.ID);
 					assertNotNull(viewPart);
-					viewReferences = views.get_Views_References();
+					viewReferences = views.references();
 					assertEquals(1, viewReferences.size());
 					assertEquals(viewReferences.get(0).getId(), SimpleEditor.ID);
 					
@@ -106,17 +100,17 @@ public class Views_Test
 		//	{
 		
 		//open an close a view from this plugin
-		IViewPart viewPart = views.open_View(SimpleEditor.ID);
+		IViewPart viewPart = views.open(SimpleEditor.ID);
 		assertNotNull(viewPart);				
 		
 		assertIsClass(viewPart, SimpleEditor.class);
-		assertNotNull(views.get_View_Reference(SimpleEditor.ID));
+		assertNotNull(views.reference(SimpleEditor.ID));
 		Startup.eclipseApi.views.close(viewPart);
-		assertNull(views.get_View_Reference(SimpleEditor.ID));
+		assertNull(views.reference(SimpleEditor.ID));
 		//				
 			
 		//open a non existing view
-		IViewPart noView = views.open_View("AAAAAAA");
+		IViewPart noView = views.open("AAAAAAA");
 		assertNull(noView);
 		//	}});
 	}
@@ -125,11 +119,11 @@ public class Views_Test
 	public void closeAboutWindow()
 	{
 		EclipseAPI eclipseAPI = Startup.eclipseApi;
-		IViewReference viewReference = eclipseAPI.views.get_View_Reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
+		IViewReference viewReference = eclipseAPI.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 		if (viewReference != null)
 		{
 			eclipseAPI.views.close(viewReference);
-			viewReference = eclipseAPI.views.get_View_Reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
+			viewReference = eclipseAPI.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 			assertNull(viewReference);
 		}
 	}

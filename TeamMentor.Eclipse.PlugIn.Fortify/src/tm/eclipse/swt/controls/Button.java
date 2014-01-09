@@ -45,22 +45,26 @@ public class Button extends org.eclipse.swt.widgets.Button
 		button.setText(text);
 		return button;
 	}
-
 	public static Button add_Button(final Composite target, String text)
 	{
 		return add_Button(target, SWT.None, text);
+	}
+
+	public static Button add_CheckBox(final Composite target)
+	{
+		return add_Button(target, SWT.CHECK);
 	}	
-		
-	public Display 		_display;
-public SWTBotButton swtBotButton;
+	
+	public Composite    parent;
+	public Display 		display;
 	public Reflection 	reflection;
 	
 	public Button(Composite parent, int style) 
 	{		
 		super(parent, style);
-		swtBotButton = new SWTBotButton(this);
-		_display = parent.getDisplay();			// we need to store this in case there are multiple ones
-		reflection = new Reflection(this);
+		this.parent = parent;
+		display     = parent.getDisplay();			// we need to store this in case there are multiple ones
+		reflection  = new Reflection(this);
 	}	
 	
 	protected void checkSubclass()
@@ -89,14 +93,14 @@ public SWTBotButton swtBotButton;
 	
 	public Boolean enabled()
 	{
-		return UIThreadRunnable.syncExec(_display,new Result<Boolean>() { public Boolean run() 
+		return UIThreadRunnable.syncExec(display,new Result<Boolean>() { public Boolean run() 
 		{
 			return Button.super.isEnabled();			
 		}});
 	}
 	public Button enabled(final boolean value)
 	{
-		UIThreadRunnable.syncExec(_display,new VoidResult() { public void run() 
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
 		{
 			Button.super.setEnabled(value);			
 		}});
@@ -104,7 +108,7 @@ public SWTBotButton swtBotButton;
 	}
 	public String getText()
 	{
-		return UIThreadRunnable.syncExec(_display,new Result<String>() { public String run() 
+		return UIThreadRunnable.syncExec(display,new Result<String>() { public String run() 
 		{
 			return Button.super.getText();			
 		}});		
@@ -112,7 +116,7 @@ public SWTBotButton swtBotButton;
 	public Button onClick(final Runnable runnable)
 	{
 		if (runnable != null)
-			UIThreadRunnable.syncExec(_display,new VoidResult() { public void run() 
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
 				{
 					Button.this.addListener(SWT.Selection, new Listener() { public void handleEvent(Event event) 
 					{
@@ -122,17 +126,22 @@ public SWTBotButton swtBotButton;
 	
 		return this; 
 	}
-	public void   setImage(final Image image)
+	public Composite parent()
 	{
-		UIThreadRunnable.syncExec(_display,new VoidResult() { public void run() 
+		return parent;
+	}
+	public Button image(final Image image)
+	{
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
 		{
 			Button.super.setImage(image);			
 		}});
-	}
+		return this;
+	}	
 	public void   setText(final String text)
 	{
 		if (text!=null)
-			UIThreadRunnable.syncExec(_display,new VoidResult() { public void run() 
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
 			{
 				Button.super.setText(text);
 				Button.this.getParent().layout(true);  // need to see if there is a better to way to refresh the contents				
@@ -146,5 +155,22 @@ public SWTBotButton swtBotButton;
 	{
 		setText(text);
 		return this;
+	}
+	
+	public Button select()
+	{
+		return select(true);
+	}
+	public Button select(final boolean selected)
+	{
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+		{
+			Button.this.setSelection(selected);			
+		}});
+		return this;
+	}
+	public Button unselect()
+	{
+		return select(false);
 	}
 }

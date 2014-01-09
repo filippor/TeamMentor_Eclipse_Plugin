@@ -5,16 +5,20 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
+import tm.eclipse.groovy.plugins.GroovyPlugins;
+import tm.eclipse.helpers.EclipseUI;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
-import tm.eclipse.ui.Startup;
-import tm.eclipse.ui.views.SimpleEditor;
 
-public class OpenScriptEditor implements IHandler 
-{
+public class InvokePropertiesTests implements IHandler {
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException 
 	{				
-		return Startup.eclipseApi.views.open(SimpleEditor.ID);					
+		GroovyPlugins groovyPlugins = new GroovyPlugins();
+		String file = "TM_Plugins/Views/ExecutePreferencesJUnitTests.groovy";
+
+		groovyPlugins.execute_PluginScript(file);
+		return null;		
 	}
 
 	@Override public boolean isEnabled()  { return TM_Preferences.showAdvancedMode(); }

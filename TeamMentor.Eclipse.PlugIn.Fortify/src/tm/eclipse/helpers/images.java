@@ -12,6 +12,10 @@ public class images
 {
 	public static ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 	
+	public static List<String> list()
+	{
+		return names();
+	}
 	public static List<String> names()
 	{		
 		List<String> names = new ArrayList<String>();

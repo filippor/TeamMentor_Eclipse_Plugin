@@ -2,6 +2,9 @@ package tm.lang;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Reflection 
 {
@@ -54,4 +57,32 @@ public class Reflection
 		return reflection;
 	}
 	
+	public List<Method> methods()
+	{
+		return Arrays.asList(clazz.getMethods());
+	}	
+	public List<String> methods_Names()
+	{
+		return methods_Names(false);
+	}
+	public List<String> methods_Names(boolean onlyShowDeclared)
+	{
+		return methods_Names(onlyShowDeclared ? methods_Declared() : methods());
+	}
+	public List<String> methods_Names(List<Method> methods)
+	{
+		List<String> names = new ArrayList<String>();
+		for(Method method : methods)			
+			names.add(method.getName());
+		return names;
+	}
+	public List<Method> methods_Declared()
+	{
+		return Arrays.asList(clazz.getDeclaredMethods());
+	}
+	public Reflection inspect()
+	{
+		groovy.inspect.swingui.ObjectBrowser.inspect(target);
+		return this;
+	}
 }

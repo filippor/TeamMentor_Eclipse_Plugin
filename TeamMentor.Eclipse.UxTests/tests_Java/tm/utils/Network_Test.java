@@ -2,9 +2,7 @@ package tm.utils;
 
 import static org.junit.Assert.*;
 import static tm.utils.Network.*;
-
 import org.junit.Test;
-
 import tm.eclipse.Plugin_Config;
 
 public class Network_Test 

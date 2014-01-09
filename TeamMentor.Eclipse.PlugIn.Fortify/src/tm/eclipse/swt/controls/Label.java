@@ -1,6 +1,7 @@
 package tm.eclipse.swt.controls;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
@@ -41,6 +42,16 @@ public class Label extends org.eclipse.swt.widgets.Label
 		super(parent, style);
 		this.display = parent.getDisplay();			// we need to store this in case there are multiple ones
 		this.target  = parent;		
+	}
+	
+	public Label image(final Image image)
+	{
+		if (image != null)
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+			{
+				Label.super.setImage(image);					
+			}});
+		return this;
 	}
 	@Override
 	public void setText(final String text)

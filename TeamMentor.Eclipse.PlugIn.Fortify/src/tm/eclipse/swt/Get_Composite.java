@@ -1,10 +1,10 @@
 package tm.eclipse.swt;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
+import tm.eclipse.swt.controls.Composite;
 
 public class Get_Composite<T extends Composite> 
 {	

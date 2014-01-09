@@ -2,9 +2,7 @@ package tm.eclipse.groovy.plugins;
 
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
-import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +61,7 @@ public class GroovyExecution
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
 		binding.setVariable("groovy"          , GroovyExecution.class);
 		binding.setVariable("log"             , tm.eclipse.helpers.log.class);		
-		binding.setVariable("form"            , tm.eclipse.swt.controls.Form_Ex.class);
+		binding.setVariable("form"            , tm.eclipse.swt.controls.extra.Form.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{

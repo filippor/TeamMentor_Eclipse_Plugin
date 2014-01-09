@@ -40,12 +40,14 @@
            id="tm.eclipse.ui.pluginPreferences"
            name="TeamMentor Preferences">
      </page>
+     <!--
      <page
            category="tm.eclipse.ui.pluginPreferences"
            class="tm.eclipse.ui.pluginPreferences.pages.LoginToTM"
            id="tm.eclipse.ui.PluginPreferences.LoginToTM"
            name="Login to TeamMentor">
      </page>
+     -->
      <!--
      <page
            category="tm.eclipse.ui.PluginPreferences"
@@ -55,9 +57,9 @@
      </page>
      -->
      <page
-           category="tm.eclipse.ui.PluginPreferences"
-           class="tm.eclipse.ui.pluginPreferences.EditAboutPage"
-           id="tm.eclipse.ui.pluginPreferences.EditAboutPage"
+           category="tm.eclipse.ui.pluginPreferences"
+           class="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
+           id="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
            name="Edit About Page">
      </page>
      <page
@@ -171,6 +173,14 @@
                 <visibleWhen
                       checkEnabled="true">
                 </visibleWhen>
+                <command
+                      commandId="tm.eclipse.commands.InvokePropertiesTests"
+                      label="Invoke Properties"
+                      style="push">
+                      <visibleWhen
+                         checkEnabled="true">
+                      </visibleWhen>
+                </command>
              </menu>
           </menu>
        </menuContribution>
@@ -198,6 +208,11 @@
              defaultHandler="tm.eclipse.handlers.OpenScriptEditor"
              id="tm.eclipse.commands.OpenScriptEditor"
              name="Open TeamMentor Script Editor">
+       </command>
+       <command
+             defaultHandler="tm.eclipse.handlers.InvokePropertiesTests"
+             id="tm.eclipse.commands.InvokePropertiesTests"
+             name="Invoke TM Properties Tests">
        </command>
     </extension>
     <!--

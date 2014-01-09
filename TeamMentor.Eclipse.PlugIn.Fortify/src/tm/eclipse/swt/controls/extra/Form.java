@@ -1,4 +1,4 @@
-package tm.eclipse.swt.controls;
+package tm.eclipse.swt.controls.extra;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,27 +7,44 @@ import java.util.concurrent.Semaphore;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+//import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.ArrayResult;
 
-public class Form_Ex 
+import tm.eclipse.swt.controls.Browser;
+import tm.eclipse.swt.controls.Button;
+import tm.eclipse.swt.controls.Shell;
+import tm.eclipse.swt.controls.Text;
+import tm.eclipse.swt.controls.Tree;
+import tm.lang.Reflection;
+
+public class Form 
 {
 	public Display display;
 	public Shell   shell;
 	public Thread  thread_toClose;
+	public Reflection reflection;
 	
-	public Form_Ex()
+	public Form()
 	{
-		display = tm.eclipse.swt.display.current();
+		display = calculateDisplay();
 		display.syncExec(new Runnable() { public void run() 
 					{
 						shell = new Shell(display);		
 					}});
-		
+		reflection = new Reflection(this);
 	}
 	
-	public Form_Ex show()
+	public static Display calculateDisplay() 
+	{
+		//SWTUtils.display() does it a bit different, but the version below will create a display when it doesn't find one
+		if (Display.getCurrent() != null)
+			return Display.getCurrent() ;
+		if (Display.getDefault() != null)
+			return Display.getDefault() ;
+		return new Display ();
+	}
+	public Form show()
 	{
 		display.syncExec(new Runnable() { public void run() 
 					{
@@ -35,7 +52,7 @@ public class Form_Ex
 					}});
 		return this;
 	}
-	public Form_Ex layout_Fill()
+	public Form layout_Fill()
 	{
 		display.syncExec(new Runnable() { public void run() 
 					{
@@ -45,7 +62,7 @@ public class Form_Ex
 	}
 	
 	
-	public Form_Ex waitForClose()
+	public Form waitForClose()
 	{
 		display.syncExec(new Runnable() { public void run() 
 					{
@@ -58,7 +75,7 @@ public class Form_Ex
 		return this;
 	}
 	
-	public Form_Ex close()
+	public Form close()
 	{
 		display.syncExec(new Runnable() { public void run() 
 					{
@@ -67,11 +84,11 @@ public class Form_Ex
 		return this;
 	}
 		
-	public Form_Ex close_InNSeconds(final int seconds)
+	public Form close_InSeconds(final int seconds)
 	{
 		return close_InMiliSeconds(seconds * 1000);
 	}
-	public Form_Ex close_InMiliSeconds(final int miliSeconds)
+	public Form close_InMiliSeconds(final int miliSeconds)
 	{
 		thread_toClose = new Thread(new Runnable() { public void run()
 		{		
@@ -110,11 +127,11 @@ public class Form_Ex
 				return clazz.cast(control);
 		return null;		
 	}
-	public Form_Ex 		wait_Seconds(final int seconds)
+	public Form 		wait_Seconds(final int seconds)
 	{
 		return wait_MiliSeconds(seconds * 1000);
 	}
-	public Form_Ex 		wait_MiliSeconds(final int miliSeconds)
+	public Form 		wait_MiliSeconds(final int miliSeconds)
 	{
 		final Semaphore semaphore = new Semaphore(1);
 		Thread thread = new Thread(new Runnable() { public void run()
@@ -150,9 +167,9 @@ public class Form_Ex
 		return this;
 	}
 		
-	public Browser_Ex   add_Browser()
+	public Browser   add_Browser()
 	{
-		return Browser_Ex.add_Browser(this.shell);
+		return Browser.add_Browser(this.shell);
 	}
 	public Button      add_Button()
 	{
@@ -170,12 +187,12 @@ public class Form_Ex
 	{
 		return Text.add_Text_Search(this.shell);
 	}
-	public Tree_Ex      add_Tree()
+	public Tree      add_Tree()
 	{
-		return Tree_Ex.add_Tree(this.shell);
+		return Tree.add_Tree(this.shell);
 	}
 	
-	public Form_Ex refresh()
+	public Form refresh()
 	{
 		display.syncExec(new Runnable() { public void run() 
 					{
@@ -183,9 +200,9 @@ public class Form_Ex
 					}});
 		return this;
 	}
-	public static Form_Ex popupWindow()
+	public static Form popupWindow()
 	{
-		return new Form_Ex().layout_Fill()
+		return new Form().layout_Fill()
 						    .show();
 	}
 }

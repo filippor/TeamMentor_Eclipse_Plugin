@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import groovy.lang.Binding;
 
@@ -58,10 +61,16 @@ public class TeamMentorAPI
 	}
 	public static String loginIntoTM()
 	{		
-		Browser.setCookie("Session=" + TM_Preferences.getSessionId(), TM_Preferences.getServer());
-		String cookie = Browser.getCookie("Session", TM_Preferences.getServer());
-		return TM_Preferences.getSessionId();
+		return setBrowserCookieToTMSession();
 	}	
+	public static String setBrowserCookieToTMSession()
+	{
+		String sessionId = TM_Preferences.getSessionId();
+		String server    = TM_Preferences.getServer();
+		Browser.setCookie("Session=" + sessionId , server);
+		//String cookie = Browser.getCookie("Session", TM_Preferences.getServer());
+		return TM_Preferences.getSessionId();
+	}
 	public static void setServer(String newServer)
 	{
 		TM_Preferences.setServer(newServer);
@@ -151,7 +160,11 @@ public class TeamMentorAPI
 		setServer(TM_Preferences.getServer());
 		setSession(TM_Preferences.getSessionId()); 
 	}
-	public static String loginIntoTeamMentor(String username, String password) 
+	public static String loginIntoTeamMentor(String username, String password)
+	{
+		return loginIntoTeamMentor(TM_Preferences.getServer(),username, password);
+	}
+	public static String loginIntoTeamMentor(String server, String username, String password)
 	{
 		if(Plugin_Config.UNIT_TEST_MODE)
 		{
@@ -168,7 +181,7 @@ public class TeamMentorAPI
 		URL obj;
 		try 
 		{
-			String url = String.format("%s/rest/login/%s/%s", TM_Preferences.getServer() ,username, password);
+			String url = String.format("%s/rest/login/%s/%s", server ,username, password);
 			obj = new URL(url);
 		
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -189,6 +202,46 @@ public class TeamMentorAPI
 		String guid = response.toString().replace("<guid xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">","")
 									     .replace("</guid>","");
 		return guid;
+	}
+	
+	public static String loginIntoTeamMentor_SSOToken(String username, String ssoToken)
+	{
+		return loginIntoTeamMentor_SSOToken(TM_Preferences.getServer(),username, ssoToken);
+	}
+	public static String loginIntoTeamMentor_SSOToken(String server, String username, String ssoToken)
+	{
+		String requestTemplate = "%s/_customizations/sso.aspx?username=%s&requestToken=%s";		
+		//StringBuffer response = new StringBuffer();
+		URL obj;
+		try 
+		{
+			String url = String.format(requestTemplate, server,username, ssoToken);
+			obj = new URL(url);
+		
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setInstanceFollowRedirects(false);
+			int responseCode = con.getResponseCode();
+			//if (responseCode != 200)
+			if (responseCode != 302)	// expect redirect
+				return Consts_TM.EMPTY_GUID;
+			
+			//BufferedReader bufferReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			Map<String, List<String>> headers = con.getHeaderFields();
+			List<String> cookies = headers.get("Set-Cookie");
+			if (cookies != null)
+				for(String cookie : cookies)
+					if (cookie.startsWith("Session"))
+					{
+						cookie = cookie.substring(0, cookie.indexOf(";"));
+						String cookieValue = cookie.substring(cookie.indexOf("=") + 1, cookie.length());
+						return cookieValue;
+					}			
+			//bufferReader.close();
+		} 
+		catch (MalformedURLException e)  { e.printStackTrace(); }
+		catch (IOException e) 		     { e.printStackTrace(); }
+		return Consts_TM.EMPTY_GUID;
 	}
 	
 	public static void mapGroovyBindings(Binding binding) 

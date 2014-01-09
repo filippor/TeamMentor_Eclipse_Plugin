@@ -1,11 +1,9 @@
 package tm.eclipse.api;
 
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
 import org.junit.Test;

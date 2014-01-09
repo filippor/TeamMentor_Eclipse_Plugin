@@ -8,19 +8,25 @@ import org.eclipse.swt.*;
 import org.eclipse.swt.browser.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import tm.eclipse.swt.controls.Browser;
+import tm.eclipse.swt.controls.Label;
+import tm.eclipse.swt.controls.Shell;
+import tm.eclipse.swt.controls.Text;
+import tm.eclipse.swt.controls.Tree;
+import tm.eclipse.swt.controls.extra.Form;
 
 public class Tree_Ex_Test
 {
 	@Test
 	public void tree_Ctor()
 	{
-		Form_Ex form = Form_Ex.popupWindow();
+		Form form = Form.popupWindow();
 				
-		Tree_Ex tree = Tree_Ex.add_Tree(form.shell);
+		Tree tree = Tree.add_Tree(form.shell);
 		
 		assertTrue(form.controls().size() == 1);
 		assertEquals(form.controls().get(0), tree);
@@ -37,15 +43,15 @@ public class Tree_Ex_Test
 	@Test
 	public void add_Node()
 	{
-		Form_Ex form = Form_Ex.popupWindow();
+		Form form = Form.popupWindow();
 				
-		Tree_Ex tree = form.add_Tree();
+		Tree tree = form.add_Tree();
 		assertEquals(0, tree.get_Nodes().size());
 		
 		tree.add_Node("1st Node");
 		tree.add_Node("2nd Node");
 		
-		List<SWTBotTreeItem> nodes = tree.get_Nodes();
+		List<TreeItem> nodes = tree.get_Nodes();
 		assertEquals(2, nodes.size());
 		form.close();
 	}

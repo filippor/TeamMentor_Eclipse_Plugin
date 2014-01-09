@@ -2,23 +2,17 @@ package tm.eclipse.swt.controls;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
-import org.eclipse.swt.*;
-import org.eclipse.swt.browser.*;
-import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import tm.eclipse.swt.controls.Text;
+import tm.eclipse.swt.controls.extra.Form;
 
 public class Text_Ex_Test
 {
 	@Test
 	public void text_Ctor()
 	{
-		Form_Ex form = Form_Ex.popupWindow();
+		Form form = Form.popupWindow();
 				
 		Text text = Text.add_Text(form.shell);
 		
@@ -32,7 +26,7 @@ public class Text_Ex_Test
 	@Test
 	public void text_Get_Set()
 	{
-		Form_Ex form = Form_Ex.popupWindow();
+		Form form = Form.popupWindow();
 				
 		Text text = form.add_Text();
 		assertEquals("", text.getText());
@@ -59,7 +53,7 @@ public class Text_Ex_Test
 	@Test
 	public void text_Search()
 	{
-		Form_Ex form = Form_Ex.popupWindow();
+		Form form = Form.popupWindow();
 		Text text = form.add_Text_Search();
 		assertNotNull(text);
 		assertEquals(1,form.controls().size());

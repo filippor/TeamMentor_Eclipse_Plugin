@@ -1,6 +1,5 @@
 package tm.eclipse.swt;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
