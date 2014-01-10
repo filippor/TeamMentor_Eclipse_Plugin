@@ -8,10 +8,24 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
+import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Set;
+
 public class Label extends org.eclipse.swt.widgets.Label
 {
-	public Display display;
-	public Composite target;
+	public Display 			   display;
+	public Composite 		   target;
+	public Control_Set<Label>  set;
+	public Control_Get<Label> get;
+	
+	public Label(Composite parent, int style) 
+	{
+		super(parent, style);
+		this.display = parent.getDisplay();			// we need to store this in case there are multiple ones
+		this.target  = parent;	
+		this.set     = new Control_Set<Label>(this);
+		this.get     = new Control_Get<Label>(this);
+	}
 	
 	public static Label add_Label(Composite target)
 	{
@@ -37,12 +51,7 @@ public class Label extends org.eclipse.swt.widgets.Label
 		return add_Label(target,style).text(text);		
 	}
 	
-	public Label(Composite parent, int style) 
-	{
-		super(parent, style);
-		this.display = parent.getDisplay();			// we need to store this in case there are multiple ones
-		this.target  = parent;		
-	}
+	
 	
 	public Label image(final Image image)
 	{
@@ -62,6 +71,15 @@ public class Label extends org.eclipse.swt.widgets.Label
 				Label.super.setText(text);	
 				Label.this.refresh();
 			}});
+	}
+	public Label toolTip(final String text)
+	{
+		if (text != null)
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+			{
+				Label.super.setToolTipText(text);					
+			}});
+		return this;
 	}
 	@Override
 	public String getText()

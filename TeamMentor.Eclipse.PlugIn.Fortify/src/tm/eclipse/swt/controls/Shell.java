@@ -6,9 +6,9 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
 import tm.eclipse.swt.controls.Composite;
-import tm.eclipse.swt.Add_Composite;
-import tm.eclipse.swt.Get_Composite;
-import tm.eclipse.swt.Set_Composite;
+import tm.eclipse.swt.Composite_Add;
+import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Set;
 import tm.lang.Reflection;
 
 public class Shell extends org.eclipse.swt.widgets.Shell 
@@ -22,9 +22,9 @@ public class Shell extends org.eclipse.swt.widgets.Shell
 				}});
 
 	}
-	public Add_Composite<Composite> add;
-	public Get_Composite<Composite> get;
-	public Set_Composite<Composite> set;
+	public Composite_Add<Composite> add;
+	public Control_Get<Composite> get;
+	public Control_Set<Composite> set;
 	public Display display;
 	public Reflection reflection;
 	public Composite composite;
@@ -35,9 +35,9 @@ public class Shell extends org.eclipse.swt.widgets.Shell
 		 this.display 	 = display;
 		 this.reflection = new Reflection(this);
 		 this.composite = new Composite((org.eclipse.swt.widgets.Composite)this); // need to wrap the current shell's composite into our own Composite 
-		 add = new Add_Composite<Composite>(composite);
-		 get = new Get_Composite<Composite>(composite);
-		 set = new Set_Composite<Composite>(composite);
+		 add = new Composite_Add<Composite>(composite);
+		 get = new Control_Get<Composite>(composite);
+		 set = new Control_Set<Composite>(composite);
 	}
 	
 	protected void checkSubclass()

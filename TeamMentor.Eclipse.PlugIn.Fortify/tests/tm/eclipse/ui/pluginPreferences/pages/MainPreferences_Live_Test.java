@@ -38,7 +38,7 @@ public class MainPreferences_Live_Test
 	public void openPropertiesWindow()
 	{
 		propertyPage = new MainPreferences();
-		String viewId =  "Test main TM Propeties Window";
+		String viewId =  "Test main TM Propeties Windowte";
 		view = eclipse.views.create(viewId);
 		view.close();
 		

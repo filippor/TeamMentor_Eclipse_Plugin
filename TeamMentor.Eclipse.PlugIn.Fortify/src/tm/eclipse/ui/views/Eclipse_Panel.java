@@ -14,9 +14,9 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.part.ViewPart;
 
-import tm.eclipse.swt.Add_Composite;
-import tm.eclipse.swt.Get_Composite;
-import tm.eclipse.swt.Set_Composite;
+import tm.eclipse.swt.Composite_Add;
+import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Set;
 import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.*;
 
@@ -25,9 +25,9 @@ public class Eclipse_Panel extends ViewPart
 	public static final String ID = "tm.eclipse.ui.views.Eclipse_Panel";
 	public Composite composite;
 	public Mouse 					mouse;
-	public Add_Composite<Composite> add;
-	public Get_Composite<Composite> get;
-	public Set_Composite<Composite> set;
+	public Composite_Add<Composite> add;
+	public Control_Get<Composite> get;
+	public Control_Set<Composite> set;
 	
 	//required implementations
 	public void createPartControl(org.eclipse.swt.widgets.Composite parent) 

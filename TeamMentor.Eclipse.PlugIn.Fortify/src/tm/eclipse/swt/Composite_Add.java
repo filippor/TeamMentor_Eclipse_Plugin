@@ -6,33 +6,27 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
+import tm.eclipse.helpers.Images;
 import tm.eclipse.swt.controls.Button;
 import tm.eclipse.swt.controls.Canvas;
 import tm.eclipse.swt.controls.Composite;
 import tm.eclipse.swt.controls.Group;
 import tm.eclipse.swt.controls.Label;
 import tm.eclipse.swt.controls.Text;
+import tm.eclipse.swt.controls.ToolBar;
 import tm.eclipse.swt.jface.TreeViewer;
 
-public class Add_Composite <T extends Composite>
+public class Composite_Add <T extends Composite>
 {
 	public T target;
 	public Display   display;
 	
-	public Add_Composite(T target)
+	public Composite_Add(T target)
 	{
 		this.target  = target;
 		this.display = target.getDisplay();
 	}
 	
-	public Composite panel()
-	{
-		return composite();
-	}
-	public Composite composite()
-	{
-		return Composite.add_Composite(target);
-	}
 	public Button button()
 	{
 		return button((String)null);
@@ -57,10 +51,66 @@ public class Add_Composite <T extends Composite>
 	{
 		return Button.add_Button(target,SWT.CHECK).text(text);		
 	}
-	
+	public Composite composite()
+	{
+		return Composite.add_Composite(target);
+	}
 	public Group group()
 	{
 		return Group.add_Group(target, SWT.NONE);		
+	}
+	public Label image(String imageKey)
+	{
+		Image image = Images.get(imageKey);
+		if (image != null)
+			return image(image);
+		return null;
+	}
+	public Label image(Image image)
+	{
+		return label().image(image);		
+	}
+	public Label image(Image image, String toolTip)
+	{
+		return label().image(image).toolTip(toolTip);		
+	}
+	public Label label()
+	{
+		return label((String)null);
+	}
+	public Label label(Image image)
+	{
+		return label().image(image);		
+	}
+	public Label label(String text)
+	{
+		return label(text, SWT.NONE);
+	}
+	public Label label(String text, int style)
+	{
+		return Label.add_Label(target,style).text(text);		
+	}
+	public Composite panel()
+	{
+		return composite();
+	}
+	public T refresh()
+	{
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+		{
+			target.layout(true);
+		}});
+		return target;
+	}	
+	public Label separator()
+	{
+		return separator(true);
+	}
+	
+	public Label separator(boolean horizontalLayout)
+	{
+		int alignment = (horizontalLayout) ? SWT.HORIZONTAL : SWT.VERTICAL;
+		return label(null, SWT.SEPARATOR | alignment);
 	}
 	public Text text()
 	{
@@ -70,46 +120,16 @@ public class Add_Composite <T extends Composite>
 	{
 		return Text.add_Text(target).text(text);		
 	}
-	
-	
-	public Label label()
+	public Text textArea(String text)
 	{
-		return label((String)null);
+		return Text.add_Text_MultiLine(target,text);		
 	}
-	public Label label(String text)
-	{
-		return label(text, SWT.NONE);
-	}
-	public Label label(Image image)
-	{
-		return label().image(image);		
-	}	
-	public Label label(String text, int style)
-	{
-		return Label.add_Label(target,style).text(text);		
-	}
-	
-	public Label separator()
-	{
-		return separator(true);
-	}
-	public Label separator(boolean horizontalLayout)
-	{
-		int alignment = (horizontalLayout) ? SWT.HORIZONTAL : SWT.VERTICAL;
-		return label(null, SWT.SEPARATOR | alignment);
-	}
-	
 	public TreeViewer treeViewer()
 	{
 		return TreeViewer.add_TreeViewer(target);
 	}
-	public T refresh()
+	public ToolBar toolBar()
 	{
-		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
-		{
-			target.layout(true);
-		}});
-		return target;
+		return ToolBar.add_ToolBar(target);		
 	}
-	
 }

@@ -11,11 +11,29 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
+import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Set;
 import tm.lang.Reflection;
 
 
 public class Button extends org.eclipse.swt.widgets.Button
 {	
+	public Composite    		parent;
+	public Display 				display;
+	public Reflection 			reflection;
+	public Control_Get<Button>  get;
+	public Control_Set<Button>  set;
+	
+	public Button(Composite parent, int style) 
+	{		
+		super(parent, style);
+		this.parent 	 = parent;
+		this.display     = parent.getDisplay();			// we need to store this in case there are multiple ones
+		this.reflection  = new Reflection(this);
+		this.set 		 = new Control_Set<Button>(this);
+		this.get 		 = new Control_Get<Button>(this);
+	}
+	
 	public static Button add(Composite target)
 	{
 		return add_Button(target);
@@ -55,17 +73,6 @@ public class Button extends org.eclipse.swt.widgets.Button
 		return add_Button(target, SWT.CHECK);
 	}	
 	
-	public Composite    parent;
-	public Display 		display;
-	public Reflection 	reflection;
-	
-	public Button(Composite parent, int style) 
-	{		
-		super(parent, style);
-		this.parent = parent;
-		display     = parent.getDisplay();			// we need to store this in case there are multiple ones
-		reflection  = new Reflection(this);
-	}	
 	
 	protected void checkSubclass()
 	{}

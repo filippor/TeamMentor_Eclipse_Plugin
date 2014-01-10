@@ -3,12 +3,19 @@ package tm.eclipse.helpers;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.ui.PlatformUI;
 
 public class colors
-{
-	public static Color get(int systemColorId)
+{	
+	public static Color get(final int systemColorId)
 	{
-		return Display.getCurrent ().getSystemColor(systemColorId);
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		return UIThreadRunnable.syncExec(display, new Result<Color>() { public Color run()	
+			{
+				return Display.getCurrent ().getSystemColor(systemColorId);
+			}});
 	}
 	public static Color black()
 	{

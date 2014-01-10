@@ -7,27 +7,27 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
-import tm.eclipse.swt.Add_Composite;
-import tm.eclipse.swt.Get_Composite;
-import tm.eclipse.swt.Set_Composite;
+import tm.eclipse.swt.Composite_Add;
+import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Set;
 
 public class Canvas extends org.eclipse.swt.widgets.Canvas
 {
 	public Display display;
 	public org.eclipse.swt.widgets.Composite target;
 	public Composite composite;
-	public Add_Composite<Composite> add;
-	public Get_Composite<Composite> get;
-	public Set_Composite<Composite> set;
+	public Composite_Add<Composite> add;
+	public Control_Get<Composite> get;
+	public Control_Set<Composite> set;
 			
 	public Canvas(org.eclipse.swt.widgets.Composite parent, int style) 
 	{
 		super(parent, style);
 		this.display = parent.getDisplay();
 		this.composite = new Composite(this); // need to wrap the current shell's composite into our own Composite 
-		add = new Add_Composite<Composite>(composite);
-		get = new Get_Composite<Composite>(composite);
-		set = new Set_Composite<Composite>(composite);				
+		add = new Composite_Add<Composite>(composite);
+		get = new Control_Get<Composite>(composite);
+		set = new Control_Set<Composite>(composite);				
 	}	
 	
 	public static Canvas add_Canvas(final Composite target, final int style)

@@ -17,8 +17,21 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
+import tm.eclipse.swt.Control_Set;
+
 public class Text extends org.eclipse.swt.widgets.Text
 {	
+	public Display 			 		display;
+	public Control_Set<Text>        set;
+	
+	public Text(Composite parent, int style) 
+	{		
+		super(parent, style);
+		display = parent.getDisplay();			// we need to store this in case there are multiple ones
+		set = new Control_Set<Text>(this);
+	}
+	
+    public ControlDecoration controlDecoration;
 	public static Text add_Text(final Composite target)
 	{
 		return add_Text(target, SWT.BORDER);
@@ -53,13 +66,8 @@ public class Text extends org.eclipse.swt.widgets.Text
 	{
 		return add_Text(target, SWT.SEARCH | SWT.ICON_SEARCH | SWT.CANCEL | SWT.BORDER);
 	}	
-	public Display 			 display;
-    public ControlDecoration controlDecoration;
-	public Text(Composite parent, int style) 
-	{		
-		super(parent, style);
-		display = parent.getDisplay();			// we need to store this in case there are multiple ones
-	}
+	
+	
 	protected void checkSubclass()
 	{}
 		
@@ -150,18 +158,7 @@ public class Text extends org.eclipse.swt.widgets.Text
 		}});
 		return this;
 	}
-	public Text fill()
-	{		
-		return layout_Fill(true,true);
-	}
-	public Text fill_Horizontal()
-	{
-		return layout_Fill(true,false);
-	}
-	public Text fill_Vertical()
-	{
-		return layout_Fill(false,true);
-	}
+	
 	@Override
 	public String getText()
 	{

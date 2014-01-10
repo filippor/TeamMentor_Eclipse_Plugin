@@ -225,7 +225,7 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		
 		new Label(group,SWT.BORDER);
 		tm.eclipse.swt.controls.Composite composite = new tm.eclipse.swt.controls.Composite(group);
-		composite.set.layout_Grid(2);
+		composite.set.layout.grid(2);
 		authenticate_Button = composite.add.button("Authenticate");
 		result = composite.add.label("",SWT.NONE);
 		composite.layout(true);
