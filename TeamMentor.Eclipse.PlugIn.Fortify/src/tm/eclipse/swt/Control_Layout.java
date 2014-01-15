@@ -71,6 +71,10 @@ public class Control_Layout<T extends Control>
 		return layout(new RowLayout(alignment));
 	}
 
+	public T grid_Fill()
+	{
+		return grid_Grab_All();
+	}
 	public T grid_Grab()
 	{
 		return grid_Grab_All();

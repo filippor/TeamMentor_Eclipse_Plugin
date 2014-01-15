@@ -1,5 +1,6 @@
 package tm.lang;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,6 +18,13 @@ public class Reflection
 		this.clazz = target.getClass();
 	}
 	
+	public <T> T invoke(Class<T> returnType, String methodName, Object ...parameters )
+	{
+		Object returnValue = invoke(methodName, parameters);
+		if (returnValue != null  &&	returnValue.getClass() == returnType)
+			return returnType.cast(returnValue);
+		return null;
+	}
 	public Object invoke(String methodName, Object ...parameters )
 	{
 		/*if(parameters.length == 0)
@@ -29,11 +37,11 @@ public class Reflection
 		{*/
 			Class<?>[] parameterClasses= new Class<?>[parameters.length];
 			for(int i=0; i < parameterClasses.length; i++)					//tried to do this with List<Class<?>> but it wasn't working
-			{
-				Class<?> parameterClass = parameters[i].getClass();		    //this will have probs with boxing of primitive values
-				parameterClasses[i] = parameterClass;
+			{				
+				Class<?> parameterClass = parameters[i].getClass();		    //this will have probs with boxing of primitive values (see http://stackoverflow.com/questions/3925587/java-reflection-calling-constructor-with-primitive-types)
+				parameterClasses[i] = parameterClass;				
 			}
-			Method method = method_Declared(methodName,parameterClasses);
+			Method method = method(methodName,parameterClasses);
 			if (method!= null)
 				return invoke(method,parameters);
 		//}
@@ -68,12 +76,68 @@ public class Reflection
 		Reflection reflection = new Reflection(target);		
 		return reflection;
 	}
+	public Object field_Value(Field field)
+	{
+		field.setAccessible(true);
+		try {
+			return field.get(target);
+		} catch (IllegalArgumentException e) 
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e) 
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public List<Field> fields()
+	{
+		return Arrays.asList(clazz.getDeclaredFields());		
+	}
+	public List<Object> fields_Values()
+	{
+		return fields_Values(fields());
+	}
+	public List<Object> fields_Values(List<Field> fields)
+	{
+		List<Object> values = new ArrayList<Object>();
+		for(Field field : fields)
+			values.add(field_Value(field));
+		return values;
+	}
 	
+	public List<String> fields_Names()
+	{
+		List<String> names = new ArrayList<String>();
+		for(Field field : fields())			
+			names.add(field.getName());
+		return names;	
+	}
+
+	public List<String> getters_Names()
+	{
+		List<String> getters = new ArrayList<String>();
+		for(String methodName : methods_Names())
+			if (methodName.startsWith("get"))
+					getters.add(methodName.substring(3));
+		return getters;
+	}
+	public List<String> getters_Values()
+	{
+		List<String> getters = new ArrayList<String>();
+		for(String methodName : methods_Names())
+			if (methodName.startsWith("get"))
+			{
+				Object result = invoke(methodName);				
+				getters.add(result == null ? null : result.toString());					
+			}
+		return getters;
+	}
 	public Method method(String methodName,Class<?> ... parameters )
 	{
 		return method(clazz, methodName, parameters);
 	}
-	
+
 	///Recursive Search for method	
 	public Method method(Class<?> targetClass, String methodName,Class<?> ... parameters )
 	{
@@ -90,11 +154,11 @@ public class Reflection
 	{
 		return method_Declared(clazz, methodName, parameters);
 	}
-	public Method method_Declared(Class<?> method_Declared, String methodName,Class<?> ... parameters)
+	public Method method_Declared(Class<?> targetClass, String methodName,Class<?> ... parameters)
 	{
 		try  
 		{
-			return method_Declared.getDeclaredMethod(methodName,parameters);			
+			return targetClass.getDeclaredMethod(methodName,parameters);			
 		}
 		catch (NoSuchMethodException 	 e) 
 		{
@@ -110,19 +174,19 @@ public class Reflection
 	{
 		return Arrays.asList(targetClass.getMethods());
 	}	
-	public List<String> method_Names()
+	public List<String> methods_Names()
 	{
-		return method_Names(false);
+		return methods_Names(false);
 	}
-	public List<String> method_Names(Class<?> targetClass)
+	public List<String> methods_Names(Class<?> targetClass)
 	{
-		return method_Names(methods(targetClass));
+		return methods_Names(methods(targetClass));
 	}
-	public List<String> method_Names(boolean onlyShowDeclared)
+	public List<String> methods_Names(boolean onlyShowDeclared)
 	{
-		return method_Names(onlyShowDeclared ? methods_Declared() : methods());
+		return methods_Names(onlyShowDeclared ? methods_Declared() : methods());
 	}
-	public List<String> method_Names(List<Method> methods)
+	public List<String> methods_Names(List<Method> methods)
 	{
 		List<String> names = new ArrayList<String>();
 		for(Method method : methods)			

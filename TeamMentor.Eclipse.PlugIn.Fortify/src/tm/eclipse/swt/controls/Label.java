@@ -51,7 +51,10 @@ public class Label extends org.eclipse.swt.widgets.Label
 		return add_Label(target,style).text(text);		
 	}
 	
-	
+	public Label bold()
+	{
+		return set.bold();
+	}
 	
 	public Label image(final Image image)
 	{

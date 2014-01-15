@@ -10,6 +10,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import tm.eclipse.ui.views.utils.IconsViewer;
+
 public class Images 
 {
 	public static List<String> 	 	 sharedImages_Names;
@@ -78,5 +80,10 @@ public class Images
  			return org.eclipse.jdt.internal.ui.JavaPluginImages.get(imagePath);
 		}
 		return null;
+	}
+	
+	public static IconsViewer view()
+	{
+		return new IconsViewer();
 	}
 }

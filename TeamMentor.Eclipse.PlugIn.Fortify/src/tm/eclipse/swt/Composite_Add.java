@@ -7,16 +7,22 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
 import tm.eclipse.helpers.Images;
+import tm.eclipse.swt.controls.Browser;
 import tm.eclipse.swt.controls.Button;
 import tm.eclipse.swt.controls.Canvas;
 import tm.eclipse.swt.controls.Composite;
 import tm.eclipse.swt.controls.Group;
 import tm.eclipse.swt.controls.Label;
+import tm.eclipse.swt.controls.SashForm;
+import tm.eclipse.swt.controls.Table;
 import tm.eclipse.swt.controls.Text;
 import tm.eclipse.swt.controls.ToolBar;
+import tm.eclipse.swt.controls.Tree;
+import tm.eclipse.swt.controls.extra.ObjectBrowser;
+import tm.eclipse.swt.controls.extra.ObjectViewer;
 import tm.eclipse.swt.jface.TreeViewer;
 
-public class Composite_Add <T extends Composite>
+public class Composite_Add <T extends org.eclipse.swt.widgets.Composite>//Composite>
 {
 	public T target;
 	public Display   display;
@@ -26,7 +32,10 @@ public class Composite_Add <T extends Composite>
 		this.target  = target;
 		this.display = target.getDisplay();
 	}
-	
+	public Browser browser()
+	{
+		return Browser.add_Browser(target);
+	}
 	public Button button()
 	{
 		return button((String)null);
@@ -42,7 +51,7 @@ public class Composite_Add <T extends Composite>
 	public Button button(String text, Image image)
 	{
 		return Button.add_Button(target).text(text).image(image);		
-	}
+	}	
 	public Canvas canvas()
 	{
 		return Canvas.add_Canvas(target, SWT.NONE);		
@@ -84,7 +93,7 @@ public class Composite_Add <T extends Composite>
 	}
 	public Label label(String text)
 	{
-		return label(text, SWT.NONE);
+		return label(text, SWT.BOLD);// SWT.NONE);
 	}
 	public Label label(String text, int style)
 	{
@@ -101,7 +110,11 @@ public class Composite_Add <T extends Composite>
 			target.layout(true);
 		}});
 		return target;
-	}	
+	}		
+	public SashForm sashForm()
+	{
+		return SashForm.add_SashForm(target); 
+	}
 	public Label separator()
 	{
 		return separator(true);
@@ -112,6 +125,10 @@ public class Composite_Add <T extends Composite>
 		int alignment = (horizontalLayout) ? SWT.HORIZONTAL : SWT.VERTICAL;
 		return label(null, SWT.SEPARATOR | alignment);
 	}
+	public Table table()
+	{
+		return Table.add_Table(target);
+	}
 	public Text text()
 	{
 		return text(null);
@@ -120,9 +137,18 @@ public class Composite_Add <T extends Composite>
 	{
 		return Text.add_Text(target).text(text);		
 	}
+	public Text text(String labelValue, String textValue)
+	{
+		label(labelValue);
+		return text(textValue);
+	}
 	public Text textArea(String text)
 	{
 		return Text.add_Text_MultiLine(target,text);		
+	}
+	public Tree tree()
+	{
+		return Tree.add_Tree(target);
 	}
 	public TreeViewer treeViewer()
 	{
@@ -131,5 +157,13 @@ public class Composite_Add <T extends Composite>
 	public ToolBar toolBar()
 	{
 		return ToolBar.add_ToolBar(target);		
+	}
+	public ObjectBrowser objectBrowser()
+	{
+		return ObjectBrowser.add_ObjectBrowser(target);		
+	}
+	public ObjectViewer objectViewer()
+	{
+		return ObjectViewer.add_ObjectViewer(target);		
 	}
 }

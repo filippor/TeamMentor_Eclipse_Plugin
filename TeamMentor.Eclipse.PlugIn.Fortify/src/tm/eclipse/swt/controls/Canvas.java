@@ -30,7 +30,7 @@ public class Canvas extends org.eclipse.swt.widgets.Canvas
 		set = new Control_Set<Composite>(composite);				
 	}	
 	
-	public static Canvas add_Canvas(final Composite target, final int style)
+	public static Canvas add_Canvas(final org.eclipse.swt.widgets.Composite target, final int style)
 	{	
 		if (target == null)
 			return null;		

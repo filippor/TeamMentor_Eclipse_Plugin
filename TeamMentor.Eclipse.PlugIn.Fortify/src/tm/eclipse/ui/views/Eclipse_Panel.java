@@ -1,9 +1,7 @@
 package tm.eclipse.ui.views;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 //import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -16,6 +14,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import tm.eclipse.swt.Composite_Add;
 import tm.eclipse.swt.Control_Get;
+import tm.eclipse.swt.Control_Self;
 import tm.eclipse.swt.Control_Set;
 import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.*;
@@ -26,8 +25,9 @@ public class Eclipse_Panel extends ViewPart
 	public Composite composite;
 	public Mouse 					mouse;
 	public Composite_Add<Composite> add;
-	public Control_Get<Composite> get;
-	public Control_Set<Composite> set;
+	public Control_Get  <Composite> get;
+	public Control_Set  <Composite> set;
+	public Control_Self <Composite> self;
 	
 	//required implementations
 	public void createPartControl(org.eclipse.swt.widgets.Composite parent) 
@@ -38,6 +38,7 @@ public class Eclipse_Panel extends ViewPart
 		add   = composite.add;
 		set   = composite.set;
 		get   = composite.get;
+		self   = composite.self;
 	}
 	public void setFocus() 
 	{
@@ -53,6 +54,7 @@ public class Eclipse_Panel extends ViewPart
 	}
 	
 	//helper methods
+	/*
 	public Browser add_Browser()
 	{
 		return add_WebBrowser();	    	    
@@ -98,18 +100,20 @@ public class Eclipse_Panel extends ViewPart
 		return Browser.add_Browser(composite, this);			    	   
 	}
 	
-	
+	*/
 	public Eclipse_Panel clear()
 	{
-		UIThreadRunnable.syncExec(composite.getDisplay(), new VoidResult() { public void run() 
+		composite.self.clear();
+		return this;
+		
+/*		UIThreadRunnable.syncExec(composite.getDisplay(), new VoidResult() { public void run() 
 			{
 				for(Control control : controls())
 					control.dispose();
-			}});
-		return this;
+			}});*/		
 	}
 	public Eclipse_Panel close()
-	{
+	{		
 		UIThreadRunnable.syncExec(composite.getDisplay(), new VoidResult() { public void run() 
 			{
 				Eclipse_Panel.this.getSite().getPage().hideView(Eclipse_Panel.this);
@@ -139,17 +143,16 @@ public class Eclipse_Panel extends ViewPart
 	}
 	public List<Control> controls()
 	{
-		return UIThreadRunnable.syncExec(composite.getDisplay(), new Result<List<Control>>() { public List<Control> run() 
+		return composite.self.controls();
+		
+	/*	return UIThreadRunnable.syncExec(composite.getDisplay(), new Result<List<Control>>() { public List<Control> run() 
 					{
 						return Arrays.asList(composite.getChildren());
-					}});
+					}});*/
 	}	
 	public <T> T 		 control(Class<T> clazz)
 	{
-		for(Control control : controls())
-			if (control.getClass() == clazz)
-				return clazz.cast(control);
-		return null;		
+		return composite.self.control(clazz);	
 	}
 	
 	public Layout 		 layout()

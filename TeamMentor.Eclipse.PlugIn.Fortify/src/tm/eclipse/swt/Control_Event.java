@@ -59,6 +59,20 @@ public class Control_Event <T extends Control>
 		return target;
 	}
 	
+	
+	public T onChange(final Runnable runnable)
+	{
+		if (runnable != null)
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+				{
+					target.addListener(SWT.CHANGED, new Listener() { public void handleEvent(Event event) 
+					{
+						new Thread(runnable).start();
+						//runnable.run();
+					}});
+				}});
+		return target;
+	}
 	public T click()
 	{
 		UIThreadRunnable.syncExec(display,new VoidResult() { public void run()

@@ -18,17 +18,20 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 
 import tm.eclipse.swt.Control_Set;
+import tm.eclipse.swt.Control_Self;
 
 public class Text extends org.eclipse.swt.widgets.Text
 {	
 	public Display 			 		display;
 	public Control_Set<Text>        set;
+	public Control_Self<Text>	    self;
 	
 	public Text(Composite parent, int style) 
 	{		
 		super(parent, style);
 		display = parent.getDisplay();			// we need to store this in case there are multiple ones
-		set = new Control_Set<Text>(this);
+		set     = new Control_Set<Text>(this);
+		self    = new Control_Self<Text>(this);
 	}
 	
     public ControlDecoration controlDecoration;
@@ -170,6 +173,10 @@ public class Text extends org.eclipse.swt.widgets.Text
 	public boolean isEmpty()
 	{
 		return this.getText().equals("");
+	}
+	public Text fill()
+	{
+		return layout_Fill(true,true);
 	}
 	public Text layout_Fill(final boolean grabExcessHorizontalSpace, final boolean grabExcessVerticalSpace)
 	{		

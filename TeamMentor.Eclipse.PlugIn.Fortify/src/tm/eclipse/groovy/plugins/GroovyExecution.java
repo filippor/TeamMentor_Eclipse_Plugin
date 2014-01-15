@@ -15,6 +15,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
+import tm.eclipse.Plugin_Config;
 import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.helpers.*;
@@ -65,8 +66,8 @@ public class GroovyExecution
 	}	
 	public GroovyShell     setGroovyShell()
 	{
-		groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);
-		addRefsToGroovyShell(eclipseApi.extraGroovyJars);		
+		groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);		
+		addRefsToGroovyShell(eclipseApi.extraGroovyJars);
 		return groovyShell;
 	}
 	public GroovyShell     addRefToGroovyShell(String refToAdd)
@@ -94,10 +95,12 @@ public class GroovyExecution
 	public Object 	       executeScript(String scriptText)
 	{					
 		scriptToExecute = scriptText;
+		if (Plugin_Config.AUTOSAVE_GROOVY_SCRIPTS)
+			eclipseApi.plugin.save_SavedScript(scriptText); //save script to SaveScripts folder
 		return executeScript();		
 	}
 	public Object          executeScript()
-	{
+	{		
 		executionException = null;
 		returnValue = null;
 		setExecuteOptionsBasedOnCodeReferences();					// do this at the last minute so that we have access to the final state of the objects

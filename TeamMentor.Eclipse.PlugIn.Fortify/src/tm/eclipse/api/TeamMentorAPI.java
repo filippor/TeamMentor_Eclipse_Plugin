@@ -19,9 +19,11 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.Plugin_Config;
+import tm.eclipse.swt.controls.extra.ObjectBrowser;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
+import tm.lang.Reflection;
 import tm.utils.Consts_TM;
 
 public class TeamMentorAPI 
@@ -273,6 +275,8 @@ public class TeamMentorAPI
 		binding.setVariable("browser"      , lastBrowser);		
 		
 		binding.setVariable("inspect"     , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class	   , "inspect"));
-		binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class	   , "inspect"));		
+		//binding.setVariable("show"        , new MethodClosure( groovy.inspect.swingui.ObjectBrowser.class	   , "inspect"));
+		binding.setVariable("show"        , new MethodClosure( ObjectBrowser.class	   						   , "inspect"));
+		binding.setVariable("reflection"  , new MethodClosure( Reflection.class, "reflection"));
 	}
 }

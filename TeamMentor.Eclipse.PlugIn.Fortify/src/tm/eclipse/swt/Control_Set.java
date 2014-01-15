@@ -1,10 +1,15 @@
 package tm.eclipse.swt;
 
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
+
+
+
 
 
 
@@ -57,4 +62,25 @@ public class  Control_Set<T extends Control>
 		}});
 		return target;
 	}
+	public T redraw(final boolean value)
+	{
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+		{
+			target.setRedraw(value);			
+		}});	
+		return target;
+	}
+	public T bold()
+	{
+		//I think this leaks font objects, so check if they can be reused 
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+		{
+			FontData fontData = target.getFont().getFontData()[0];
+			int style         = fontData.getStyle(); 
+			Font font = new Font(display, fontData.getName(), fontData.getHeight(), style | SWT.BOLD);
+			target.setFont(font);				
+		}});	
+		return target;
+	}
+		
 }

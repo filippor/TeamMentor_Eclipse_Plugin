@@ -23,8 +23,12 @@ import org.eclipse.ui.PlatformUI;
 
 
 
+
+
 import static tm.eclipse.helpers.log.*;
 import tm.eclipse.swt.Mouse;
+import tm.eclipse.swt.controls.extra.ObjectBrowser;
+import tm.eclipse.swt.controls.extra.ObjectViewer;
 //import tm.eclipse.groovy.TestGroovy;
 //import tm.eclipse.groovy.Tree_ExtensionMethods;
 import tm.eclipse.ui.EclipsePartEvents;
@@ -43,12 +47,16 @@ public class EclipseAPI
 //	public TestGroovy   	testGroovy;	
 	public IWorkspace   	workspace;
 	
+	public Plugin			plugin;
 	public Console			console;
 	public Menus			menus;
 	public Panels		    panelFactory;
 	public Views			views;
 	public Editors		    editors;
 	public Mouse			mouse;
+	public Platform			platform;
+	public Registry		    registry;
+	public Utils		    utils;
 	public boolean			ready;
 	
 	/*static 
@@ -70,7 +78,11 @@ public class EclipseAPI
 				panelFactory = new Panels(workbench);		
 				views  		 = new Views(EclipseAPI.this);
 				editors  	 = new Editors(EclipseAPI.this);
+				plugin 	 	 = new Plugin(EclipseAPI.this);
 				console 	 = new Console();
+				platform 	 = new Platform(EclipseAPI.this);
+				registry 	 = new Registry(EclipseAPI.this);
+				utils 	     = new Utils(EclipseAPI.this);
 				setEclipsePartEvents();
 				ready = true;
 			}});
@@ -152,6 +164,11 @@ public class EclipseAPI
 				runnable.run();
 			}});
 		return this;
+	}
+	
+	public ObjectBrowser show(Object object)
+	{
+		return ObjectBrowser.show_ObjectBrowser(object);
 	}
 }
 

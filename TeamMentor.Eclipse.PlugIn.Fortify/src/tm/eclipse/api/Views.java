@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.swt.*;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
 import tm.eclipse.helpers.EclipseUI;
@@ -83,7 +85,24 @@ public class Views //extends EclipseBase
 					return editor;
 		return null;
 	}	*/
-	public IViewPart open(final String idTitleOrPartName)
+	public IViewPart 			 open(final String mainId, final String secundaryId)
+	{
+		return syncExec(new Result<IViewPart>() { public IViewPart run() 
+		{
+			// first try to use the activeWorkbenchPage showView (which will create a new instance of the provided ID if needed)
+			try 
+			{
+				
+				return eclipse.activeWorkbenchPage.showView(mainId, secundaryId, IWorkbenchPage.VIEW_ACTIVATE);
+			} 
+			catch (PartInitException e) 
+			{				
+				System.out.println("[open_View] Could not find view: " + mainId);
+				return null;
+			}
+		}});
+	}
+	public IViewPart 			 open(final String idTitleOrPartName)
 	{
 		return syncExec(new Result<IViewPart>() { public IViewPart run() 
 			{
@@ -141,15 +160,15 @@ public class Views //extends EclipseBase
 		return viewToClose;
 	}	
 
-	public List<IViewReference> 	 get_Views()
+	public List<IViewReference>   get_Views()
 	{
 		return Arrays.asList(eclipse.activeWorkbenchPage.getViewReferences());
 	}
-	public boolean				 hasView(String viewId)
+	public boolean				  hasView(String viewId)
 	{
 		return view(viewId) != null;
 	}
-	public IViewReference 		 view(String title)
+	public IViewReference 		  view(String title)
 	{
 		return reference(title);
 	}	
@@ -178,7 +197,7 @@ public class Views //extends EclipseBase
 			titles.add(view.getTitle());
 		return  titles;
 	}
-	public  Eclipse_Panel 		 create(String viewId)
+	public  Eclipse_Panel 		  create(String viewId)
 	{
 		return eclipse.panelFactory.open_Panel(viewId);
 	}

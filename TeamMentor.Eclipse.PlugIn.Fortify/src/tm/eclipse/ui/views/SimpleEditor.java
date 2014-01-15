@@ -129,9 +129,9 @@ public class SimpleEditor extends ViewPart
 					{
 					//	styledText_Result.setText("...stoping execution...");
 					//	styledText_Result.setBackground(new Color(Display.getCurrent (),255,220,220));				
-						executionThread.stop();
-						showExecutionStoppedMessage();						
-					}
+						executionThread.stop();										
+					}					
+					showExecutionStoppedMessage();	
 				} });
 	    
 	    //default value

@@ -60,7 +60,7 @@ public class EclipseUI
 	}
 	public static Browser			 new_Browser(String browserId)
 	{
-		return new_Panel(browserId).add_Browser();
+		return new_Panel(browserId).add.browser();
 	}
 
 	public static PreferenceDialog 		 open_PreferencesDialog(final String id)

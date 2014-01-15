@@ -12,81 +12,69 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
+import tm.eclipse.swt.controls.Tree;
+import tm.eclipse.swt.controls.TreeItem;
+
 public class TreeViewer extends org.eclipse.jface.viewers.TreeViewer
 {
-	public Display display;
+	public Display   display;
 	public Composite target;
+	public Tree      tree;
 		
 	public TreeViewer(Composite parent)
-	{
-		super(parent);
-		setTarget(parent);	
+	{		
+		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);		
 	}
 	public TreeViewer(Composite parent, int style) 
-	{
-		super(parent, style);
-		setTarget(parent);
-		
-	}
+	{		
+		this(new Tree(parent, style));				
+	}	
 	public TreeViewer(Tree tree)
 	{
 		super(tree);
-		setTarget(tree.getParent());
+		this.tree = tree;
+		this.target  = tree.getParent();
+		this.display = this.target.getDisplay();		
 	}
 	
 	public static TreeViewer add_TreeViewer(final Composite target)
-	{		
-		
+	{				
 		if (target == null)
 			return null;		
 		return UIThreadRunnable.syncExec(target.getDisplay(),new Result<TreeViewer>() { public TreeViewer run() 
-					{
+					{						
 						return new TreeViewer(target);						
 					}});
 	}
 	
-	public TreeViewer setTarget(Composite target)
+	public TreeViewer add_Nodes(final Object...nodes)
 	{
-		this.target  = target;
-		this.display = this.target.getDisplay();
+		tree.add_Nodes(nodes);
+		return this;
+	}
+	public TreeViewer add_Nodes(final List<Object> nodes)
+	{
+		tree.add_Nodes(nodes);
 		return this;
 	}
 	
-	
-	public TreeItem add_Node(final String text)
+	public TreeItem add_Node(final Object node)
 	{
-		return UIThreadRunnable.syncExec(display,new Result<TreeItem>() { public TreeItem run()
-							{
-								Tree tree = TreeViewer.this.getTree();
-								TreeItem treeItem = new TreeItem(tree,SWT.NONE);
-								treeItem.setText(text);								
-								return treeItem;
-							}});
+		return tree.add_Node(node);
+	}
+	public TreeItem add_Node(final Object node, final Object data)
+	{				
+		return tree.add_Node(node, data);		
 	}
 	
-	public TreeViewer gridData_Fill()
+	public List<TreeItem> nodes() 
 	{
-		UIThreadRunnable.syncExec(display,new VoidResult() { public void run()
-			{
-				GridData gridData = new GridData(SWT.FILL, SWT.FILL, true,true,1,1);
-				TreeViewer.this.getTree().setLayoutData(gridData);
-				target.layout(true);
-			}});
-		return this;
-	}
-	public List<TreeItem> nodes()
-	{
-		return UIThreadRunnable.syncExec(display,new Result<List<TreeItem>>() { public List<TreeItem> run()
-		{
-			return Arrays.asList(TreeViewer.this.getTree().getItems());
-		}});		
+		return tree.nodes();					
 	}
 	
 	public TreeViewer onDoubleClick(final Runnable runnable)
@@ -107,39 +95,12 @@ public class TreeViewer extends org.eclipse.jface.viewers.TreeViewer
 	}
 	public TreeViewer onSelection(final Runnable runnable)
 	{
-		UIThreadRunnable.syncExec(display,new VoidResult() { public void run()
-			{	
-				TreeViewer.this.getTree().addSelectionListener(new SelectionAdapter() {
-					  @Override
-					  public void widgetSelected(SelectionEvent e) 
-					  {
-						  UIThreadRunnable.syncExec(display,new VoidResult() { public void run()
-							{		
-							  runnable.run();
-							}});
-					  }});
-			}});
-/*		      @Override
-		      public void doubleClick(DoubleClickEvent event) {
-		        TreeViewer viewer = (TreeViewer) event.getViewer();
-		        IStructuredSelection thisSelection = (IStructuredSelection) event
-		            .getSelection();
-		        Object selectedNode = thisSelection.getFirstElement();
-		        viewer.setExpandedState(selectedNode,
-		            !viewer.getExpandedState(selectedNode));
-		      }
-		    });*/
+		tree.onSelection(runnable);		
 		return this;
 	}
-	/*public void refresh()
+
+	public TreeItem selected()
 	{
-		if (target != null && display != null)			
-			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
-			{
-				target.layout(true);
-			}});
-					
-		return this;
-	}*/
-	
+		return tree.selected();
+	}
 }

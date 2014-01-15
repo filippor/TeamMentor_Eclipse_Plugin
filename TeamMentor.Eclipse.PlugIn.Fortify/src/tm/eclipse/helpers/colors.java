@@ -37,6 +37,14 @@ public class colors
 	{
 		return get(SWT.COLOR_GREEN);
 	}
+	public static Color darkGreen()
+	{
+		return get(SWT.COLOR_DARK_GREEN);
+	}
+	public static Color darkRed()
+	{
+		return get(SWT.COLOR_DARK_RED);
+	}
 	public static Color red()
 	{
 		return get(SWT.COLOR_RED);

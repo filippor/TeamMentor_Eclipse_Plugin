@@ -31,7 +31,7 @@ public class Group extends org.eclipse.swt.widgets.Group
 		set = new Control_Set<Composite>(composite);
 	}	
 	
-	public static Group add_Group(final Composite target, final int style)
+	public static Group add_Group(final org.eclipse.swt.widgets.Composite target, final int style)
 	{	
 		if (target == null)
 			return null;		

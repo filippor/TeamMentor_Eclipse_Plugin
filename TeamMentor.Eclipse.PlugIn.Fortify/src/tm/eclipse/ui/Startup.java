@@ -1,4 +1,4 @@
-	package tm.eclipse.ui;
+package tm.eclipse.ui;
 
 import java.util.ArrayList;
 import java.util.List;

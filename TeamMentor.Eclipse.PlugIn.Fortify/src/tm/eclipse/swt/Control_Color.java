@@ -23,10 +23,19 @@ public class Control_Color<T extends Control>
 	{
 		return background();
 	}
-	public T back_Red()
+	public T blue()
+	{
+		return background(colors.blue());
+	}
+	public T green()
+	{
+		return background(colors.green());
+	}
+	public T red()
 	{
 		return background(colors.red());
 	}
+	
 	public T back_Green()
 	{
 		return background(colors.green());
