@@ -16,5 +16,5 @@ public class StringInput implements IStorageEditorInput
     public IStorage             getStorage()                { return storage;           }
     public String               getToolTipText()            { return "String-based file: " + storage.getName(); }
     @SuppressWarnings("rawtypes")
-	public Object               getAdapter( Class adapter)  { return null;              }
+    public Object               getAdapter( Class adapter)  { return null;              }
  }
