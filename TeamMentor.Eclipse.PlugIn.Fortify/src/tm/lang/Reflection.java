@@ -135,7 +135,14 @@ public class Reflection
 	}
 	public Method method(String methodName,Class<?> ... parameters )
 	{
-		return method(clazz, methodName, parameters);
+		//first try full match (with paramters)
+		Method methodMatch = method(clazz, methodName, parameters);
+		if(methodMatch != null)
+			return methodMatch;
+		for(Method method : methods())
+			if (method.getName().equals(methodName))
+				return method;
+		return null;
 	}
 
 	///Recursive Search for method	

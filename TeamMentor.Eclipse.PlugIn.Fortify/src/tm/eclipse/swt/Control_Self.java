@@ -23,6 +23,8 @@ public class Control_Self  <T extends Control> extends Reflection
 	public Control_Self(T target)
 	{
 		super(target);
+		this.target  = target;
+		this.display = target.getDisplay();
 		if (target instanceof Composite)
 			composite = (Composite)target;
 	}

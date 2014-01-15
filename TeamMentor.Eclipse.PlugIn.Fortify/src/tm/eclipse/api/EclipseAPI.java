@@ -25,7 +25,9 @@ import org.eclipse.ui.PlatformUI;
 
 
 
+
 import static tm.eclipse.helpers.log.*;
+import tm.eclipse.helpers.Images;
 import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.extra.ObjectBrowser;
 import tm.eclipse.swt.controls.extra.ObjectViewer;
@@ -47,6 +49,7 @@ public class EclipseAPI
 //	public TestGroovy   	testGroovy;	
 	public IWorkspace   	workspace;
 	
+	public Images			images;
 	public Plugin			plugin;
 	public Console			console;
 	public Menus			menus;
@@ -73,9 +76,10 @@ public class EclipseAPI
 				extraGroovyJars = new ArrayList<String>();
 				 
 				captureEclipseObjects();
+				images		 = new Images();
 				mouse 		 = new Mouse(display);
 				menus  		 = new Menus(workbench);
-				panelFactory = new Panels(workbench);		
+				panelFactory = new Panels(workbench);
 				views  		 = new Views(EclipseAPI.this);
 				editors  	 = new Editors(EclipseAPI.this);
 				plugin 	 	 = new Plugin(EclipseAPI.this);
@@ -83,6 +87,9 @@ public class EclipseAPI
 				platform 	 = new Platform(EclipseAPI.this);
 				registry 	 = new Registry(EclipseAPI.this);
 				utils 	     = new Utils(EclipseAPI.this);
+				
+				
+				
 				setEclipsePartEvents();
 				ready = true;
 			}});
