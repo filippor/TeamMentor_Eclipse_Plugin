@@ -10,10 +10,12 @@ import java.util.List;
 
 import org.eclipse.swt.*;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.views.IViewDescriptor;
 
 import tm.eclipse.helpers.EclipseUI;
 import tm.eclipse.ui.Startup;
@@ -104,23 +106,27 @@ public class Views //extends EclipseBase
 	}
 	public IViewPart 			 open(final String idTitleOrPartName)
 	{
-		return syncExec(new Result<IViewPart>() { public IViewPart run() 
+		IViewPart viewPart = syncExec(new Result<IViewPart>() { public IViewPart run() 
 			{
 				// first try to use the activeWorkbenchPage showView (which will create a new instance of the provided ID if needed)
 				try 
 				{
-					return eclipse.activeWorkbenchPage.showView(idTitleOrPartName);
+					return eclipse.activeWorkbenchPage.showView(idTitleOrPartName, null, IWorkbenchPage.VIEW_ACTIVATE);
 				} 
-				catch (PartInitException e) 
-				{				
-					//System.out.println("[open_View] Could not find view: " + viewIdTitleOrPartName);
-				}
-				//then first the existing viewReferences and get the view from there
+				catch (PartInitException e)  { }
+				
+				//then look at the existing viewReferences and get the view from there (this will not active it)
 				IViewReference reference = reference(idTitleOrPartName);
 				if (reference!= null)
 					return reference.getView(true);
+				
+				//finally look at the views registered in this eclipse
+				for(IViewDescriptor viewDescriptor : available())
+					if (viewDescriptor.getId().contains(idTitleOrPartName) || viewDescriptor.getLabel().contains(idTitleOrPartName))
+						return open(viewDescriptor.getId());
 				return null;
 			}});
+		return viewPart;
 		
 		/*try
 		{
@@ -200,5 +206,18 @@ public class Views //extends EclipseBase
 	public  Eclipse_Panel 		  create(String viewId)
 	{
 		return eclipse.panelFactory.open_Panel(viewId);
+	}
+
+	public List<IViewDescriptor>  available()
+	{
+		return eclipse.registry.views();
+	}
+	public List<String>           available_Ids()
+	{
+		return eclipse.registry.views_Ids();
+	}
+	public List<String>           available_Labels()
+	{
+		return eclipse.registry.views_Labels();
 	}
 }

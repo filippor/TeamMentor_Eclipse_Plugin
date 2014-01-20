@@ -1,7 +1,13 @@
 package tm.eclipse.api;
 
-import java.io.IOException;
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtbot.swt.finder.results.Result;
 
 public class Platform
 {
@@ -19,16 +25,22 @@ public class Platform
 	{
 		return org.eclipse.core.internal.runtime.InternalPlatform.getDefault();
 	}
-	public Process exec(String processPath, String arguments)
+	
+	public Shell shell(final String title)
 	{
-		try 
-		{
-			//return Runtime.getRuntime().exec(processPath, arguments);  //didn't work
-			return new ProcessBuilder(processPath, arguments).start();
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
-			return null;
-		}
+		return syncExec(display,new Result<Shell>() { public Shell run ()  
+			{				
+				for(Shell shell : shells())
+					if(shell.getText().equals(title))
+						return shell;
+				return null;
+			}});
+	}
+	public List<Shell> shells()
+	{
+		return syncExec(new Result<List<Shell>>() { public List<Shell> run ()  
+			{				
+				return Arrays.asList(display.getShells());
+			}});
 	}
 }

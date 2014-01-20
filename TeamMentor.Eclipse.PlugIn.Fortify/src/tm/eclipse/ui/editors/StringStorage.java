@@ -11,31 +11,47 @@ import org.eclipse.core.runtime.IPath;
 
 public class StringStorage implements IStorage 
 {
-  public String string;
- 
-  StringStorage(String input) {
+  public String  string;
+  public boolean readOnly;
+  
+  public StringStorage(String input) 
+  {
+    this(input, true);
+  }
+  public StringStorage(String input, boolean readOnly) 
+  {
     this.string = input;
+    this.readOnly = readOnly;
   }
  
-  public InputStream getContents() throws CoreException {
+  public InputStream getContents() throws CoreException 
+  {
     return new ByteArrayInputStream(string.getBytes());
   }
  
-  public IPath getFullPath() {
+  public IPath getFullPath() 
+  {
     return null;
   }
    
-public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) 
+{
     return null;
   }
  
-  public String getName() {
+  public String getName() 
+  {
     int len = Math.min(5, string.length());
     return string.substring(0, len).concat("..."); //$NON-NLS-1$
   }
  
   public boolean isReadOnly() 
   {	  
-    return true;
+    return readOnly;
+  }
+  public StringStorage readOnly(boolean readOnly)
+  {
+	  this.readOnly = readOnly;
+	  return this;
   }
 }

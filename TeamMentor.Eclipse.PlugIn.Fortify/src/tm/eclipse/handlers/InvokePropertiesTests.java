@@ -7,18 +7,20 @@ import org.eclipse.core.commands.IHandlerListener;
 
 import tm.eclipse.groovy.plugins.GroovyPlugins;
 import tm.eclipse.helpers.EclipseUI;
+import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
+import tm.eclipse.ui.pluginPreferences.pages.JUnitTestExecutionUI;
 
 public class InvokePropertiesTests implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException 
 	{				
-		GroovyPlugins groovyPlugins = new GroovyPlugins();
+		/*GroovyPlugins groovyPlugins = new GroovyPlugins();
 		String file = "TM_Plugins/Views/ExecutePreferencesJUnitTests.groovy";
 
-		groovyPlugins.execute_PluginScript(file);
-		return null;		
+		groovyPlugins.execute_PluginScript(file);*/
+		return new JUnitTestExecutionUI(Startup.eclipseApi);		
 	}
 
 	@Override public boolean isEnabled()  { return TM_Preferences.showAdvancedMode(); }

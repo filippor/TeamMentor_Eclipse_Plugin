@@ -55,8 +55,8 @@ public class Control_Self  <T extends Control> extends Reflection
 		return UIThreadRunnable.syncExec(composite.getDisplay(), new Result<List<Control>>() { public List<Control> run() 
 			{				
 				Control[]     controls_Array      = targetComposite.getChildren();					 // get array
-				List<Control> controls_NonEdiable = Arrays.asList(controls_Array);  			 // convert to list
-				List<Control> controls 			  = new ArrayList<Control>(controls_NonEdiable); // convert to a list that can be changed (add or remove elements). previous lines are the same as doing List<Control> controls = new ArrayList<Control>(Arrays.asList(composite.getChildren()));
+				List<Control> controls_NonEditable = Arrays.asList(controls_Array);  			 // convert to list
+				List<Control> controls 			  = new ArrayList<Control>(controls_NonEditable); // convert to a list that can be changed (add or remove elements). previous lines are the same as doing List<Control> controls = new ArrayList<Control>(Arrays.asList(composite.getChildren()));
 				
 				if (recursive)
 					for(Control childControl : controls_Array)	
@@ -68,9 +68,43 @@ public class Control_Self  <T extends Control> extends Reflection
 				
 			}});
 	}
+	public <T1> List<T1> controls(Class<T1> clazz)
+	{
+		return controls(composite, clazz);
+	}
+	public <T1> List<T1> controls(boolean recursive, Class<T1> clazz)
+	{
+		return controls(composite, recursive, clazz);
+	}
+	public <T1> List<T1> controls(Composite targetComposite  , Class<T1> clazz)
+	{
+		return controls(composite, false, clazz);
+	}
+	public <T1> List<T1> controls(Composite targetComposite  , boolean recursive, Class<T1> clazz)
+	{
+		List<Control> controls = controls(targetComposite, recursive);
+		List<T1> filtered = new ArrayList<T1>();
+		for(Control control : controls)
+			if (control.getClass() == clazz)
+				filtered.add(clazz.cast(control));
+		return filtered;
+	}
 	public <T1> T1 		 control(Class<T1> clazz)
 	{
-		for(Control control : controls())
+		return control(composite, clazz);
+	}
+	public <T1> T1 		 control(boolean recursive, Class<T1> clazz)
+	{
+		return control(composite, recursive, clazz);
+	}
+	public <T1> T1 		 control(Composite targetComposite  , Class<T1> clazz)
+	{
+		return control(composite, false, clazz);
+	}
+	public <T1> T1 		 control(Composite targetComposite  , boolean recursive, Class<T1> clazz)
+	{
+		List<Control> controls = controls(targetComposite, recursive);
+		for(Control control : controls)
 			if (control.getClass() == clazz)
 				return clazz.cast(control);
 		return null;

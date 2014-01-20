@@ -46,7 +46,13 @@ public class Control_Event <T extends Control>
 	}
 	public T onMouseEnter(final Runnable runnable)
 	{
-		if (runnable != null)
+		return mouseTrackListener(new MouseTrackListener() 
+						{
+							public void mouseHover(MouseEvent e) { }
+							public void mouseExit (MouseEvent e) { }							
+							public void mouseEnter(MouseEvent e) { runnable.run(); }
+						});		
+		/*if (runnable != null)
 			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
 				{
 					target.addMouseTrackListener( new MouseTrackListener() 
@@ -55,6 +61,15 @@ public class Control_Event <T extends Control>
 							public void mouseExit (MouseEvent e) { }							
 							public void mouseEnter(MouseEvent e) { runnable.run(); }
 						});
+				}});
+		return target;*/
+	}
+	public T mouseTrackListener(final MouseTrackListener mouseTrackListener)
+	{
+		if (mouseTrackListener != null)
+			UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+				{
+					target.addMouseTrackListener(mouseTrackListener);					
 				}});
 		return target;
 	}

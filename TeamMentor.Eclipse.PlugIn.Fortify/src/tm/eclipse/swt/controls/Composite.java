@@ -36,11 +36,11 @@ public class Composite extends org.eclipse.swt.widgets.Composite
 		super(parent, style);
 		this.parent  = parent;
 		this.display = parent.getDisplay(); 
-		mouse 		= new Mouse(this.getDisplay());
-		add   		= new Composite_Add<Composite>(this);
-		set   		= new Control_Set<Composite>(this);
-		get   		= new Control_Get<Composite>(this);
-		self   		= new Control_Self<Composite>(this);
+		mouse 		 = new Mouse(this.getShell());
+		add   		 = new Composite_Add<Composite>(this);
+		set   		 = new Control_Set<Composite>(this);
+		get   		 = new Control_Get<Composite>(this);
+		self   		 = new Control_Self<Composite>(this);
 		
 		Layout layout = this.getLayout();		
 		if (layout == null)

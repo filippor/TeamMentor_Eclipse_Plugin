@@ -158,7 +158,13 @@ public class TreeItem extends org.eclipse.swt.widgets.TreeItem
 				return TreeItem.this.getData();
 			}});		
 	};
-	
+	public String text()
+	{
+		return UIThreadRunnable.syncExec(tree.display,new Result<String>() { public String run()
+			{			
+				return TreeItem.this.getText();
+			}});		
+	};
 	public TreeItem red()
 	{
 		return foreground(colors.red());

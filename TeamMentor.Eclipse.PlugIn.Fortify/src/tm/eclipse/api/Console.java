@@ -92,7 +92,11 @@ public class Console// extends EclipseBase
 			consoleManager.showConsoleView(consoleToShow);
 		return this;
 	}
-	public Console 		  write(final String message)
+	public Console		  log(String message)
+	{
+		return write(message);
+	}
+	public Console 		  write(String message)
 	{
 		return write(message, messageConsole);
 	}

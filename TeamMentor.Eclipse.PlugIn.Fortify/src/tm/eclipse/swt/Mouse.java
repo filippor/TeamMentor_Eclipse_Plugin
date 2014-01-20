@@ -1,11 +1,13 @@
 package tm.eclipse.swt;
 
 import org.eclipse.swt.*;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
@@ -17,15 +19,24 @@ public class Mouse
 	public static int GLIDE_DELAY_STEP  	  = 5;
 	public static int MOUSE_CLICK_DELAY 	  = 300;
 	
-	public Display display;
+	public Shell        shell;
+	public Display 		display;
+	public MouseCursor  cursor; 
+	
 	//public Composite target;
 	
-	public Mouse(Display display)
+	public Mouse(Shell shell)
 	{
-//		this.target  = target;	
-		this.display = display;//target.getDisplay();
+		this.shell 	 = shell;
+		this.display = shell.getDisplay();
+		this.cursor  = new MouseCursor(shell);
 	}
 	
+	public Mouse delay(int value)
+	{
+		GLIDE_DELAY_MILISECONDS  = value;
+		return this;
+	}
 	public Mouse click()
 	{
 		click(SWT.MouseDown,1);		
@@ -45,9 +56,30 @@ public class Mouse
 		}});	
 		return this;
 	}
-	public Mouse glide(Control control)
+	public Mouse click(Control control)
 	{
-		return glide(location_Desktop(control));
+		return click(control,true); 
+	}
+	public Mouse click(Control control, boolean glideToControl)
+	{
+		if (glideToControl)
+			glide(control);			
+		else
+			move(control);
+		click();
+		return this;
+	}
+	public Mouse glide(final Control control)
+	{
+		UIThreadRunnable.syncExec(display, new VoidResult() { public void run()
+			{
+				Point location = location_Desktop(control);
+				Point size = control.getSize();
+				int targetX = location.x + size.x /2; // point to the middle x of the control
+				int targetY = location.y + size.y /2; // point to the middle y of the control
+				glide(targetX, targetY);
+			}});
+		return this;
 	}
 	public Mouse glide(Point point)
 	{
@@ -71,7 +103,7 @@ public class Mouse
 			if(GLIDE_DELAY_STEP > 0 && (newX+newY) % GLIDE_DELAY_STEP == 0)
 				sleep(GLIDE_DELAY_MILISECONDS);
 			
-		} while (currentLocation.x != x ); // && currentPos.y != y)
+		} while (currentLocation.x != x  || currentLocation.y != y);
 		return this;
 	}
 	public Mouse move(final Control control)
@@ -131,6 +163,10 @@ public class Mouse
 	}
 	
 	//keyboard event
+	public Mouse text(final String text)
+	{
+		return keyPress(text);
+	}
 	public Mouse keyPress(final String text)
 	{
 		return keyPress(text.toCharArray());

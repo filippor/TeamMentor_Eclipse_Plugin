@@ -59,6 +59,13 @@ public class Registry
 		return workbenchPlugin().getViewRegistry();
 	}
 	
+	public IEditorDescriptor editor(String idOrLabel)
+	{
+		for(IEditorDescriptor editorDescription : editors())
+			if (editorDescription.getLabel().contains(idOrLabel) || editorDescription.getId().equals(idOrLabel))
+				return editorDescription;
+		return null;
+	}
 	@SuppressWarnings("restriction")
 	public List<IEditorDescriptor> editors()
 	{
@@ -67,6 +74,30 @@ public class Registry
 			for(IEditorDescriptor editorDescriptor : fileEditorMapping.getEditors())
 				editors.add(editorDescriptor);
 		return editors;
+	}
+	public List<String> 		   editors_Ids()
+	{
+		return editors("getId"); 
+	}
+	public List<String> 		   editors_PluginIds()
+	{
+		return editors("getPluginID"); 
+	}
+	public List<String> editors_Labels()
+	{
+		return editors("getLabel"); 
+	}
+			
+	public List<String> editors(String getterMethodName)
+	{
+		//Question: is there a better way to do this in Java? In C# I could had used Lambda methods but here it seems that using the reflection trick bellow is the only option
+		List<String> ids = new ArrayList<String>();
+		for(IEditorDescriptor viewDescriptor : editors())
+		{
+			Reflection reflection = new Reflection(viewDescriptor);			
+			ids.add(reflection.invoke(String.class,getterMethodName));
+		}
+		return ids;
 	}
 	
 	@SuppressWarnings("restriction")

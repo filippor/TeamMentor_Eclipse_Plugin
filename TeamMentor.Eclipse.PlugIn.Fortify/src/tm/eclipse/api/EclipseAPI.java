@@ -1,8 +1,11 @@
 package tm.eclipse.api;
 
+import static tm.eclipse.helpers.log.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -11,28 +14,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-
-
-
-
-
-
-
-
-
-import static tm.eclipse.helpers.log.*;
 import tm.eclipse.helpers.Images;
 import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.extra.ObjectBrowser;
-import tm.eclipse.swt.controls.extra.ObjectViewer;
-//import tm.eclipse.groovy.TestGroovy;
-//import tm.eclipse.groovy.Tree_ExtensionMethods;
 import tm.eclipse.ui.EclipsePartEvents;
 
 public class EclipseAPI 
@@ -77,7 +68,7 @@ public class EclipseAPI
 				 
 				captureEclipseObjects();
 				images		 = new Images();
-				mouse 		 = new Mouse(display);
+				mouse 		 = new Mouse(shell);
 				menus  		 = new Menus(workbench);
 				panelFactory = new Panels(workbench);
 				views  		 = new Views(EclipseAPI.this);
@@ -171,6 +162,28 @@ public class EclipseAPI
 				runnable.run();
 			}});
 		return this;
+	}
+	public EclipseAPI asyncExec(final Runnable callback)
+	{
+		UIThreadRunnable.asyncExec(display, new VoidResult() { public void run()	
+			{
+				callback.run();
+			}});
+		return this;
+	}
+	public <T> T syncExec(final Callable<T> callback)
+	{
+		return UIThreadRunnable.syncExec(display, new Result<T>() { public T run()	
+			{
+				try {
+					return callback.call();
+				} 
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+					return null;
+				}
+			}});		
 	}
 	
 	public ObjectBrowser show(Object object)

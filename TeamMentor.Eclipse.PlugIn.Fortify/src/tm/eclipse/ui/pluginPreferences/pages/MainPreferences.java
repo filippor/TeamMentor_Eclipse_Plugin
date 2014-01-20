@@ -14,11 +14,13 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 //import org.eclipse.swt.widgets.*;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -37,9 +39,12 @@ import tm.utils.Consts_TM;
 
 public class MainPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public static IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+	public static IPreferenceStore 	    store = Activator.getDefault().getPreferenceStore();
+	public org.eclipse.swt.widgets.Text server_Text;
+	public org.eclipse.swt.widgets.Text loginToken_Text;
+	public Display 			 display;
 	public StringFieldEditor server_FieldEditor;	
-	public StringFieldEditor loginToken;
+	public StringFieldEditor loginToken;	
 	public Text 			 username_Text;
 	public Text 			 password_Text;
 	public Text 			 ssoToken_Text;
@@ -188,6 +193,7 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		Group group = addGroup(title);
 		
 		server_FieldEditor = new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SERVER		 , "TeamMentor &Server:", group);
+		server_Text        = server_FieldEditor.getTextControl(group);
 		addField(server_FieldEditor);
 		
 		server_FieldEditor.getTextControl(group).addModifyListener(setAuthButtonStatus);
@@ -199,35 +205,35 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		Group group  = addGroup(groupTitle);	
 			
 		//Username
-		new Label(group,SWT.BORDER).setText("User name:");
+		new Label(group,SWT.None).setText("User name:");
 		
 		username_Text = new Text(group,SWT.BORDER);
 		username_Text.setText("");
 		username_Text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		//Password
-		password_Label = new Label(group,SWT.BORDER);
+		password_Label = new Label(group,SWT.None);
 		password_Label.setText("Password");
 		
 		password_Text = new Text(group,SWT.BORDER | SWT.PASSWORD);
 		password_Text.setText("");
 		password_Text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 								
-		or_Label = new Label(group,SWT.BORDER).text("or");;
-		new Label(group,SWT.BORDER);
+		or_Label = new Label(group,SWT.None).text("or");;
+		new Label(group,SWT.None);
 		
 		//SSO Token
-		ssoToken_Label = new Label(group,SWT.BORDER).text("SSO Token");
+		ssoToken_Label = new Label(group,SWT.None).text("SSO Token");
 		ssoToken_Text = new Text(group,SWT.BORDER);
 		ssoToken_Text.setText("");
 		ssoToken_Text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 				
 		
-		new Label(group,SWT.BORDER);
+		new Label(group,SWT.None);
 		tm.eclipse.swt.controls.Composite composite = new tm.eclipse.swt.controls.Composite(group);
 		composite.set.layout.grid(2);
 		authenticate_Button = composite.add.button("Authenticate");
-		result = composite.add.label("",SWT.NONE);
+		result = composite.add.label("",SWT.None);
 		composite.layout(true);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
@@ -254,14 +260,15 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		String title = "For reference, here is your current Session ID:";
 		Group group  = addGroup(title);	
 		
-		loginToken = new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID	 , "Session ID:"		, group);
+		loginToken 		= new StringFieldEditor (PreferenceInitializer.P_TEAMMENTOR_SESSION_ID	 , "Session ID:"		, group);
+		loginToken_Text = loginToken.getTextControl(group);
 		loginToken.setEnabled(false, group);
 		addField(loginToken);
 	}
 	
 	public Group addGroup(String title)
 	{		
-		new Label(parent,SWT.BORDER).setText(title);
+		new Label(parent,SWT.None).setText(title);
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));		
 		group.setLayout(new GridLayout(2, false));	
@@ -283,7 +290,6 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		console.write(message);
 	}
 	
-
 	public void init(IWorkbench workbench) { }
 
 	protected void setControl(Control newControl)
@@ -291,8 +297,17 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 		super.setControl(newControl);
 	}
 	protected Control createContents(Composite parent)
-	{
+	{		
+		this.display = parent.getDisplay();
 		return super.createContents(parent);
+	}
+	
+	public String server_Text()
+	{
+		return UIThreadRunnable.syncExec(display,new Result<String>() { public String run() 
+			{
+				return server_Text.getText();
+			}});
 	}
 	
 	//URL util (move to another class)

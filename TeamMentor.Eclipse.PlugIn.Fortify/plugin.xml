@@ -160,6 +160,7 @@
                    style="push">
              </command>
              <menu
+                   icon="images/pngs/cog.png"
                    label="Advanced and Debug Features">
                 <command
                       commandId="tm.eclipse.commands.OpenScriptEditor"
@@ -175,7 +176,8 @@
                 </visibleWhen>
                 <command
                       commandId="tm.eclipse.commands.InvokePropertiesTests"
-                      label="Invoke Properties"
+                      icon="images/pngs/mouse.png"
+                      label="Open QA Automation GUI"
                       style="push">
                       <visibleWhen
                          checkEnabled="true">

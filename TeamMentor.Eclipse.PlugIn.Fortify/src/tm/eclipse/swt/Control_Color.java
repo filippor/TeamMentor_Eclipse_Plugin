@@ -31,6 +31,10 @@ public class Control_Color<T extends Control>
 	{
 		return background(colors.green());
 	}
+	public T gray()
+	{
+		return background(colors.gray());
+	}
 	public T red()
 	{
 		return background(colors.red());
