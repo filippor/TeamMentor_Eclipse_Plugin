@@ -54,9 +54,9 @@ public class Control_Self  <T extends Control> extends Reflection
 		
 		return UIThreadRunnable.syncExec(composite.getDisplay(), new Result<List<Control>>() { public List<Control> run() 
 			{				
-				Control[]     controls_Array      = targetComposite.getChildren();					 // get array
+				Control[]     controls_Array       = targetComposite.getChildren();					 // get array
 				List<Control> controls_NonEditable = Arrays.asList(controls_Array);  			 // convert to list
-				List<Control> controls 			  = new ArrayList<Control>(controls_NonEditable); // convert to a list that can be changed (add or remove elements). previous lines are the same as doing List<Control> controls = new ArrayList<Control>(Arrays.asList(composite.getChildren()));
+				List<Control> controls 			   = new ArrayList<Control>(controls_NonEditable); // convert to a list that can be changed (add or remove elements). previous lines are the same as doing List<Control> controls = new ArrayList<Control>(Arrays.asList(composite.getChildren()));
 				
 				if (recursive)
 					for(Control childControl : controls_Array)	

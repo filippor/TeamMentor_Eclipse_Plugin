@@ -21,7 +21,7 @@ public class IconsViewer
 	
 	public IconsViewer()
 	{
-		eclipse = Startup.eclipseApi;
+		eclipse = EclipseAPI.current();
 		createGui();
 	}
 	public IconsViewer createGui()

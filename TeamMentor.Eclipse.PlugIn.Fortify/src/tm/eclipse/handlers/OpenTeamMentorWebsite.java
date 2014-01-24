@@ -8,10 +8,11 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.ui.IWorkbench;
 
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.api.Panels;
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
+import tm.teammentor.TeamMentorAPI;
 import tm.utils.Consts_Eclipse;
 
 public class OpenTeamMentorWebsite implements IHandler 
@@ -21,13 +22,14 @@ public class OpenTeamMentorWebsite implements IHandler
 	{
 		TeamMentorAPI.setBrowserCookieToTMSession();
 		String server = TM_Preferences.getServer(); //"https://teammentor.net"
-		IWorkbench workbench = Startup.eclipseApi.workbench;
+		IWorkbench workbench = EclipseAPI.current().workbench;
 		final Panels panels = new Panels(workbench);	
-		if (online())
+		//if (online())
+		if(url_Exists(server))
 			panels.open_Url_in_WebBrowser("TeamMentor Website",server);
 		else
-			//panels.open_Html_in_WebBrowser(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE);
-			TeamMentorAPI.show_Html_With_TeamMentor_Banner(Consts_Eclipse.DEFAULT_TM_NET_OFFLINE_MESSAGE);		
+			TeamMentorAPI.showOfflineMessage();
+			//panels.open_Html_in_WebBrowser(Eclipse_Consts.DEFAULT_TM_NET_OFFLINE_MESSAGE);				
 		return null;
 	}
 

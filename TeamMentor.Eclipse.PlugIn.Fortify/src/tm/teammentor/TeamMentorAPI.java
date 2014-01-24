@@ -1,6 +1,7 @@
-package tm.eclipse.api;
+package tm.teammentor;
 
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
+import static tm.utils.Network.url_Exists;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,17 +20,26 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.Plugin_Config;
+import tm.eclipse.api.EclipseAPI;
+import tm.eclipse.api.Panels;
 import tm.eclipse.swt.controls.extra.ObjectBrowser;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.PluginResources;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.lang.Reflection;
+import tm.utils.Consts_Eclipse;
 import tm.utils.Consts_TM;
 
 public class TeamMentorAPI 
 {
 	public static EclipseAPI eclipseAPI;	
 	public static Browser 	 lastBrowser;
+	
+	static 
+	{
+		TeamMentorAPI.eclipseAPI = EclipseAPI.current();
+		TeamMentorAPI.setServer_CurrentSetup();
+	}
 	
 	public TeamMentorAPI()
 	{}
@@ -123,7 +133,10 @@ public class TeamMentorAPI
 */	
 	public static Browser open_Article_Page(String mode, String articleId)
 	{
-		String tmUrl = TM_Preferences.getServer() + "/" + mode + "/" + articleId; 		
+		String server = TM_Preferences.getServer();
+		if(url_Exists(server) == false )
+			return TeamMentorAPI.showOfflineMessage().browser;
+		String tmUrl = server + "/" + mode + "/" + articleId; 		
 		String browserId = (TM_Preferences.openArticleInNewWindow()) ? articleId : TM_Preferences.getDefaultBrowserId();
 		lastBrowser = eclipseAPI.panelFactory.open_Url_in_WebBrowser(browserId, tmUrl).browser;
 		return lastBrowser;
@@ -246,6 +259,10 @@ public class TeamMentorAPI
 		return Consts_TM.EMPTY_GUID;
 	}
 	
+	public static DefaultPart_WebBrowser showOfflineMessage() 
+	{
+		return TeamMentorAPI.show_Html_With_TeamMentor_Banner(Consts_Eclipse.DEFAULT_TM_NET_OFFLINE_MESSAGE);	
+	}
 	public static void mapGroovyBindings(Binding binding) 
 	{
 		binding.setVariable("openArticle", new MethodClosure(TeamMentorAPI.class, "open_Article"));

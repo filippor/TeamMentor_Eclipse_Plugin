@@ -19,7 +19,7 @@ public class JUnitTestExecutionUI
 	
 	public JUnitTestExecutionUI()
 	{
-		this(Startup.eclipseApi);
+		this(EclipseAPI.current());
 	}
 	public JUnitTestExecutionUI(EclipseAPI eclipse)
 	{

@@ -17,9 +17,9 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 
 import tm.eclipse.Plugin_Config;
 import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.helpers.*;
 import tm.eclipse.ui.Startup;
+import tm.teammentor.TeamMentorAPI;
 
 public class GroovyExecution 
 {
@@ -41,7 +41,7 @@ public class GroovyExecution
 	}
 	public GroovyExecution(List<String> _addToClassPath)
 	{		
-		eclipseApi = Startup.eclipseApi;		
+		eclipseApi = EclipseAPI.current();		
 		setBindingVariablesValues();
 		setCompilerConfiguration();	
 		setGroovyShell();
@@ -300,9 +300,9 @@ public class GroovyExecution
 				groovyExecution.execute_JUnit_Test(jUnitClass);
 
 			if (groovyExecution.executionException != null)
-				Startup.eclipseApi.log("JUnit Execution Error: " +  groovyExecution.executionException.toString().replace("\n"," "));
+				EclipseAPI.current().log("JUnit Execution Error: " +  groovyExecution.executionException.toString().replace("\n"," "));
 			else
-				Startup.eclipseApi.log("JUnit Result: " + groovyExecution.returnValue.toString().replace("\n"," "));
+				EclipseAPI.current().log("JUnit Result: " + groovyExecution.returnValue.toString().replace("\n"," "));
 			}});
 		thread.start();
 		return groovyExecution;

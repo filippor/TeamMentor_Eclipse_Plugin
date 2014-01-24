@@ -15,6 +15,8 @@ public class Network
 	}
 	public static boolean url_Exists(String URLName)
 	{		
+		if (Plugin_Config.FORCE_OFFLINE)
+			return false;
 	    try 
 	    {
 	    	HttpURLConnection.setFollowRedirects(true);	      

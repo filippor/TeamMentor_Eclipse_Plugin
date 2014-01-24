@@ -26,7 +26,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 
 import tm.eclipse.api.Console;
-import tm.eclipse.api.TeamMentorAPI;
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.helpers.colors;
 import tm.eclipse.swt.controls.Button;
 import tm.eclipse.swt.controls.Label;
@@ -35,6 +35,7 @@ import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
 import tm.eclipse.ui.pluginPreferences.PreferenceInitializer;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
+import tm.teammentor.TeamMentorAPI;
 import tm.utils.Consts_TM;
 
 public class MainPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -286,7 +287,7 @@ public class MainPreferences extends FieldEditorPreferencePage implements IWorkb
 
 	public void logMessage(String message)
 	{ 
-		Console console = Startup.eclipseApi.console;	
+		Console console = EclipseAPI.current().console;	
 		console.write(message);
 	}
 	

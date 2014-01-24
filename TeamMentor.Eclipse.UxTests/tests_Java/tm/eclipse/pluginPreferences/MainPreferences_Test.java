@@ -1,13 +1,17 @@
 package tm.eclipse.pluginPreferences;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
+
 import tm.eclipse.ui.pluginPreferences.*;
 
 public class MainPreferences_Test extends Preferences_JUnit
 {
 
 	@Test
+	@Ignore
 	public void checkPreferencesPage_DefaultValues()
 	{						
 		openPropertiesPage("tm.eclipse.ui.pluginPreferences")		
@@ -26,6 +30,7 @@ public class MainPreferences_Test extends Preferences_JUnit
 	}
 	
 	@Test
+	@Ignore
 	public void checkPreferencesPage_ValueChanges()
 	{		
 		//Open and set defaults

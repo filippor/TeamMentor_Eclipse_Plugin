@@ -160,7 +160,7 @@ public class Views //extends EclipseBase
 		{
 			syncExec(new VoidResult() { public void run() 
 				{			
-					Startup.eclipseApi.activeWorkbenchPage.hideView(viewToClose);
+					EclipseAPI.current().activeWorkbenchPage.hideView(viewToClose);
 				}});
 		}
 		return viewToClose;

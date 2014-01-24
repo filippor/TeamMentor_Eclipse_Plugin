@@ -17,7 +17,7 @@ public class OpenScriptEditor implements IHandler
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException 
 	{				
-		EclipseAPI eclipse = Startup.eclipseApi;  
+		EclipseAPI eclipse = EclipseAPI.current();  
 		return eclipse.views.open(SimpleEditor.ID, eclipse.utils.random_String());					
 	}
 

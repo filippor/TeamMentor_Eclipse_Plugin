@@ -26,7 +26,7 @@ public class MainPreferences_Live_Test
 	
 	public MainPreferences_Live_Test()
 	{
-		eclipse = Startup.eclipseApi;
+		eclipse = EclipseAPI.current();
 		mouse = eclipse.mouse;
 		mouse.delay(0);
 		setup_CreateShell();				

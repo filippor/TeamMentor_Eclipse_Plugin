@@ -1,6 +1,8 @@
-package tm.eclipse.api;
+package tm.teammentor.poc;
 
 import org.eclipse.jface.action.*;
+import tm.teammentor.*;
+import tm.eclipse.api.EclipseAPI;
 
 
 public class TeamMentorMenu 

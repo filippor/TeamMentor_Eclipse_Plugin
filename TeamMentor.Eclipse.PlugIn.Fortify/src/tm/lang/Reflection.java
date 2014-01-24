@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Reflection 
@@ -76,23 +78,49 @@ public class Reflection
 		Reflection reflection = new Reflection(target);		
 		return reflection;
 	}
+	public Field field(String fieldName)
+	{
+		
+		try 
+		{
+			return clazz.getDeclaredField(fieldName);
+		} 
+		catch (SecurityException    e)  {	e.printStackTrace(); } 
+		catch (NoSuchFieldException e)  { 	e.printStackTrace(); }
+		return null;
+	}
+	public Object field_Value(String fieldName)
+	{		
+		return field_Value(field(fieldName));
+	}
+	public <T> T field_Value(String fieldName, Class<T> returnType)
+	{
+		Object value = field_Value(fieldName);
+		if (value.getClass().equals(returnType))
+			return returnType.cast(value);
+		return null;
+	}
 	public Object field_Value(Field field)
 	{
-		field.setAccessible(true);
-		try {
-			return field.get(target);
-		} catch (IllegalArgumentException e) 
-		{
-			e.printStackTrace();
-		} catch (IllegalAccessException e) 
-		{
-			e.printStackTrace();
-		}
+		if (field!= null)
+			field.setAccessible(true);
+			try 
+			{
+				return field.get(target);
+			} 
+			catch (IllegalArgumentException e) 
+			{
+				e.printStackTrace();
+			} catch (IllegalAccessException e) 
+			{
+				e.printStackTrace();
+			}
 		return null;
 	}
 	public List<Field> fields()
 	{
-		return Arrays.asList(clazz.getDeclaredFields());		
+		List<Field> fields = Arrays.asList(clazz.getDeclaredFields()); 
+		return sort_by_Name(fields);
 	}
 	public List<Object> fields_Values()
 	{
@@ -179,7 +207,8 @@ public class Reflection
 	}
 	public List<Method> methods(Class<?> targetClass)
 	{
-		return Arrays.asList(targetClass.getMethods());
+		List<Method> methods = Arrays.asList(targetClass.getMethods());
+		return sort_by_Name(methods);		
 	}	
 	public List<String> methods_Names()
 	{
@@ -202,11 +231,48 @@ public class Reflection
 	}
 	public List<Method> methods_Declared()
 	{
-		return Arrays.asList(clazz.getDeclaredMethods());
+		List<Method> methods = Arrays.asList(clazz.getDeclaredMethods()); 				
+		return sort_by_Name(methods);
 	}
 	public Reflection inspect()
 	{
 		groovy.inspect.swingui.ObjectBrowser.inspect(target);
 		return this;
+	}
+	
+	public List<String> sort(List<String> list)
+	{
+		Collections.sort(list);
+		return list;
+	}
+	public <T> List<T> sort_by_Name(List<T> list)
+	{		
+		Collections.sort(list, new Comparator_FieldToStringValue<T>("name"));
+		return list;		
+	}	
+	
+	
+	
+	public static class Comparator_FieldToStringValue<T> implements Comparator<T>
+	{
+		public String fieldToSortBy;
+		public Comparator_FieldToStringValue(String fieldToSortBy)
+		{
+			this.fieldToSortBy = fieldToSortBy;
+		}
+	
+		public int compare(T object1, T object2)
+		{
+			try
+			{
+				String value1 = new Reflection(object1).field_Value(fieldToSortBy).toString();
+				String value2 = new Reflection(object2).field_Value(fieldToSortBy).toString();
+				return value1.compareTo(value2);
+			}
+			catch(Exception ex)
+			{
+				return 0;
+			}
+		}
 	}
 }

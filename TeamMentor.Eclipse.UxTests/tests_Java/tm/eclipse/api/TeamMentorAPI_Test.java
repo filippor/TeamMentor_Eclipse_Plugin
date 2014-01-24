@@ -1,12 +1,13 @@
 package tm.eclipse.api;
 
 import static org.junit.Assert.*;
+
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.junit.Test;
 
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
+import tm.teammentor.TeamMentorAPI;
 
 public class TeamMentorAPI_Test 
 {	

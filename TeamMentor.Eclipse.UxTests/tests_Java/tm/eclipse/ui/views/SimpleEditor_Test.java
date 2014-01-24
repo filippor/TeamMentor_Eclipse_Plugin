@@ -12,10 +12,10 @@ import org.eclipse.ui.IViewPart;
 import org.junit.Test;
 
 import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Startup;
 import tm.swtbot.SWTBot_JUnit;
+import tm.teammentor.TeamMentorAPI;
 
 public class SimpleEditor_Test extends SWTBot_JUnit
 {	

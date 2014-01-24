@@ -34,6 +34,7 @@ Export-Package: bsh,
  tm.eclipse.ui.actions,
  tm.eclipse.ui.pluginPreferences,
  tm.eclipse.ui.views,
+ tm.teammentor,
  tm.utils
 Bundle-ClassPath: .,
  libs/bsh-2.0b4.jar,

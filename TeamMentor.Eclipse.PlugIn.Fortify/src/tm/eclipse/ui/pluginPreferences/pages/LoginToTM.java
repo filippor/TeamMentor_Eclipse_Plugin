@@ -10,10 +10,10 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.pluginPreferences.PreferenceInitializer;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
+import tm.teammentor.TeamMentorAPI;
 import tm.utils.Consts_TM;
 
 public class LoginToTM extends PreferencePage implements IWorkbenchPreferencePage 

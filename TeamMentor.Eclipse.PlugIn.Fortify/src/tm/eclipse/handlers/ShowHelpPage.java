@@ -5,8 +5,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.ui.pluginPreferences.TM_Preferences;
+import tm.teammentor.TeamMentorAPI;
 
 public class ShowHelpPage implements IHandler 
 {

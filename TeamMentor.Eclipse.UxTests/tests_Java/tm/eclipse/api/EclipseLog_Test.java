@@ -29,7 +29,7 @@ public class EclipseLog_Test
 	{
 		logListener = new LogListener();
 		statusManager = StatusManager.getManager();
-		Platform.addLogListener(logListener);
+		org.eclipse.core.runtime.Platform.addLogListener(logListener);
 		
 		assertNotNull(logListener);
 		assertNotNull(statusManager);
@@ -41,7 +41,7 @@ public class EclipseLog_Test
 	@After
 	public void afterClass()
 	{
-		Platform.removeLogListener(logListener);
+		org.eclipse.core.runtime.Platform.removeLogListener(logListener);
 		assertFalse(RuntimeLog.contains(logListener));
 	}	
 	

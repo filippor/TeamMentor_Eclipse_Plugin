@@ -15,7 +15,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -25,10 +28,12 @@ import tm.eclipse.helpers.Images;
 import tm.eclipse.swt.Mouse;
 import tm.eclipse.swt.controls.extra.ObjectBrowser;
 import tm.eclipse.ui.EclipsePartEvents;
+import tm.teammentor.TeamMentorAPI;
 
 public class EclipseAPI 
 {
-	public static EclipsePartEvents partEvents;
+	private static EclipseAPI        current;
+	public  static EclipsePartEvents partEvents;	
 	public HashMap<String,Object> 	objects;
 	public List<String>     	  	extraGroovyJars;
 	
@@ -37,7 +42,6 @@ public class EclipseAPI
 	public IWorkbench 		workbench;	
 	public Display	 		display;
 	public Shell   	    	shell;
-//	public TestGroovy   	testGroovy;	
 	public IWorkspace   	workspace;
 	
 	public Images			images;
@@ -50,55 +54,70 @@ public class EclipseAPI
 	public Mouse			mouse;
 	public Platform			platform;
 	public Registry		    registry;
-	public Utils		    utils;
+	public Utils		    utils; 
 	public boolean			ready;
 	
-	/*static 
+	static 
 	{
-		Tree_ExtensionMethods.setExtensionmethods();		
-	}*/
-	
+		// this will be called on Eclipse startup on a separate thread
+		//PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() { @Override public void run() 
+			//{								
+			//}});	
+	}
 	public EclipseAPI() 
 	{	
 		display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() { public void run() 
-			{
-				objects 		= new HashMap<String,Object>();
-				extraGroovyJars = new ArrayList<String>();
-				 
-				captureEclipseObjects();
-				images		 = new Images();
-				mouse 		 = new Mouse(shell);
-				menus  		 = new Menus(workbench);
-				panelFactory = new Panels(workbench);
-				views  		 = new Views(EclipseAPI.this);
-				editors  	 = new Editors(EclipseAPI.this);
-				plugin 	 	 = new Plugin(EclipseAPI.this);
-				console 	 = new Console();
-				platform 	 = new Platform(EclipseAPI.this);
-				registry 	 = new Registry(EclipseAPI.this);
-				utils 	     = new Utils(EclipseAPI.this);
-				
-				
-				
-				setEclipsePartEvents();
-				ready = true;
-			}});
+		if (SWTUtils.isUIThread(display))
+			setup();
+		else		
+		//UIThreadRunnable.syncExec(display, new VoidResult() { public void run()
+			display.syncExec(new Runnable() { public void run() 
+				{
+					setup();
+				}});
 	}	
-	
-	public EclipseAPI setEclipsePartEvents()
+	public static EclipseAPI current()
 	{
-		if(partEvents==null)
-		{ 			
-			partEvents = new EclipsePartEvents();
+		if (current == null)
+			current = new EclipseAPI();
+		return current;
+	}
+	public EclipseAPI       setup()
+	{
+		objects 		= new HashMap<String,Object>();
+		extraGroovyJars = new ArrayList<String>();
+		 
+		captureEclipseObjects();
+		images		 = new Images();
+		mouse 		 = new Mouse(shell);
+		menus  		 = new Menus(workbench);
+		panelFactory = new Panels(workbench);
+		views  		 = new Views(EclipseAPI.this);
+		editors  	 = new Editors(EclipseAPI.this);
+		plugin 	 	 = new Plugin(EclipseAPI.this);
+		console 	 = new Console();
+		platform 	 = new Platform(EclipseAPI.this);
+		registry 	 = new Registry(EclipseAPI.this);
+		utils 	     = new Utils(EclipseAPI.this);
 
-			IPartService partService = workbench.getActiveWorkbenchWindow().getPartService();
-			partService.addPartListener(partEvents);
-				
-		}
+		setEclipsePartEvents();
+		ready = true;
 		return this;
 	}
-	public EclipseAPI captureEclipseObjects()
+	public EclipseAPI       alert(String message)
+	{		
+		MessageDialog.openInformation(shell,"Message",message);
+		return this;
+	}
+	public EclipseAPI 		asyncExec(final Runnable callback)
+	{
+		UIThreadRunnable.asyncExec(display, new VoidResult() { public void run()	
+			{
+				callback.run();
+			}});
+		return this;
+	}			
+	public EclipseAPI 		captureEclipseObjects()
 	{		
 		try
 		{
@@ -115,63 +134,38 @@ public class EclipseAPI
 		}
 		
 		return this;
-	}		
-	
-	//helpers
-	public IWorkbench 	    workbench()
-	{
-		return workbench;
 	}
-/*	public IWorkbenchWindow activeWorkbenchWindow()
+	public IEditorReference editor(String editorTitle)
 	{
-		if (workbench != null)
-		{
-			return workbench.getActiveWorkbenchWindow();
-		}
-		return null;
-	}
-	public IWorkbenchPage 	activePage()
-	{
-		IWorkbenchWindow workbenchWindow = activeWorkbenchWindow();
-		if (workbenchWindow != null)
-		 	return workbenchWindow.getActivePage();
-		return null;
-	}*/
-	public EclipseAPI       alert(String message)
-	{		
-		MessageDialog.openInformation(shell,"Message",message);
-		return this;
+		return editors.get(editorTitle);
 	}
 	public EclipseAPI       log(String message)
 	{		
-		/*StatusManager manager = StatusManager.getManager();
-		manager.handle(new Status(Status.INFO, "Message", message));		
-		*/
-		info(message);
+		//info(message);
+		console.log(message);
 		return this;
 	}	
-	public String ping()
+	public String 			ping()
 	{
 		return "Pong ...";
-	}
-	
-	public EclipseAPI syncExec(final Runnable runnable)
+	}	
+	public EclipseAPI 		setEclipsePartEvents()
 	{
-		UIThreadRunnable.syncExec(display, new VoidResult() { public void run()	
-			{
-				runnable.run();
-			}});
+		if(partEvents==null)
+		{ 			
+			partEvents = new EclipsePartEvents();
+
+			IPartService partService = workbench.getActiveWorkbenchWindow().getPartService();
+			partService.addPartListener(partEvents);
+				
+		}
 		return this;
-	}
-	public EclipseAPI asyncExec(final Runnable callback)
+	}	
+	public ObjectBrowser 	show(Object object)
 	{
-		UIThreadRunnable.asyncExec(display, new VoidResult() { public void run()	
-			{
-				callback.run();
-			}});
-		return this;
+		return ObjectBrowser.show_ObjectBrowser(object);
 	}
-	public <T> T syncExec(final Callable<T> callback)
+	public <T> T 			syncExec(final Callable<T> callback)
 	{
 		return UIThreadRunnable.syncExec(display, new Result<T>() { public T run()	
 			{
@@ -185,10 +179,23 @@ public class EclipseAPI
 				}
 			}});		
 	}
-	
-	public ObjectBrowser show(Object object)
+	public EclipseAPI 		syncExec(final Runnable runnable)
 	{
-		return ObjectBrowser.show_ObjectBrowser(object);
+		UIThreadRunnable.syncExec(display, new VoidResult() { public void run()	
+			{
+				runnable.run();
+			}});
+		return this;
+	}
+	public IViewReference   view(String viewIdTitleOrPartName)
+	{
+		return views.get(viewIdTitleOrPartName);
+	}
+
+	//helpers
+	public IWorkbench 	    workbench()
+	{
+		return workbench;
 	}
 }
 

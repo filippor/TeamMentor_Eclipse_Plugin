@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import tm.eclipse.Plugin_Config;
@@ -40,6 +41,7 @@ public class LoginToTM_Test extends Preferences_JUnit
 	}
 	
 	@Test 
+	@Ignore
 	public void open_Preferences_Page()
 	{			
 		//check textboxes
@@ -61,6 +63,7 @@ public class LoginToTM_Test extends Preferences_JUnit
 	}
 	
 	@Test 	
+	@Ignore
 	public void click_Login_Button()
 	{				
 		assertEquals("Submit", submitButton.getText());
@@ -83,8 +86,8 @@ public class LoginToTM_Test extends Preferences_JUnit
 		closePropertiesPage();
 	}	
 	
-	@Test
-	//@Ignore
+	@Test	
+	@Ignore
 	public void check_Properties_Values_After_Login()
 	{		
 		TM_Preferences.setSessionId("12345_ABCDEF");		

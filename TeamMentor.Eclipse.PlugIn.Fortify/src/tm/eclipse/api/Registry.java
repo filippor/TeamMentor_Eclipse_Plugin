@@ -61,9 +61,9 @@ public class Registry
 	
 	public IEditorDescriptor editor(String idOrLabel)
 	{
-		for(IEditorDescriptor editorDescription : editors())
-			if (editorDescription.getLabel().contains(idOrLabel) || editorDescription.getId().equals(idOrLabel))
-				return editorDescription;
+		for(IEditorDescriptor editorDescriptor : editors())
+			if (editorDescriptor.getLabel().contains(idOrLabel) || editorDescriptor.getId().equals(idOrLabel))
+				return editorDescriptor;
 		return null;
 	}
 	@SuppressWarnings("restriction")
@@ -83,6 +83,10 @@ public class Registry
 	{
 		return editors("getPluginID"); 
 	}
+	public List<String> editors_Names()
+	{
+		return editors_Labels();
+	}
 	public List<String> editors_Labels()
 	{
 		return editors("getLabel"); 
@@ -100,26 +104,41 @@ public class Registry
 		return ids;
 	}
 	
+	public IViewDescriptor view(String idOrLabel)
+	{
+		for(IViewDescriptor viewDescriptor : views())
+			if (viewDescriptor.getLabel().contains(idOrLabel) || viewDescriptor.getId().contains(idOrLabel))
+				return viewDescriptor;
+		return null;
+	}
 	@SuppressWarnings("restriction")
 	public List<IViewDescriptor> views()
 	{
 		IViewDescriptor[]  views = workbenchPlugin().getViewRegistry().getViews();
 		return Arrays.asList(views);
+	}	
+	public List<IViewDescriptor> views(String idOrLabel)
+	{
+		List<IViewDescriptor> views = new ArrayList<IViewDescriptor>();
+		for(IViewDescriptor viewDescriptor : views())
+			if (viewDescriptor.getLabel().contains(idOrLabel) || viewDescriptor.getId().contains(idOrLabel))
+				views.add(viewDescriptor);
+		return views;
 	}
 	public List<String> views_Ids()
 	{
-		return views("getId"); 
-	}
-	public List<String> views_Descriptions()
+		return views_by_Gettter("getId"); 
+	}	
+	public List<String> views_Names()
 	{
-		return views("getDescription"); 
+		return views_Labels();
 	}
 	public List<String> views_Labels()
 	{
-		return views("getLabel"); 
+		return views_by_Gettter("getLabel"); 
 	}
 			
-	public List<String> views(String getterMethodName)
+	public List<String> views_by_Gettter(String getterMethodName)
 	{
 		//Question: is there a better way to do this in Java? In C# I could had used Lambda methods but here it seems that using the reflection trick bellow is the only option
 		List<String> ids = new ArrayList<String>();

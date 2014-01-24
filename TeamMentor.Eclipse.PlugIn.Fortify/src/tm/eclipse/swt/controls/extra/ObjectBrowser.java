@@ -9,6 +9,7 @@ import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.swt.controls.Composite;
 import tm.eclipse.swt.controls.SashForm;
 import tm.eclipse.swt.controls.Tree;
@@ -136,7 +137,7 @@ public class ObjectBrowser extends Composite
 	}
 	public static ObjectBrowser show_ObjectBrowser(Object targetObject)
 	{
-		Eclipse_Panel view =  Startup.eclipseApi.views.create("Object Browser");
+		Eclipse_Panel view =  EclipseAPI.current().views.create("Object Browser");
 		view.clear();
 		ObjectBrowser objectBrowser = view.add.panel().add.objectBrowser();
 		view.refresh();

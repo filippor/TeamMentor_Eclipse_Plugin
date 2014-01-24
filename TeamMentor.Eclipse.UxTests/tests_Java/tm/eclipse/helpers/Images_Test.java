@@ -1,20 +1,26 @@
 package tm.eclipse.helpers;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
 import static org.junit.Assert.*;
+
 import java.util.List;
+
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.junit.Test;
 
 public class Images_Test 
 {
 	public String  expected_FirstName = "IMG_DEC_FIELD_ERROR";
-	public String  expected_LastName  = "IMG_OBJS_DND_TOFASTVIEW_SOURCE";
-	public int     expected_Size      = 79;
+	public String  expected_LastName  = "IMG_CORRECTION_MOVE";
+	public int     expected_Size      = 173;
 	
 	@Test
 	public void Images_Ctor()
 	{ 
-		assertNotNull(Images.sharedImages);
+		assertNotNull(Images.javaPluginImages_Names);
+		assertNotNull(Images.sharedImages_Names);
 	}
 	
 	@Test
@@ -39,6 +45,9 @@ public class Images_Test
 		assertEquals (image_Via_Name.getImageData().height, image_Via_Index.getImageData().height);
 		assertEquals (image_Via_Name.getImageData().width , image_Via_Index.getImageData().width);
 		assertEquals (image_Via_Name, image_Via_Index);
-		assertEquals (Images.get(expected_Size-1), Images.get(expected_LastName));
+		UIThreadRunnable.syncExec(new VoidResult() { public void run() 
+			{
+				assertEquals (Images.get(expected_Size-1), Images.get(expected_LastName));
+			}});
 	}
 }

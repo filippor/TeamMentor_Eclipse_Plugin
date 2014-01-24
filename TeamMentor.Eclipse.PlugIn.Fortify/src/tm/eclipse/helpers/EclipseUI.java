@@ -18,7 +18,7 @@ public class EclipseUI
 	
 	static
 	{
-		eclipse = Startup.eclipseApi;
+		eclipse = EclipseAPI.current();
 	}
 		
 	public static void 					 asyncExec(final Runnable runnable)

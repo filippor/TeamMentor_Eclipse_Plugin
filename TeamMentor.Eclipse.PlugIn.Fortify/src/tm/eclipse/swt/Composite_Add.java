@@ -133,6 +133,10 @@ public class Composite_Add <T extends org.eclipse.swt.widgets.Composite>//Compos
 	{
 		return text(null);
 	}
+	public Text text_Search()
+	{
+		return Text.add_Text_Search(target);
+	}
 	public Text text(String text)
 	{
 		return Text.add_Text(target).text(text);		

@@ -5,6 +5,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyPlugins;
 import tm.eclipse.helpers.EclipseUI;
 import tm.eclipse.ui.Startup;
@@ -20,7 +21,7 @@ public class InvokePropertiesTests implements IHandler {
 		String file = "TM_Plugins/Views/ExecutePreferencesJUnitTests.groovy";
 
 		groovyPlugins.execute_PluginScript(file);*/
-		return new JUnitTestExecutionUI(Startup.eclipseApi);		
+		return new JUnitTestExecutionUI(EclipseAPI.current());		
 	}
 
 	@Override public boolean isEnabled()  { return TM_Preferences.showAdvancedMode(); }

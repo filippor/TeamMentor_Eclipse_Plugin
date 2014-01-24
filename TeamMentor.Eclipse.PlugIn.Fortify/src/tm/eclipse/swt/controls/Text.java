@@ -176,7 +176,14 @@ public class Text extends org.eclipse.swt.widgets.Text
 	}
 	public Text fill()
 	{
-		return layout_Fill(true,true);
+		return fill(1);
+	}
+	public Text fill(int horizontalSpan)
+	{
+		set.layout.grid_Grab_All(horizontalSpan,1);
+		return this;
+	}
+		/*return layout_Fill(true,true);
 	}
 	public Text layout_Fill(final boolean grabExcessHorizontalSpace, final boolean grabExcessVerticalSpace)
 	{		
@@ -187,7 +194,7 @@ public class Text extends org.eclipse.swt.widgets.Text
 			Text.this.getParent().layout(true);
 		}});
 		return this;
-	}
+	}*/
 	@Override
 	public void setText(final String text)
 	{

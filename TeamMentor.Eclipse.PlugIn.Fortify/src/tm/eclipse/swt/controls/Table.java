@@ -66,7 +66,7 @@ public class Table extends org.eclipse.swt.widgets.Table
 	public static Table add_Table(final Composite target, final int style)
 	{	
 		if (target == null)
-			return null;		
+			return null;			
 		return UIThreadRunnable.syncExec(target.getDisplay(),new Result<Table>() { public Table run() 
 					{
 						Table table = new Table(target,style);												
@@ -92,6 +92,7 @@ public class Table extends org.eclipse.swt.widgets.Table
 				column.setWidth(width);			
 				else
 					column.pack();
+				
 				return column;			
 			}});			
 	}
@@ -133,6 +134,7 @@ public class Table extends org.eclipse.swt.widgets.Table
 	}
 	public List<TableColumn> columns()
 	{
+	
 		return UIThreadRunnable.syncExec(display,new Result<List<TableColumn>>() { public List<TableColumn> run() 
 			{
 				return Arrays.asList(Table.this.getColumns());
@@ -171,6 +173,16 @@ public class Table extends org.eclipse.swt.widgets.Table
 			{
 				for(TableColumn column: columns())
 					column.dispose();
+			}});
+		return this;
+	}
+	public Table column_Clear(final int columnIndex)
+	{
+		UIThreadRunnable.syncExec(display,new VoidResult() { public void run() 
+			{
+				List<TableColumn> columns = columns();
+				if (columns.size() > columnIndex)
+					columns.get(columnIndex).dispose();
 			}});
 		return this;
 	}

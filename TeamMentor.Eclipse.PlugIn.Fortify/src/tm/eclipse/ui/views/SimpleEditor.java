@@ -25,6 +25,7 @@ import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swt.SWT;
 
 import tm.eclipse.Plugin_Config;
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
@@ -310,6 +311,6 @@ public class SimpleEditor extends ViewPart
 
 	public SimpleEditor close() 
 	{		
-		return Startup.eclipseApi.views.close(this);					
+		return EclipseAPI.current().views.close(this);					
 	}
 }

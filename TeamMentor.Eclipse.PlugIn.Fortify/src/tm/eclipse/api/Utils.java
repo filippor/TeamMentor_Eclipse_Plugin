@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import tm.eclipse.swt.Control_Self;
+import tm.eclipse.ui.Startup;
 
 public class Utils 
 {
@@ -27,12 +28,30 @@ public class Utils
 	public Display    	display;
 	public SecureRandom secureRandom;
 	
+	public Utils()
+	{
+		this(EclipseAPI.current());
+	}
 	public Utils(EclipseAPI eclipse)
 	{
 		this.eclipse      = eclipse;
 		this.display 	  = eclipse.display;
 		this.secureRandom = new SecureRandom();
 	}
+	
+	public static int sleep(int miliseconds)
+	{
+		try 
+		{
+			Thread.sleep(miliseconds);
+		}
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
+		return miliseconds;
+	}
+	// file utils
 	public boolean dir_Create(File path)
 	{
 		return path.mkdirs();

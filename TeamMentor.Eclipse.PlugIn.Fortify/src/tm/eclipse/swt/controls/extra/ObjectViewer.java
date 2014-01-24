@@ -5,10 +5,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 
+
 //import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.swt.controls.Composite;
 import tm.eclipse.swt.controls.Label;
 import tm.eclipse.swt.controls.Table;
@@ -34,7 +36,7 @@ public class ObjectViewer extends Composite
 							  this.add.label("SuperClass:").bold();
 		this.superClassName = this.add.label("");
 	 	  					  this.add.label("toString:").bold();		
-		this.toString 		= this.add.text ("").layout_Fill(true, false);
+		this.toString 		= this.add.text ("").set.layout.grid_Grab_Horizontal();
 
 		this.table 			= this.add.table().fill(6);			
 	}
@@ -55,7 +57,7 @@ public class ObjectViewer extends Composite
 	
 	public static ObjectViewer show_ObjectViewer(Object targetObject)
 	{
-		Eclipse_Panel view =  Startup.eclipseApi.views.create("Object Viewer");
+		Eclipse_Panel view =  EclipseAPI.current().views.create("Object Viewer");
 		view.clear();
 		ObjectViewer objectViewer = view.add.panel().add.objectViewer();
 		view.refresh();
@@ -147,11 +149,12 @@ public class ObjectViewer extends Composite
 	}
 	public <Q> Table show(List<Q> list)
 	{		
-		if(list != null)
-		{
-			className.text(list.toArray().getClass().getName());
+		if(list != null && list.size() > 0)
+		{			
+			Object firstItem = list.toArray()[0];
+			className.text(firstItem.getClass().getName());
 			superClassName.text("");
-			toString.text(list.toString());
+			toString.text("");//list.toString());
 			this.add_Object_Getters_as_Columns(list);
 			this.add_Object_Getters_Values_as_Rows(list);
 		}

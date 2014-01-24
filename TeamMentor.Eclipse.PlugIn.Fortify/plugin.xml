@@ -55,13 +55,14 @@
            id="tm.eclipse.ui.PluginPreferences.Register"
            name="Register in TM">
      </page>
-     -->
+     
      <page
            category="tm.eclipse.ui.pluginPreferences"
            class="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
            id="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
            name="Edit About Page">
      </page>
+     -->
      <page
            category="tm.eclipse.ui.pluginPreferences"
            class="tm.eclipse.ui.pluginPreferences.pages.Config"
