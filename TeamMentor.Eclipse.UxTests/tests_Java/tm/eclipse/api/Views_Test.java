@@ -13,6 +13,7 @@ import java.util.List;
 
 
 
+
 /*import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,7 +34,7 @@ public class Views_Test
 	
 	public Views_Test()
 	{
-		eclipseApi = Startup.eclipseApi;
+		eclipseApi = EclipseAPI.current();
 		views = new Views(eclipseApi);
 		assertNotNull(eclipseApi);
 		assertNotNull(views);		
@@ -105,7 +106,7 @@ public class Views_Test
 		
 		assertIsClass(viewPart, SimpleEditor.class);
 		assertNotNull(views.reference(SimpleEditor.ID));
-		Startup.eclipseApi.views.close(viewPart);
+		eclipseApi.views.close(viewPart);
 		assertNull(views.reference(SimpleEditor.ID));
 		//				
 			
@@ -117,13 +118,12 @@ public class Views_Test
 
 	@Test
 	public void closeAboutWindow()
-	{
-		EclipseAPI eclipseAPI = Startup.eclipseApi;
-		IViewReference viewReference = eclipseAPI.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
+	{		
+		IViewReference viewReference = eclipseApi.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 		if (viewReference != null)
 		{
-			eclipseAPI.views.close(viewReference);
-			viewReference = eclipseAPI.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
+			eclipseApi.views.close(viewReference);
+			viewReference = eclipseApi.views.reference(Consts_Eclipse.VIEW_ID_WELCOME_SCREEN);
 			assertNull(viewReference);
 		}
 	}

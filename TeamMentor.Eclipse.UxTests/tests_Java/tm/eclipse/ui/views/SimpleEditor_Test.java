@@ -24,7 +24,7 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 	
 	public SimpleEditor_Test()
 	{		
-		eclipseAPI = Startup.eclipseApi;
+		eclipseAPI = EclipseAPI.current();
 		
 		IViewPart viewPart = null;
 		viewPart =  eclipseAPI.views.open(SimpleEditor.ID); 
