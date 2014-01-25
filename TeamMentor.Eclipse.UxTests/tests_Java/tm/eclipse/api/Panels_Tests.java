@@ -16,7 +16,7 @@ public class Panels_Tests
 	
 	public Panels_Tests()
 	{
-		eclipseApi = Startup.eclipseApi;
+		eclipseApi = EclipseAPI.current();
 		panels = new Panels(eclipseApi.workbench);
 		assertNotNull(eclipseApi);
 		assertNotNull(panels);

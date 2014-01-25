@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TeamMentor Eclipse Plugin Fortify
 Bundle-SymbolicName: TeamMentor.Eclipse.Plugin.Fortify;singleton:=true
-Bundle-Version: 1.5.7.qualifier
+Bundle-Version: 1.6.0.qualifier
 Bundle-Activator: tm.eclipse.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
@@ -48,3 +48,4 @@ Bundle-ClassPath: .,
  libs/org.hamcrest.core_1.3.0.v201303031735.jar,
  libs/org.hamcrest.library_1.3.0.v201305281000.jar,
  libs/junit.jar
+Bundle-Vendor: Securtiy Innovation
