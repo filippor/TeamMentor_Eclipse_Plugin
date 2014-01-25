@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import tm.eclipse.api.TeamMentorAPI;
+import tm.teammentor.TeamMentorAPI;
 
 public class EnableTeamMentor implements IWorkbenchWindowActionDelegate 
 {

@@ -5,6 +5,8 @@ import groovy.lang.Closure;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 
+import tm.eclipse.api.EclipseAPI;
+
 public class EclipsePartEvents implements IPartListener2
 {
 	public static boolean LOG_Part_Opened 	 = false;
@@ -18,7 +20,7 @@ public class EclipsePartEvents implements IPartListener2
 	{
 		if(LOG_Part_Opened)
 		{
-			Startup.eclipseApi.log("Part Activated: " + arg0.getId());
+			EclipseAPI.current().log("Part Activated: " + arg0.getId());
 		}
 		if (Part_Activated!=null)		
 		{
@@ -31,7 +33,7 @@ public class EclipsePartEvents implements IPartListener2
 	{
 		if(LOG_Part_Opened)
 		{
-			Startup.eclipseApi.log("Part Opened: " + arg0.getId());
+			EclipseAPI.current().log("Part Opened: " + arg0.getId());
 		}
 		if (Part_Opened!=null)
 		{

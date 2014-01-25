@@ -16,7 +16,7 @@ public class GroovyPlugins_Test
 	public void get_PluginScript_Path()
 	{		
 		assertNotNull(groovyPlugins.get_PluginScript_Path("TM_Plugins/Fortify/FortifyAPI.groovy"));		
-		assertNotNull(groovyPlugins.get_PluginScript_Path("TM_Plugins/Fortify/Tree_ExtensionMethods.groovy"));
+		assertNotNull(groovyPlugins.get_PluginScript_Path("TM_Plugins/Tests/Tree_ExtensionMethods.groovy"));
 		assertNotNull(groovyPlugins.get_PluginScript_Path("TM_Plugins/Tests/TestGroovy.groovy"));
 		assertNotNull(groovyPlugins.get_PluginScript_Path("TM_Plugins/Tests/MeaningOfLife.groovy"));
 		assertNull	 (groovyPlugins.get_PluginScript_Path("TM_Plugins/Fortify/AAAAA"));
@@ -28,7 +28,7 @@ public class GroovyPlugins_Test
 	public void get_PluginScript()
 	{		
 		assertNotNull(groovyPlugins.get_PluginScript_Code("TM_Plugins/Fortify/FortifyAPI.groovy"));		
-		assertNotNull(groovyPlugins.get_PluginScript_Code("TM_Plugins/Fortify/Tree_ExtensionMethods.groovy"));
+		assertNotNull(groovyPlugins.get_PluginScript_Code("TM_Plugins/Tests/Tree_ExtensionMethods.groovy"));
 		assertNotNull(groovyPlugins.get_PluginScript_Code("TM_Plugins/Tests/TestGroovy.groovy"));
 		assertNotNull(groovyPlugins.get_PluginScript_Code("TM_Plugins/Tests/MeaningOfLife.groovy"));
 		assertNull	 (groovyPlugins.get_PluginScript_Code("TM_Plugins/Fortify/AAAAA"));

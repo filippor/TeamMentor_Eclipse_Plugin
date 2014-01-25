@@ -8,8 +8,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.internal.WorkbenchWindow;
 
+import tm.teammentor.TeamMentorAPI;
+
 @SuppressWarnings("restriction")
-public class Menus extends EclipseUI 
+public class Menus extends EclipseBase 
 {
 	public Menus(IWorkbench workbench)
 	{

@@ -3,18 +3,21 @@ package tm.eclipse.api;
 import static tm.eclipse.helpers.log.*;
 import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 
+import java.util.UUID;
+
 import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.utils.StringUtils;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.swt.widgets.Composite;
 
-import tm.eclipse.ui.PluginPreferences.MainPreferences;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.eclipse.ui.views.Eclipse_Panel;
 
-public class Panels  extends EclipseUI
+public class Panels  extends EclipseBase
 {		
 	Eclipse_Panel panel;
 	
@@ -23,13 +26,20 @@ public class Panels  extends EclipseUI
 		super(workbench);	
 	}
 
+	public Eclipse_Panel open_Panel()
+	{
+		return open_Panel("");
+	}
 	public Eclipse_Panel open_Panel(final String panelId)
 	{	
 		return syncExec(new Result<Eclipse_Panel>() { public Eclipse_Panel run() 
 			{				
 				try 
-				{
-					Eclipse_Panel panel = (Eclipse_Panel)activePage.showView(Eclipse_Panel.ID, panelId, IWorkbenchPage.VIEW_ACTIVATE);
+				{	
+					String secondaryId = (StringUtils.isEmptyOrNull(panelId))
+											? UUID.randomUUID().toString()
+											: panelId;
+					Eclipse_Panel panel = (Eclipse_Panel)activePage.showView(Eclipse_Panel.ID, secondaryId, IWorkbenchPage.VIEW_ACTIVATE);
 					panel.title(panelId);
 					return panel;
 				} catch (PartInitException e) 
@@ -72,7 +82,7 @@ public class Panels  extends EclipseUI
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(String htmlToShow)
 	{
-		return open_Html_in_WebBrowser(MainPreferences.getDefaultBrowserId(), MainPreferences.getDefaultBrowserTitle(), htmlToShow);
+		return open_Html_in_WebBrowser(TM_Preferences.getDefaultBrowserId(), TM_Preferences.getDefaultBrowserTitle(), htmlToShow);
 	}
 	public DefaultPart_WebBrowser open_Html_in_WebBrowser(final String browserId, final String title, final String htmlToShow)
 	{	

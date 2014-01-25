@@ -28,7 +28,7 @@ public class PluginResources
 		
 		//for now override
 		//if (file.exists())			
-		//	return file.getAbsolutePath();
+	//		return file.getAbsolutePath();
 		
 		InputStream inputStream = get_Resource_Stream(resourceName);
 		if (inputStream != null)
@@ -61,6 +61,7 @@ public class PluginResources
 			{	
 				return plugin.getBundle()
 							 .getEntry(resourceName)
+							 
 							 .openStream();
 			}
 			return null;

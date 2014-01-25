@@ -15,10 +15,11 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.eclipse.swtbot.swt.finder.results.Result;
 
+import tm.eclipse.Plugin_Config;
 import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
-import tm.eclipse.helpers.eclipseUI;
+import tm.eclipse.helpers.*;
 import tm.eclipse.ui.Startup;
+import tm.teammentor.TeamMentorAPI;
 
 public class GroovyExecution 
 {
@@ -40,7 +41,7 @@ public class GroovyExecution
 	}
 	public GroovyExecution(List<String> _addToClassPath)
 	{		
-		eclipseApi = Startup.eclipseApi;		
+		eclipseApi = EclipseAPI.current();		
 		setBindingVariablesValues();
 		setCompilerConfiguration();	
 		setGroovyShell();
@@ -55,16 +56,18 @@ public class GroovyExecution
 		binding.setVariable("groovyShell"	  , groovyShell		);								
 		binding.setVariable("eclipseAPI"      , TeamMentorAPI.eclipseAPI);
 		binding.setVariable("eclipse"         , TeamMentorAPI.eclipseAPI);  // I think this one is better
-		binding.setVariable("eclipseUI"       , eclipseUI.class);  		
+		binding.setVariable("eclipseUI"       , EclipseUI.class);
+		binding.setVariable("images"          , Images.class);
+		binding.setVariable("colors"          , colors.class);
 		binding.setVariable("teammentorAPI"   , TeamMentorAPI.class);
 		binding.setVariable("groovy"          , GroovyExecution.class);
 		binding.setVariable("log"             , tm.eclipse.helpers.log.class);		
-		binding.setVariable("form"            , tm.swt.controls.Form_Ex.class);
+		binding.setVariable("form"            , tm.eclipse.swt.controls.extra.Form.class);
 	}	
 	public GroovyShell     setGroovyShell()
 	{
-		groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);
-		addRefsToGroovyShell(eclipseApi.extraGroovyJars);		
+		groovyShell = new GroovyShell(getClass().getClassLoader(),binding,configuration);		
+		addRefsToGroovyShell(eclipseApi.extraGroovyJars);
 		return groovyShell;
 	}
 	public GroovyShell     addRefToGroovyShell(String refToAdd)
@@ -76,7 +79,7 @@ public class GroovyExecution
 				URL url = new URL("file:///" + refToAdd);							
 				groovyShell.getClassLoader().addURL(url);
 			}
-			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@£$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
+			catch(MalformedURLException ex)				// I can't see to be able to trigger this, even with crazy values like: url = new URL("bb$%aa !@$%^&*()_+{}[]|\"'?/><,.;'\\~`?|");
 			{
 				ex.printStackTrace();
 			}
@@ -92,10 +95,12 @@ public class GroovyExecution
 	public Object 	       executeScript(String scriptText)
 	{					
 		scriptToExecute = scriptText;
+		if (Plugin_Config.AUTOSAVE_GROOVY_SCRIPTS)
+			eclipseApi.plugin.save_SavedScript(scriptText); //save script to SaveScripts folder
 		return executeScript();		
 	}
 	public Object          executeScript()
-	{
+	{		
 		executionException = null;
 		returnValue = null;
 		setExecuteOptionsBasedOnCodeReferences();					// do this at the last minute so that we have access to the final state of the objects
@@ -295,14 +300,14 @@ public class GroovyExecution
 				groovyExecution.execute_JUnit_Test(jUnitClass);
 
 			if (groovyExecution.executionException != null)
-				Startup.eclipseApi.log("JUnit Execution Error: " +  groovyExecution.executionException.toString().replace("\n"," "));
+				EclipseAPI.current().log("JUnit Execution Error: " +  groovyExecution.executionException.toString().replace("\n"," "));
 			else
-				Startup.eclipseApi.log("JUnit Result: " + groovyExecution.returnValue.toString().replace("\n"," "));
+				EclipseAPI.current().log("JUnit Result: " + groovyExecution.returnValue.toString().replace("\n"," "));
 			}});
 		thread.start();
 		return groovyExecution;
 	}
-	public static GroovyExecution dev_Execute_JUnitTest()
+	/*public static GroovyExecution dev_Execute_JUnitTest()
 	{		
 		String jUnitTestClass = "tm.eclipse.ui.TeamMentor_Menu_Test";
 		return dev_Execute_JUnitTest(jUnitTestClass);
@@ -318,8 +323,30 @@ public class GroovyExecution
 		groovyExecution.addRefToGroovyShell(binFolder);
 		groovyExecution.execute_JUnit_Test(jUnitTestClass);
 		return groovyExecution;
+	}*/
+	public static Object 		  dev_Execute_TM_JUnit()
+	{
+		return dev_Execute_TM_JUnit("tm.utils.Network_Test");
 	}
-	
+	public static Object 		  dev_Execute_TM_JUnit(String jUnitClassName)
+	{
+		GroovyExecution groovyExecution = new GroovyExecution();
+		try {
+			URL binFolder_TMCode   = GroovyExecution.class.getProtectionDomain().getCodeSource().getLocation();
+			URL binFolder_TMJUnit;
+		
+			binFolder_TMJUnit = new URL(binFolder_TMCode, "../../TeamMentor.Eclipse.UxTests/bin/");
+				 	
+			groovyExecution.addRefToGroovyShell(binFolder_TMJUnit.getPath());
+
+			groovyExecution.execute_JUnit_Test(jUnitClassName);
+		}
+		catch (MalformedURLException e) 
+		{
+			e.printStackTrace();
+		}			
+		return groovyExecution;
+	}	
 	public static void inspect_Object(Object target)
 	{
 		groovy.inspect.swingui.ObjectBrowser.inspect(target);

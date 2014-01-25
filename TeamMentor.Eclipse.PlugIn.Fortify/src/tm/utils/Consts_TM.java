@@ -10,6 +10,6 @@ public class Consts_TM
 	
 	//unit tests constants
 	public static String QA_LOGIN_USERNAME = "qa_user";
-	public static String QA_LOGIN_PASSWORD = "@£$DS()JN14vss";
+	public static String QA_LOGIN_PASSWORD = "@$DS()JN14vss";
 	public static String QA_LOGIN_SESSION = "11111111-2222-3333-4444-555555555555";
 }

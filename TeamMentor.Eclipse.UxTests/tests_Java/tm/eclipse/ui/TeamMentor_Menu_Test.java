@@ -12,6 +12,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.junit.Test;
 
 import tm.eclipse.Plugin_Config;
+import tm.eclipse.ui.pluginPreferences.TM_Preferences;
 import tm.eclipse.ui.views.DefaultPart_WebBrowser;
 import tm.swtbot.SWTBot_JUnit;
 import tm.swtbot.models.SWTBot_View;
@@ -61,11 +62,12 @@ public class TeamMentor_Menu_Test extends SWTBot_JUnit
 	{
 		if (online())
 		{
-			bot.menu("TeamMentor").menu("Open TeamMentor Website").click();
-			SWTBot_View teamMentorNet = swtBot_View_Fast("https://teammentor.net");
+			String expectedServer = TM_Preferences.getServer();
+			bot.menu("TeamMentor").menu("Open TeamMentor Website").click();			
+			SWTBot_View teamMentorNet = swtBot_View_Fast(expectedServer);//"https://teammentor.net");
 			assertNotNull(teamMentorNet);
 			teamMentorNet.close();
-			teamMentorNet = swtBot_View_Fast("https://teammentor.net");
+			teamMentorNet = swtBot_View_Fast(expectedServer);//"https://teammentor.net");
 			assertNull(teamMentorNet);			
 		}
 

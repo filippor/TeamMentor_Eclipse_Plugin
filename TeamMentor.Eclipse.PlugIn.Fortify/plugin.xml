@@ -36,16 +36,18 @@
    
   <extension point="org.eclipse.ui.preferencePages">
      <page
-           class="tm.eclipse.ui.PluginPreferences.MainPreferences"
-           id="tm.eclipse.ui.PluginPreferences"
+           class="tm.eclipse.ui.pluginPreferences.pages.MainPreferences"
+           id="tm.eclipse.ui.pluginPreferences"
            name="TeamMentor Preferences">
      </page>
+     <!--
      <page
-           category="tm.eclipse.ui.PluginPreferences"
-           class="tm.eclipse.ui.PluginPreferences.LoginToTM"
+           category="tm.eclipse.ui.pluginPreferences"
+           class="tm.eclipse.ui.pluginPreferences.pages.LoginToTM"
            id="tm.eclipse.ui.PluginPreferences.LoginToTM"
            name="Login to TeamMentor">
      </page>
+     -->
      <!--
      <page
            category="tm.eclipse.ui.PluginPreferences"
@@ -53,12 +55,19 @@
            id="tm.eclipse.ui.PluginPreferences.Register"
            name="Register in TM">
      </page>
+     
+     <page
+           category="tm.eclipse.ui.pluginPreferences"
+           class="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
+           id="tm.eclipse.ui.pluginPreferences.pages.EditAboutPage"
+           name="Edit About Page">
+     </page>
      -->
      <page
-           category="tm.eclipse.ui.PluginPreferences"
-           class="tm.eclipse.ui.PluginPreferences.EditAboutPage"
-           id="tm.eclipse.ui.PluginPreferences.EditAboutPage"
-           name="Edit About Page">
+           category="tm.eclipse.ui.pluginPreferences"
+           class="tm.eclipse.ui.pluginPreferences.pages.Config"
+           id="tm.eclipse.ui.pluginPreferences.pages.Config"
+           name="Config">
      </page>
      <!--
      <page
@@ -78,7 +87,7 @@
   <extension
         point="org.eclipse.core.runtime.preferences">
      <initializer
-           class="tm.eclipse.ui.PluginPreferences.PreferenceInitializer">
+           class="tm.eclipse.ui.pluginPreferences.PreferenceInitializer">
      </initializer>
   </extension>
  <!--
@@ -152,6 +161,7 @@
                    style="push">
              </command>
              <menu
+                   icon="images/pngs/cog.png"
                    label="Advanced and Debug Features">
                 <command
                       commandId="tm.eclipse.commands.OpenScriptEditor"
@@ -165,6 +175,15 @@
                 <visibleWhen
                       checkEnabled="true">
                 </visibleWhen>
+                <command
+                      commandId="tm.eclipse.commands.InvokePropertiesTests"
+                      icon="images/pngs/mouse.png"
+                      label="Open QA Automation GUI"
+                      style="push">
+                      <visibleWhen
+                         checkEnabled="true">
+                      </visibleWhen>
+                </command>
              </menu>
           </menu>
        </menuContribution>
@@ -192,6 +211,11 @@
              defaultHandler="tm.eclipse.handlers.OpenScriptEditor"
              id="tm.eclipse.commands.OpenScriptEditor"
              name="Open TeamMentor Script Editor">
+       </command>
+       <command
+             defaultHandler="tm.eclipse.handlers.InvokePropertiesTests"
+             id="tm.eclipse.commands.InvokePropertiesTests"
+             name="Invoke TM Properties Tests">
        </command>
     </extension>
     <!--

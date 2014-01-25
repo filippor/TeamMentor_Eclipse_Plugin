@@ -5,36 +5,50 @@ import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.widgets.Tree
 import org.eclipse.ui.IViewPart
 import org.eclipse.ui.IWorkbenchPartReference
-
 import tm.eclipse.api.EclipseAPI;
 
 class FortifyAPI
 {
 	public static FortifyAPI current;
 	public EclipseAPI eclipseApi;
-	public String 	  partTitle = "SCA Analysis Results - With TeamMentor Support";
-	
+	public String 	  partTitle   = "SCA Analysis Results - With TeamMentor Support";
+	public String     fortifyView = "com.fortify.awb.views.views.IssuesListView";
 	
 	public FortifyAPI()
 	{
+       
 		current = this;
-		eclipseApi =  tm.eclipse.ui.Startup.eclipseApi;
-		eclipseApi.log("*** Configuring FortifyAPI support");
+		eclipseApi =  tm.eclipse.api.EclipseAPI.current();
+		eclipseApi.console.log("[FortifyAPI] Configuring FortifyAPI support");
 
-		add_ContentProviderStateListener();
+		if (eclipseApi.registry.view(fortifyView) != null)
+		{
+			add_ContentProviderStateListener();
 
-/*		eclipseApi.partEvents.Part_Opened =
-			{
-				IWorkbenchPartReference part ->
-						eclipseApi.log("View Opened: " + part.id);
-						this.setFortifyHooks();
-			};*/
+			eclipseApi.partEvents.Part_Opened = 
+				{
+					IWorkbenchPartReference part -> 
+   
+						   eclipseApi.console.log("View Opened: " + part.id);
+							if(part.id.equals(fortifyView))//"com.fortify.awb.views.views.IssuesListView"))
+						        this.add_ContentProviderStateListener();
+
+				};
+		}
+		else
+			eclipseApi.console.log("[FortifyAPI] Skyping setup since the expected view is not available: " + fortifyView)
 	}
 	public FortifyAPI add_ContentProviderStateListener()
     { 
-	    eclipseApi.log("   - addContentProviderStateListener");
-		def issuesList     		    = eclipseApi.activeWorkbenchPage.findView("com.fortify.awb.views.views.IssuesListView");  // gets a reference to the Fortify view
-		def fortifyClassLoader  = issuesList.class.getClassLoader();																		 // gets the class loader of the Fortify plugin
+	    //eclipseApi.console.log("[FortifyAPI] in addContentProviderStateListener");
+		def issuesList     		    = eclipseApi.activeWorkbenchPage.findView(fortifyView);//"com.fortify.awb.views.views.IssuesListView");  // gets a reference to the Fortify view
+        if (issuesList == null)
+		{
+             eclipseApi.console.log("[FortifyAPI] Skipping addContentProviderStateListener since com.fortify.awb.views.views.IssuesListView is currently not available");
+             return this;
+	    }
+	     eclipseApi.console.log("[FortifyAPI] Found com.fortify.awb.views.views.IssuesListView reference:" + issuesList.toString());
+ 	    def fortifyClassLoader  = issuesList.class.getClassLoader();																		 // gets the class loader of the Fortify plugin
 		def currentThread = Thread.currentThread();																						   // get the curren thead
 		def originalClassLoader = currentThread.getContextClassLoader();														   // save its class loader
 		currentThread.setContextClassLoader(fortifyClassLoader);	
@@ -49,7 +63,7 @@ class FortifyAPI
 		def swtIntegrationUtil_Class  =  new bsh.Interpreter().eval(beanShellScript);			
 		def swtIntegration = swtIntegrationUtil_Class.newInstance();
 		swtIntegration.registerContentProviderStateListener(stateListener);
-		eclipseApi.log("   - new stateListener: " + stateListener.toString());
+		eclipseApi.console.log("[FortifyAPI] Added stateListener: " + stateListener.toString());
 
 		currentThread.setContextClassLoader(originalClassLoader);																	  // restore original class loader
 
@@ -66,7 +80,7 @@ class FortifyAPI
 			if (it.toString().contains("Bsh object"))
 			{
 				swtIntegration.removeContentProviderStateListener(it)
-				 eclipseApi.log("   - removing ContentProviderStateListener: " + it.toString());
+				 eclipseApi.console.log("[FortifyAPI] Removed ContentProviderStateListener: " + it.toString());
 			}
 		}
 		return this;
@@ -78,18 +92,18 @@ class FortifyAPI
 		if (recommendation != null && recommendation != "")
 		{
 			def tmGuid =  resolveIssueNameToGuid(category);
-			eclipseApi.log("issue category: " + category + " : GUID : " + tmGuid);
+			eclipseApi.console.log("[FortifyAPI]  in showIssue(..) issue with category: " + category + " : GUID : " + tmGuid);
 			if (tmGuid != null)
 			{
-//				tm.eclipse.api.TeamMentorAPI.open_Article(tmGuid);   // this allows edits but it is slowed and doesn't look very good when the TM window doesn't have at least 400px in width
-				tm.eclipse.api.TeamMentorAPI.view_Html(tmGuid);
+				tm.teammentor.TeamMentorAPI.open_Article(tmGuid);   // this allows edits but it is slowed and doesn't look very good when the TM window doesn't have at least 400px in width
+//				tm.teammentor.TeamMentorAPI.view_Html(tmGuid);
 			}
 			else
 			{
-				def html = "<h4>Fortify Recommentation</h4>" + 
+				def html = "<h4>Fortify Recommendation</h4>" + 
 				                  "</br>Since there is no article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" + 
-		    			              "<pre>" + recommendation + "</pre>"
-				tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
+		    			              "<pre style='word-break: normal;'>" + recommendation + "</pre>"
+				tm.teammentor.TeamMentorAPI.show_Html_With_TeamMentor_Banner(html);
 			}
 		}
 		else
@@ -99,8 +113,8 @@ class FortifyAPI
 
 	public void showNoIssueMessage()
 	{
-		eclipseApi.log("showNoIssueMessage");
-		tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner("No Fortify issue selected.");
+		eclipseApi.console.log("[FortifyAPI] in ShowNoIssueMessage");
+		tm.teammentor.TeamMentorAPI.show_Html_With_TeamMentor_Banner("No Fortify issue selected.");
 	}
 
 	public IViewPart getIssuesListView()
@@ -113,6 +127,20 @@ class FortifyAPI
 	
 	public String resolveIssueNameToGuid(String issueName)
 	{
+		def teamMentorMappings = new tm.teammentor.TeamMentorMappings();
+		def mappedIssue =  teamMentorMappings.resolve_by_Fortify("Java", issueName);
+		if (mappedIssue == null)			
+		{
+			eclipseApi.log("[FortifyAPI] in resolveIssueNameToGuid: could not get mapping for" + issueName);
+			return null;
+		}
+		eclipseApi.log("[FortifyAPI] mapped " + issueName + " to  " + mappedIssue.TM_GUID);
+		return mappedIssue.TM_GUID
+			
+/*
+		eclipseApi.log("*** teamMentorMapping: " + teamMentorMapping);
+		eclipseApi.log("in resolveIssueNameToGuid");
+		//resolve_by_Fortify
 		if (issueName!= null)
 		{
 			def lines = tmMappings.split("\n");
@@ -123,7 +151,7 @@ class FortifyAPI
 					return line.split(",")[2];
 			}
 		}
-		return null;
+		return null;*/
 	}
 	
 	public String beanShell_ContentProviderStateListener = """ 
@@ -146,18 +174,18 @@ class FortifyAPI
 					currentThread.setContextClassLoader(fortifyClassLoader);
 					
  
-					tm.eclipse.ui.Startup.eclipseApi.log(" **** ContentProviderStateListener notify event: " + eventType);
+					//tm.eclipse.api.EclipseAPI.current().console.log(" **** ContentProviderStateListener notify event: " + eventType);
 
 				   if (eventType == ContentProviderEventType.SELECTED_ISSUES_CHANGED)
 					{
-						tm.eclipse.ui.Startup.eclipseApi.log("    - contentProvider : "     + contentProvider.toString());
+						tm.eclipse.api.EclipseAPI.current().console.log("[FortifyAPI][ContentProviderStateListener] ContentProvider : "  + contentProvider.toString());
 						issue = contentProvider.getSelectedIssue();
-						tm.eclipse.ui.Startup.eclipseApi.log("    - issue : "     + issue.toString());
+						tm.eclipse.api.EclipseAPI.current().console.log("[FortifyAPI][ContentProviderStateListener] Selected Issue : "     + issue.toString());
 						
 						descriptableIssue = issue.getDescriptableIssue();				
 					    if(descriptableIssue == null)
 						{
-							tm.eclipse.ui.Startup.eclipseApi.log("Error: descriptableIssue was null");
+							tm.eclipse.api.EclipseAPI.current().console.log("[FortifyAPI][ContentProviderStateListener] Error: descriptableIssue was null");
 							fortifyApi.showIssue(null, "","");
 					    }
 						else
@@ -167,16 +195,6 @@ class FortifyAPI
 
 							fortifyApi.showIssue(issue, category, recommendation);
 						}
-/*						if (recommendation != null && recommendation != "")
-						{
-
-
-//							recommendation = "</br>Since there is no TeamMentor article for the current Fortify mapping, here is the default Fortify Recommendation content:<br><br>" +
-//														   "<pre>" + recommendation + " </pre>";
-//						    tm.eclipse.api.TeamMentorAPI.show_Html_With_TeamMentor_Banner(recommendation);	
-						}
-						else
-							fortifyApi.showNoIssueMessage();*/
 					}
  					currentThread.setContextClassLoader(originalClassLoader);
 			}

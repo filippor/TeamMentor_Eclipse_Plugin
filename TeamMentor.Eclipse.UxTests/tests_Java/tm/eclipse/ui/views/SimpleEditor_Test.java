@@ -12,10 +12,10 @@ import org.eclipse.ui.IViewPart;
 import org.junit.Test;
 
 import tm.eclipse.api.EclipseAPI;
-import tm.eclipse.api.TeamMentorAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Startup;
 import tm.swtbot.SWTBot_JUnit;
+import tm.teammentor.TeamMentorAPI;
 
 public class SimpleEditor_Test extends SWTBot_JUnit
 {	
@@ -27,7 +27,7 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 		eclipseAPI = Startup.eclipseApi;
 		
 		IViewPart viewPart = null;
-		viewPart =  eclipseAPI.views.open_View(SimpleEditor.ID);
+		viewPart =  eclipseAPI.views.open(SimpleEditor.ID); 
 		/*try 
 		{
 			viewPart = eclipseAPI.activePage().showView(SimpleEditor.ID);
@@ -54,10 +54,10 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 	@Test
 	public void closeSimpleEditor()
 	{
-		assertNotNull(eclipseAPI.views.get_View_Reference(SimpleEditor.ID));
+		assertNotNull(eclipseAPI.views.reference(SimpleEditor.ID));
 		simpleEditorView.close();
 		
-		assertNull(eclipseAPI.views.get_View_Reference(SimpleEditor.ID));
+		assertNull(eclipseAPI.views.reference(SimpleEditor.ID));
 			
 	}
 	
@@ -136,7 +136,7 @@ public class SimpleEditor_Test extends SWTBot_JUnit
 				assertEquals   (simpleEditorView.compileAndExecuteCode("return eclipseAPI.display	  "), simpleEditorView.groovyExecution.eclipseApi.display);			
 				
 				assertEquals   (simpleEditorView.compileAndExecuteCode(null),null);
-				assertEquals   (simpleEditorView.compileAndExecuteCode("!@£$"),null);
+				assertEquals   (simpleEditorView.compileAndExecuteCode("!@123$"),null);
 				assertEquals   (simpleEditorView.compileAndExecuteCode("return nonExistentVariable"),null);
 				simpleEditorView.executeSync = false;
 //			}});

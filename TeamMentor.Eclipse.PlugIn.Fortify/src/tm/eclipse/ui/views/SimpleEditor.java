@@ -25,6 +25,7 @@ import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swt.SWT;
 
 import tm.eclipse.Plugin_Config;
+import tm.eclipse.api.EclipseAPI;
 import tm.eclipse.groovy.plugins.GroovyExecution;
 import tm.eclipse.ui.Activator;
 import tm.eclipse.ui.Startup;
@@ -76,7 +77,8 @@ public class SimpleEditor extends ViewPart
 		toolBar.setLayoutData(fd_toolBar);
 		
 		//sashForm
-		sashForm = new SashForm(composite, SWT.VERTICAL);
+		//sashForm = new SashForm(composite, SWT.VERTICAL);
+		sashForm = new SashForm(composite, SWT.HORIZONTAL);
 		FormData fd_sashForm = new FormData();
 		fd_sashForm.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
 		fd_sashForm.left = new FormAttachment(0);
@@ -91,7 +93,7 @@ public class SimpleEditor extends ViewPart
 		Group grpExecutionResult = new Group(sashForm, SWT.NONE);
 		grpExecutionResult.setText("Execution result");
 		grpExecutionResult.setLayout(new FillLayout(SWT.HORIZONTAL));
-		sashForm.setWeights(new int[] {1, 1});
+		sashForm.setWeights(new int[] {2, 1});
 		
 	    styledText_Code   = new StyledText(grpGroovyCode, SWT.BORDER);	   
 	    styledText_Result = new StyledText(grpExecutionResult, SWT.BORDER  | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -128,9 +130,9 @@ public class SimpleEditor extends ViewPart
 					{
 					//	styledText_Result.setText("...stoping execution...");
 					//	styledText_Result.setBackground(new Color(Display.getCurrent (),255,220,220));				
-						executionThread.stop();
-						showExecutionStoppedMessage();						
-					}
+						executionThread.stop();										
+					}					
+					showExecutionStoppedMessage();	
 				} });
 	    
 	    //default value
@@ -309,6 +311,6 @@ public class SimpleEditor extends ViewPart
 
 	public SimpleEditor close() 
 	{		
-		return Startup.eclipseApi.views.close(this);					
+		return EclipseAPI.current().views.close(this);					
 	}
 }

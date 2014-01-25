@@ -22,14 +22,21 @@ public class CollectionToString
 	}
 	public Object[] asArray()
 	{
-		if(isCollection())
+		try
 		{
-			if(target.getClass().isArray())			
-				return (Object[])target;
-			if(target instanceof Collection<?>)			
-				return ((Collection<?>)target).toArray();			
-			if(target instanceof Map)			
-				return ((Map<?,?>)target).entrySet().toArray();
+			if(isCollection())
+			{
+				if(target.getClass().isArray())			
+					return (Object[])target;
+				if(target instanceof Collection<?>)			
+					return ((Collection<?>)target).toArray();			
+				if(target instanceof Map)			
+					return ((Map<?,?>)target).entrySet().toArray();
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
 		}
 		return null;	
 	}
@@ -38,9 +45,13 @@ public class CollectionToString
 		if(isCollection())
 		{
 			String result = "";
-			for(Object item : asArray())
-				result += item + "\n";
-			return result;
+			Object[] asArray = asArray();
+			if (asArray != null)
+			{
+				for(Object item : asArray())
+					result += item + "\n";
+				return result;
+			}
 		}
 		if(target != null)
 			return target.toString();

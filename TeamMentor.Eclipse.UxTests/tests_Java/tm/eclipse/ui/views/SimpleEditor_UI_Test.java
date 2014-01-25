@@ -18,7 +18,7 @@ public class SimpleEditor_UI_Test
 	public SimpleEditor_UI_Test()
 	{		
 		eclipseAPI = Startup.eclipseApi;
-		simpleEditor = (SimpleEditor)eclipseAPI.views.open_View(SimpleEditor.ID);
+		simpleEditor = (SimpleEditor)eclipseAPI.views.open(SimpleEditor.ID);
 		assertNotNull(simpleEditor);
 	}
 

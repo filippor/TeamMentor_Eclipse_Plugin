@@ -20,8 +20,7 @@ public class EclipseAPI_Test
                 assertNotNull(eclipseAPI.menus.workbench);
                 assertNotNull(eclipseAPI.panelFactory);                
                 assertNotNull(eclipseAPI.panelFactory.workbench);
-                assertNotNull(eclipseAPI.views);
-                assertNotNull(eclipseAPI.views.workbench);
+                assertNotNull(eclipseAPI.views);                
         }
         
         @Test
