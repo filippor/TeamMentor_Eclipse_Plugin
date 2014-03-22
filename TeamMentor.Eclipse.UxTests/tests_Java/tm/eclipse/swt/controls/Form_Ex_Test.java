@@ -46,7 +46,7 @@ public class Form_Ex_Test
 		form.wait_MiliSeconds(500);
 		if (browser.getText().equals(htmlText) == false)	// wait a bit more if needed
 			form.wait_MiliSeconds(500);	
-		assertEquals(browser.getText(),htmlText);		
+		assertEquals(htmlText,browser.getText());		
 		form.close();
 	}
 	
